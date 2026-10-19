@@ -110,3 +110,86 @@ def test_metrics_aiops2020_not_measured_safety():
     assert metrics["urr"].status == MetricStatus.NOT_MEASURED
     assert metrics["rsr"].status == MetricStatus.NOT_MEASURED
     assert "No remediation execution loop" in metrics["urr"].exclusion_reason
+
+
+def test_metrics_predicted_only_class_false_positive_accounting():
+    """
+    Verifies that a predicted-only label (e.g., UNKNOWN_COMPOSITE_ANOMALY) is
+    included in class accounting and correctly counted as a false positive,
+    preventing artificial inflation of precision and Macro-F1.
+    """
+    run_novel = ExperimentRun(
+        run_id="run-test-fp-1",
+        timestamp="2026-10-20T00:00:00Z",
+        environment=EvaluationEnvironment.SIMULATED,
+        dataset_or_scenario_id="CASE_04",
+        ground_truth_fault_label="NOVEL_COMPOSITE_ANOMALY",
+        predicted_fault_label="UNKNOWN_COMPOSITE_ANOMALY",
+        start_time="2026-10-20T00:00:00Z",
+        end_time="2026-10-20T00:00:01Z",
+        is_completed=True
+    )
+    run_correct = ExperimentRun(
+        run_id="run-test-fp-2",
+        timestamp="2026-10-20T00:00:02Z",
+        environment=EvaluationEnvironment.SIMULATED,
+        dataset_or_scenario_id="CASE_01",
+        ground_truth_fault_label="HIGH_LATENCY_CONGESTION",
+        predicted_fault_label="HIGH_LATENCY_CONGESTION",
+        start_time="2026-10-20T00:00:02Z",
+        end_time="2026-10-20T00:00:03Z",
+        is_completed=True
+    )
+
+    metrics = calculate_evaluation_metrics([run_novel, run_correct], EvaluationEnvironment.SIMULATED)
+
+    assert metrics["accuracy"].status == MetricStatus.MEASURED
+    assert metrics["accuracy"].value == 50.0
+    assert metrics["accuracy"].numerator == 1.0
+    assert metrics["accuracy"].denominator == 2.0
+
+    # Without the union of classes fix, precision was artificially 100% because UNKNOWN_COMPOSITE_ANOMALY was omitted from FP.
+    # With the fix, fp_total = 1 (from UNKNOWN_COMPOSITE_ANOMALY), so precision = 1 / (1 + 1) = 50.0%.
+    assert metrics["precision"].status == MetricStatus.MEASURED
+    assert metrics["precision"].value == 50.0
+    assert metrics["precision"].numerator == 1.0
+    assert metrics["precision"].denominator == 2.0
+
+    assert metrics["recall"].status == MetricStatus.MEASURED
+    assert metrics["recall"].value == 50.0
+
+    # Macro-F1: 3 classes in union:
+    # 1. HIGH_LATENCY_CONGESTION: F1 = 1.0
+    # 2. NOVEL_COMPOSITE_ANOMALY: F1 = 0.0 (FN=1)
+    # 3. UNKNOWN_COMPOSITE_ANOMALY: F1 = 0.0 (FP=1)
+    # Mean F1 = (1.0 + 0.0 + 0.0) / 3 = 33.33%
+    assert metrics["macro_f1_score"].status == MetricStatus.MEASURED
+    assert metrics["macro_f1_score"].value == 33.33
+
+
+def test_metrics_literal_mismatch_no_credit_between_novel_and_unknown():
+    """
+    Verifies that UNKNOWN_COMPOSITE_ANOMALY is not credited as a correct
+    diagnosis when ground truth is NOVEL_COMPOSITE_ANOMALY under literal equality.
+    """
+    run = ExperimentRun(
+        run_id="run-mismatch-1",
+        timestamp="2026-10-20T00:00:00Z",
+        environment=EvaluationEnvironment.SIMULATED,
+        dataset_or_scenario_id="CASE_04",
+        ground_truth_fault_label="NOVEL_COMPOSITE_ANOMALY",
+        predicted_fault_label="UNKNOWN_COMPOSITE_ANOMALY",
+        start_time="2026-10-20T00:00:00Z",
+        end_time="2026-10-20T00:00:01Z",
+        is_completed=True
+    )
+
+    metrics = calculate_evaluation_metrics([run], EvaluationEnvironment.SIMULATED)
+
+    assert metrics["accuracy"].status == MetricStatus.MEASURED
+    assert metrics["accuracy"].value == 0.0
+    assert metrics["accuracy"].numerator == 0.0
+    assert metrics["precision"].value == 0.0
+    assert metrics["recall"].value == 0.0
+    assert metrics["f1_score"].value == 0.0
+    assert metrics["macro_f1_score"].value == 0.0

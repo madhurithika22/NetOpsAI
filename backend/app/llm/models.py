@@ -8,6 +8,7 @@ class LLMStatus(str, Enum):
     LLM_UNAVAILABLE = "LLM_UNAVAILABLE"
     LLM_DISABLED = "LLM_DISABLED"
     LLM_ERROR = "LLM_ERROR"
+    INVALID_RESPONSE = "INVALID_RESPONSE"
 
 class TokenMeasurementMethod(str, Enum):
     PROVIDER_REPORTED = "provider-reported"

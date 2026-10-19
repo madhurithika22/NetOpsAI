@@ -54,6 +54,7 @@ class ExperimentRun(BaseModel):
     llm_escalated: bool = False
     pre_llm_diagnosis: Optional[str] = None
     post_llm_diagnosis: Optional[str] = None
+    llm_status: Optional[str] = None
     verification_scope: Optional[str] = None
     remediation_decision: Optional[str] = None
     remediation_status: Optional[str] = None

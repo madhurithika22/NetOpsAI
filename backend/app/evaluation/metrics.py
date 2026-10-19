@@ -74,7 +74,11 @@ def calculate_evaluation_metrics(runs: List[ExperimentRun], environment: Evaluat
 
         class_f1s = []
         tp_total, fp_total, fn_total = 0, 0, 0
-        for cls in set(r.ground_truth_fault_label for r in evaluable_runs):
+        observed_classes = sorted(list(
+            set(r.ground_truth_fault_label for r in evaluable_runs if r.ground_truth_fault_label) |
+            set(r.predicted_fault_label for r in evaluable_runs if r.predicted_fault_label)
+        ))
+        for cls in observed_classes:
             tp = sum(1 for r in evaluable_runs if r.ground_truth_fault_label == cls and r.predicted_fault_label == cls)
             fp = sum(1 for r in evaluable_runs if r.ground_truth_fault_label != cls and r.predicted_fault_label == cls)
             fn = sum(1 for r in evaluable_runs if r.ground_truth_fault_label == cls and r.predicted_fault_label != cls)
@@ -96,7 +100,7 @@ def calculate_evaluation_metrics(runs: List[ExperimentRun], environment: Evaluat
         metrics["precision"] = MetricValue(name="Diagnostic Precision", status=MetricStatus.MEASURED, value=overall_prec, numerator=float(tp_total), denominator=float(tp_total + fp_total), unit="%", sample_count=len(evaluable_runs))
         metrics["recall"] = MetricValue(name="Diagnostic Recall", status=MetricStatus.MEASURED, value=overall_rec, numerator=float(tp_total), denominator=float(tp_total + fn_total), unit="%", sample_count=len(evaluable_runs))
         metrics["f1_score"] = MetricValue(name="Diagnostic F1-Score", status=MetricStatus.MEASURED, value=overall_f1, unit="%", sample_count=len(evaluable_runs))
-        metrics["macro_f1_score"] = MetricValue(name="Macro F1-Score", status=MetricStatus.MEASURED, value=macro_f1, unit="%", sample_count=len(evaluable_runs), description="Unweighted mean F1-score across all evaluated fault classes")
+        metrics["macro_f1_score"] = MetricValue(name="Macro F1-Score", status=MetricStatus.MEASURED, value=macro_f1, unit="%", sample_count=len(evaluable_runs), description="Unweighted mean F1-score across all evaluated fault classes (union of observed ground truth and predicted classes)")
 
     # 6. ECR
     ecr_values = [max(0.0, 1.0 - (r.evidence_count / r.total_raw_evidence_count)) for r in valid_runs if r.total_raw_evidence_count > 0]

@@ -82,6 +82,15 @@ def validate_matrix_v2(csv_path="scratch/research_v2/phase3/experiment_matrix_v2
     """
     Validates the revised Phase 3 primary experiment matrix (120 rows).
     Includes Arms 3, 4, 5 and retained scenarios CASE_01, CASE_02, CASE_03, CASE_04.
+    Checks:
+      - Exactly 120 rows
+      - Exactly 3 arms, 4 scenarios, and 10 repetitions per arm-scenario pair
+      - Unique run IDs and unique seeds
+      - The exact declared seed formula: seed = 42 + 1000 * arm_idx + 100 * scenario_idx + rep
+      - Valid arm and scenario IDs
+      - Correct dataset-only (CASE_04 True, others False) and remediation flags (remediation_supported False)
+      - Every planned row remains PLANNED_NOT_EXECUTED
+      - The correct scientific display name for each arm
     """
     if not os.path.exists(csv_path):
         print(f"FAIL: V2 Matrix file missing at {csv_path}")
@@ -95,7 +104,10 @@ def validate_matrix_v2(csv_path="scratch/research_v2/phase3/experiment_matrix_v2
     if len(reader) != 120:
         errors.append(f"Expected exactly 120 planned rows in V2 matrix, found {len(reader)}")
 
-    required_fields = ["run_id", "arm_id", "scenario_id", "repetition", "seed", "dataset_only", "remediation_supported", "execution_status"]
+    required_fields = [
+        "run_id", "arm_id", "arm_name", "scenario_id", "scenario_name",
+        "repetition", "seed", "dataset_only", "remediation_supported", "execution_status"
+    ]
     if reader and not all(f in reader[0] for f in required_fields):
         errors.append(f"Missing required header fields in V2 matrix. Expected: {required_fields}")
 
@@ -103,12 +115,33 @@ def validate_matrix_v2(csv_path="scratch/research_v2/phase3/experiment_matrix_v2
     seen_seeds = set()
     valid_arms = {"ARM_3_RULE_BASED", "ARM_4_PHASE2_BASELINE", "ARM_5_CESO_CADE_NO_LLM"}
     valid_scenarios = {"CASE_01", "CASE_02", "CASE_03", "CASE_04"}
+    
+    arm_index_map = {
+        "ARM_3_RULE_BASED": 3,
+        "ARM_4_PHASE2_BASELINE": 4,
+        "ARM_5_CESO_CADE_NO_LLM": 5
+    }
+    scenario_index_map = {
+        "CASE_01": 1,
+        "CASE_02": 2,
+        "CASE_03": 3,
+        "CASE_04": 4
+    }
+    expected_arm_names = {
+        "ARM_3_RULE_BASED": "Rule-Based Diagnosis",
+        "ARM_4_PHASE2_BASELINE": "Modified Phase 2-Derived Baseline",
+        "ARM_5_CESO_CADE_NO_LLM": "CESO + CADE (No LLM)"
+    }
+    
+    pair_counts = {}
 
     for idx, row in enumerate(reader, start=1):
         run_id = row.get("run_id")
         arm_id = row.get("arm_id")
+        arm_name = row.get("arm_name")
         scenario_id = row.get("scenario_id")
-        seed = row.get("seed")
+        rep_str = row.get("repetition")
+        seed_str = row.get("seed")
         status = row.get("execution_status")
         remed_supp = row.get("remediation_supported", "").lower() in ("true", "1")
         dataset_only = row.get("dataset_only", "").lower() in ("true", "1")
@@ -117,25 +150,73 @@ def validate_matrix_v2(csv_path="scratch/research_v2/phase3/experiment_matrix_v2
             errors.append(f"V2 Row {idx}: Duplicate or missing run_id '{run_id}'")
         seen_run_ids.add(run_id)
 
-        if not seed or seed in seen_seeds:
-            errors.append(f"V2 Row {idx}: Duplicate or missing seed '{seed}'")
-        seen_seeds.add(seed)
+        if not seed_str or seed_str in seen_seeds:
+            errors.append(f"V2 Row {idx}: Duplicate or missing seed '{seed_str}'")
+        seen_seeds.add(seed_str)
 
         if arm_id not in valid_arms:
             errors.append(f"V2 Row {idx}: Invalid primary arm_id '{arm_id}'")
         if scenario_id not in valid_scenarios:
             errors.append(f"V2 Row {idx}: Invalid retained scenario_id '{scenario_id}'")
 
-        if dataset_only and remed_supp:
-            errors.append(f"V2 Row {idx} ({run_id}): Dataset-only scenario '{scenario_id}' cannot claim remediation_supported=True")
+        # Verify correct scientific display name for each arm
+        if arm_id in expected_arm_names:
+            expected_name = expected_arm_names[arm_id]
+            if arm_name != expected_name:
+                errors.append(f"V2 Row {idx} ({run_id}): Expected arm_name '{expected_name}' for arm '{arm_id}', got '{arm_name}'")
+
+        # Verify repetitions and pair counts
+        try:
+            rep = int(rep_str)
+            if rep < 1 or rep > 10:
+                errors.append(f"V2 Row {idx} ({run_id}): Repetition '{rep}' out of range 1..10")
+        except (ValueError, TypeError):
+            rep = None
+            errors.append(f"V2 Row {idx} ({run_id}): Invalid repetition integer '{rep_str}'")
+
+        if arm_id in valid_arms and scenario_id in valid_scenarios:
+            pair_key = (arm_id, scenario_id)
+            pair_counts[pair_key] = pair_counts.get(pair_key, 0) + 1
+
+        # Verify exact declared seed formula: seed = 42 + 1000 * arm_index + 100 * scenario_index + rep
+        if arm_id in arm_index_map and scenario_id in scenario_index_map and rep is not None:
+            expected_seed = 42 + 1000 * arm_index_map[arm_id] + 100 * scenario_index_map[scenario_id] + rep
+            try:
+                actual_seed = int(seed_str)
+                if actual_seed != expected_seed:
+                    errors.append(
+                        f"V2 Row {idx} ({run_id}): Seed mismatch. Expected {expected_seed} "
+                        f"(42 + 1000*{arm_index_map[arm_id]} + 100*{scenario_index_map[scenario_id]} + {rep}), got {actual_seed}"
+                    )
+            except (ValueError, TypeError):
+                errors.append(f"V2 Row {idx} ({run_id}): Seed '{seed_str}' is not a valid integer")
+
+        # Dataset-only and remediation flags
+        if scenario_id == "CASE_04":
+            if not dataset_only:
+                errors.append(f"V2 Row {idx} ({run_id}): CASE_04 must have dataset_only=True")
+        else:
+            if dataset_only:
+                errors.append(f"V2 Row {idx} ({run_id}): Scenario '{scenario_id}' must have dataset_only=False")
+
+        if remed_supp:
+            errors.append(f"V2 Row {idx} ({run_id}): Diagnostic-only row cannot claim remediation_supported=True")
 
         if status != "PLANNED_NOT_EXECUTED":
             errors.append(f"V2 Row {idx} ({run_id}): Expected status 'PLANNED_NOT_EXECUTED', got '{status}'")
+
+    # Verify exactly 12 pairs each with exactly 10 repetitions
+    if len(pair_counts) != 12:
+        errors.append(f"Expected 12 distinct arm-scenario pairs (3 arms * 4 scenarios), found {len(pair_counts)}")
+    for pair_key, count in pair_counts.items():
+        if count != 10:
+            errors.append(f"Pair {pair_key} has {count} repetitions, expected exactly 10")
 
     success = len(errors) == 0
     if success:
         print("PASS: V2 Matrix validation passed with zero errors.")
         print(f"Verified {len(reader)} rows, {len(seen_run_ids)} unique run_ids, {len(seen_seeds)} unique seeds.")
+        print("Verified seed equation (42 + 1000*a + 100*s + r) and scientific display names for all rows.")
     else:
         print(f"FAIL: V2 Matrix validation found {len(errors)} errors:")
         for err in errors[:10]:

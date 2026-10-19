@@ -16,8 +16,9 @@ The Phase 3 experimental design has been formally narrowed to evaluate three pri
 
 - **RQ1 (Diagnostic Accuracy & Effectiveness)**: How does CADE candidate scoring without LLM escalation (Arm 5) compare to un-escalated rule engines (Arm 3) and the modified Phase 2-derived baseline engine (Arm 4, display name: Modified Phase 2-Derived Baseline) in overall diagnostic accuracy, precision, recall, and Macro-F1?
   - *Hypothesis $H_{1a}$*: Arm 5 achieves higher Macro-F1 than Arm 3 and Arm 4 on multi-layer scenarios (`CASE_02`, `CASE_03`, `CASE_04`) by integrating multi-metric context.
-- **RQ2 (Diagnostic Observation Latency)**: What is the wall-clock execution latency $T_{\text{mttd}} = t_{\text{diagnosis}} - t_{\text{observe}}$ measured from telemetry input ingestion to diagnosis emission across Arms 3–5?
-  - *Hypothesis $H_{2a}$*: Arm 3 and Arm 4 exhibit lower mean observation latency than Arm 5 due to direct pattern matching without candidate graph evaluation.
+- **RQ2 (Diagnostic Execution Latency)**: What is the wall-clock execution latency $T_{\text{exec}} = t_{\text{diag\_end}} - t_{\text{diag\_start}}$ measured during the diagnostic function call across Arms 3–5?
+  - *Measurement Scope & Compatibility Note*: In the current implementation (`backend/app/evaluation/runner.py`), `diagnosis_latency_ms` measures exclusively the execution time of the diagnostic engine function call, while telemetry collection is timed separately (`telemetry_collection_latency_ms`). The stored metric name `mttd` in `ExperimentRun` and `EvaluationSummary` is a historical compatibility field name; it does not measure end-to-end incident detection time from fault onset or total pipeline ingestion time.
+  - *Hypothesis $H_{2a}$*: Arm 3 and Arm 4 exhibit lower mean diagnostic execution latency than Arm 5 due to direct pattern matching without candidate graph evaluation.
 - **RQ3 (Ground-Truth Isolation Integrity)**: Does the candidate evaluation pipeline maintain zero ground-truth leakage when scenario labels and evaluation targets are strictly isolated from operational input streams?
   - *Hypothesis $H_{3a}$*: Input telemetry snapshots across Arms 3–5 contain zero references to scenario metadata or ground-truth fault definitions.
 - **RQ4 (Incremental Diagnostic Value of Candidate Scoring)**: What is the net incremental diagnostic value provided by CADE candidate scoring over traditional rule-engine heuristics prior to LLM escalation?
@@ -82,6 +83,16 @@ Only scenarios with verified definitions, valid ground-truth labels, and functio
 - **`SCN_005` (Composite Anomaly)**: Excluded from primary matrix. Not present in `backend/app/scenarios/` registry; `CASE_04` provides the validated composite anomaly definition.
 - **`SCN_006` (Baseline Healthy State)**: Excluded from primary matrix. Not present as a registered scenario definition in `backend/app/scenarios/`.
 
+### CASE_04 Semantic Treatment & Operational LLM Recovery Handoff
+
+- **Separate Semantic Meanings**: `CASE_04` has the ground-truth label `NOVEL_COMPOSITE_ANOMALY`. CADE's fallback prediction is `UNKNOWN_COMPOSITE_ANOMALY`. In accordance with project-owner decision, these labels represent distinct semantic concepts and are **not** aliased.
+- **Literal Equality Scoring**: Primary diagnostic accuracy strictly requires literal string equality between the pre-LLM prediction and ground truth. Predicting `UNKNOWN_COMPOSITE_ANOMALY` against `NOVEL_COMPOSITE_ANOMALY` produces zero True Positives ($TP=0, FN=1$).
+- **Out-of-Vocabulary False-Positive Accounting**: Metric computation evaluates the union of observed ground-truth and predicted classes. `UNKNOWN_COMPOSITE_ANOMALY` is treated as an observed class and contributes False Positives ($FP=1$), ensuring that precision and Macro-F1 accurately reflect ungrounded or fallback predictions.
+- **Operational LLM Escalation Policy**: When CADE detects uncertainty (`escalation_required = True`, triggered whenever confidence $< 0.70$ or top candidate is `UNKNOWN_COMPOSITE_ANOMALY`), the operational pipeline escalates evidence to `LLMGateway` for secondary diagnosis and recovery planning. Escalation is triggered generically by CADE uncertainty metrics, never hardcoded on scenario IDs or ground truth.
+- **Context Isolation**: The context package provided to the LLM is constructed strictly from operational evidence (observed telemetry, CADE diagnosis and confidence, evidence chain, and topology counts). Ground-truth answers, injected fault descriptions, and benchmark scenario IDs (e.g. `CASE_04`) are strictly withheld and neutralized.
+- **Primary Three-Arm Isolation**: Arms 3, 4, and 5 evaluate pre-LLM diagnostic behavior. The primary metric `predicted_fault_label` strictly records the pre-LLM diagnosis (`cadd_diag.fault_type`) and is never overwritten by LLM reasoning. Post-escalation LLM results are stored separately in `post_llm_diagnosis`.
+- **LLM Failure & Remediation Safety**: If the LLM is disabled, unreachable, or returns an error, the original CADE diagnosis is retained, an explicit status (`LLM_DISABLED`, `LLM_UNAVAILABLE`, `LLM_ERROR`, `INVALID_RESPONSE`) is recorded, active remediation is blocked, and failure is never counted as successful recovery. Proposed actions must pass MSVS safety policy validation and require human approval before execution.
+
 ---
 
 ## 4. Proposed Matrix Design & Seed Formula (120 Runs)
@@ -106,7 +117,7 @@ All 120 planned rows are recorded in `scratch/research_v2/phase3/experiment_matr
 
 ### Repetition Policy Notice
 
-The choice of $N=10$ repetitions per arm-scenario pair is a **proposed design parameter** to measure empirical run variance. It is **not** presented as a proof of statistical power prior to empirical data collection. Following authorized execution, sample variance $s^2$ will be evaluated to verify sample size adequacy.
+The choice of $N=10$ repetitions per arm-scenario pair serves to evaluate software execution repeatability and runtime latency consistency under deterministic seeds. Because scenario generators and static dataset evidence in `backend/app/scenarios/` are currently deterministic and do not consume the seed parameter to inject stochastic jitter, repetitions 1–10 yield identical scenario inputs. They are **not** independent stochastic network-fault samples and do **not** establish statistical power for inferential hypothesis testing across runs.
 
 ---
 
@@ -122,14 +133,21 @@ The choice of $N=10$ repetitions per arm-scenario pair is a **proposed design pa
 
 ### Analysis Plan
 
-- Primary metrics (Accuracy, Precision, Recall, F1, Macro-F1, ECR, MTTD) will be reported per arm as sample mean $\bar{x} \pm 95\%\text{ CI}$.
-- 95% Confidence Intervals calculated via Student's $t$-distribution ($t_{0.025, 9} = 2.262$ for $N=10$).
+- **Descriptive Evaluation by Arm-Scenario Pair**: Primary classification metrics (Diagnostic Accuracy, Precision, Recall, F1, Macro-F1, and ECR) will be reported descriptively per arm-scenario pair. Because inputs are deterministic within each scenario, repeated runs produce identical diagnostic outputs.
+- **Repeated Latency Measurements**: Latency measurements ($T_{\text{exec}}$) across repetitions represent repeated software execution timings of the diagnostic function call on the local benchmark host, reflecting host execution variance (CPU scheduling, OS caching, memory latency) rather than independent network-fault samples.
+- **Reporting Requirements for Latency**: Any reported latency summary must explicitly state:
+  1. The exact measurement scope (algorithmic function call duration `diagnosis_latency_ms`).
+  2. The hardware and execution environment (CPU model, operating system, runtime Python version).
+- **Inferential Statistical Boundaries**:
+  - Identical deterministic repetitions must **NOT** be treated as independent observations for inferential accuracy statistics, ANOVA, or $p$-value calculations.
+  - Blanket claims that Student's $t$-distribution confidence intervals with $N=10$ establish inferential uncertainty across repeated runs are **invalid** for deterministic classification outcomes and are strictly qualified to software execution timing variance only.
+  - The protocol does **NOT** claim statistical generalization beyond the four retained benchmark scenarios based on repeated executions.
 
 ### Methodological Scope & Causal Inferencing Limitations
 
 - **What the Arms 3–5 Comparison CAN Establish**:
-  - The relative diagnostic accuracy and evidence compression of CADE candidate scoring vs. rule-engine baselines on identical telemetry inputs.
-  - The computational observation latency difference between candidate graph evaluation and static rule matching.
+  - The relative diagnostic accuracy and evidence compression of CADE candidate scoring vs. rule-engine baselines on the four evaluated benchmark scenarios.
+  - The algorithmic function execution latency difference between candidate graph scoring and discrete rule matching.
 - **Strict Methodological Restrictions & Bounded Claims**:
   - **Arm 4 Identity Boundary**: Arm 4 is a **Modified Phase 2-Derived Baseline** and is **not** an exact reproduction of the original frozen Phase 2 engine when it invokes the modified current implementation in `backend/app/cadd/engine.py` (`97227c88...`).
   - **CASE_04 Descriptive-Only Restriction**: Telemetry generation for `CASE_04` is deterministic and non-stochastic. Repetitions $r=1..10$ yield identical static snapshots. Therefore, `CASE_04` is retained for descriptive offline evaluation only (`dataset_only = True`) and MUST NOT be pooled as 10 independent observations for inferential hypothesis testing or ANOVA.

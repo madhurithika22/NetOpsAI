@@ -16,7 +16,7 @@ from app.msvs.policies import SafetyPolicyEngine
 from app.msvs.service import msvs_service
 from app.models.cadd_models import ActionPlan, ProposedAction
 from app.llm.gateway import llm_gateway
-from app.llm.models import LLMContextPackage
+from app.llm.models import LLMContextPackage, LLMStatus
 from app.llm.feedback import create_feedback_package
 
 
@@ -38,6 +38,12 @@ class BenchmarkRunner:
         self.msvs_policy_engine = SafetyPolicyEngine()
 
     def run_phase3_matrix(self):
+        """
+        Executes the pre-registered Phase 3 experiment matrix (120 planned runs).
+        BLOCKED: This pipeline is an unactivated placeholder requiring separate
+        implementation and research authorization. Matrix runs evaluate strictly
+        pre-LLM diagnostic behavior across Arms 3, 4, and 5 with zero LLM invocations.
+        """
         if not self.phase3_execution_authorized:
             raise PermissionError("Phase 3 research execution is PROHIBITED: phase3_execution_authorized is set to False.")
         raise NotImplementedError("Phase 3 matrix execution pipeline")
@@ -123,6 +129,8 @@ class BenchmarkRunner:
         llm_escalated = cadd_diag.escalation_required and allow_llm
         final_diagnosis = cadd_diag.fault_type
         final_action_plan = cadd_plan
+        llm_status_recorded: Optional[str] = LLMStatus.LLM_DISABLED.value if not include_llm else ("LLM_DISABLED_FOR_ARM" if arm_id in ("ARM_3_RULE_BASED", "ARM_5_CESO_CADE_NO_LLM") else "LLM_NOT_INVOKED")
+        post_llm_diagnosis: Optional[str] = cadd_diag.fault_type
 
         direct_token_metrics = None
         pipeline_token_metrics = None
@@ -133,14 +141,15 @@ class BenchmarkRunner:
         post_action_llm_assessment = None
         llm_latency_ms = 0.0
 
-        # 4. LLM Escalation & Token Experiment
+        # 4. LLM Escalation & Token Experiment (Operational Handoff)
         if llm_escalated and allow_llm:
             t_llm_start = time.perf_counter()
+            # Context package constructed strictly from operational evidence; scenario identifier neutralized
             ctx_package = LLMContextPackage(
                 incident_id=f"inc-{uuid.uuid4().hex[:8]}",
-                scenario_id=sc_id,
+                scenario_id="operational-session",
                 timestamp=start_ts,
-                topology_summary={"node_count": sc_def.target_node_count, "link_count": sc_def.target_link_count},
+                topology_summary={"node_count": len(telemetry.nodes), "link_count": len(telemetry.links)},
                 affected_nodes=cadd_diag.impacted_elements,
                 affected_links=[l.source_node + "<->" + l.target_node for l in telemetry.links if l.status != "HEALTHY"],
                 ceso_findings=[e.observed_value for e in cadd_diag.evidence_chain] or ["Operational state anomaly detected"],
@@ -151,17 +160,17 @@ class BenchmarkRunner:
                 candidate_causes=cadd_diag.candidate_causes or ["Operational telemetry degradation"],
                 msvs_safety_constraints=["Do not modify protected interface eth0"],
                 candidate_remediation_actions=[a.model_dump(mode="json") for a in final_action_plan.proposed_actions],
-                verification_requirements=["Verify post-remediation RTT < 50ms and Loss < 10%"]
+                verification_requirements={"rtt_max_ms": 50.0, "loss_max_pct": 10.0}
             )
 
             llm_req_payload = ctx_package.model_dump_json(indent=2)
 
             if run_direct_llm_comparison:
                 exp_res = llm_gateway.run_controlled_token_experiment(
-                    scenario_id=sc_id,
+                    scenario_id="operational-session",
                     raw_telemetry=raw_telemetry_dict,
                     raw_logs=[f"Syslog event: {cadd_diag.explanation_summary}"],
-                    topology_events=[f"State change event on {sc_id}"],
+                    topology_events=["Network telemetry state change event observed"],
                     context_package=ctx_package
                 )
                 direct_token_metrics = exp_res.direct.model_dump(mode="json")
@@ -170,33 +179,60 @@ class BenchmarkRunner:
                 total_reduction_pct = exp_res.total_token_reduction_pct
 
             llm_response = llm_gateway.analyze_netops_context(ctx_package)
-            llm_resp_payload = llm_response.raw_response
-            if llm_response.diagnosis and llm_response.diagnosis != "LLM_UNAVAILABLE":
-                final_diagnosis = llm_response.diagnosis
-
-            if llm_response.recommended_action:
-                try:
-                    rec_act = ProposedAction(**llm_response.recommended_action)
-                    final_action_plan = ActionPlan(
-                        plan_id=f"plan-llm-{uuid.uuid4().hex[:8]}",
-                        diagnosis_id=cadd_diag.diagnosis_id,
-                        proposed_actions=[rec_act],
-                        estimated_risk_level="HIGH",
-                        requires_approval=True
-                    )
-                except Exception:
-                    pass
             t_llm_end = time.perf_counter()
             llm_latency_ms = (t_llm_end - t_llm_start) * 1000.0
+            llm_resp_payload = llm_response.raw_response
 
+            status_enum = getattr(llm_response, "llm_status", None)
+            llm_status_recorded = status_enum.value if hasattr(status_enum, "value") else str(status_enum or "UNKNOWN")
+
+            if llm_response.llm_status == LLMStatus.LLM_AVAILABLE:
+                # Validate response fields
+                if llm_response.diagnosis and llm_response.diagnosis not in ("LLM_UNAVAILABLE", "LLM_ERROR", "LLM_DISABLED"):
+                    post_llm_diagnosis = llm_response.diagnosis
+                else:
+                    llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
+                    post_llm_diagnosis = cadd_diag.fault_type
+
+                if llm_response.recommended_action and isinstance(llm_response.recommended_action, dict):
+                    rec = llm_response.recommended_action
+                    if "command_type" in rec and "target_device" in rec:
+                        try:
+                            rec_act = ProposedAction(
+                                action_id=rec.get("action_id", f"act-llm-{uuid.uuid4().hex[:6]}"),
+                                command_type=rec["command_type"],
+                                target_device=rec["target_device"],
+                                parameters=rec.get("parameters", {}),
+                                is_destructive=rec.get("is_destructive", True),
+                                reversion_action=rec.get("reversion_action", {})
+                            )
+                            final_action_plan = ActionPlan(
+                                plan_id=f"plan-llm-{uuid.uuid4().hex[:8]}",
+                                diagnosis_id=cadd_diag.diagnosis_id,
+                                proposed_actions=[rec_act],
+                                estimated_risk_level="HIGH",
+                                requires_approval=True
+                            )
+                        except Exception:
+                            llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
+                    else:
+                        llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
+            else:
+                # LLM disabled, unreachable, or error: preserve original CADE diagnosis and block remediation
+                post_llm_diagnosis = cadd_diag.fault_type
 
         # 5. MSVS Safety Validation (LLM Output MUST Pass Through MSVS)
-        validation_res = self.msvs_policy_engine.validate_plan(final_action_plan)
-        policy_passed = validation_res[0] and validation_res[1]
-
-        remediation_decision = "APPROVED" if policy_passed else "REJECTED_UNSAFE"
-        remediation_status = "PENDING"
-        verification_result = "NOT_EXECUTED"
+        if llm_escalated and llm_status_recorded != LLMStatus.LLM_AVAILABLE.value:
+            policy_passed = False
+            remediation_decision = "BLOCKED_LLM_FAILURE"
+            remediation_status = "NOT_EXECUTED"
+            verification_result = "NOT_EXECUTED"
+        else:
+            validation_res = self.msvs_policy_engine.validate_plan(final_action_plan)
+            policy_passed = validation_res[0] and validation_res[1]
+            remediation_decision = "APPROVED" if policy_passed else "REJECTED_UNSAFE"
+            remediation_status = "PENDING"
+            verification_result = "NOT_EXECUTED"
 
         pre_rtt = telemetry.links[1].rtt_ms if len(telemetry.links) > 1 else (telemetry.links[0].rtt_ms if telemetry.links else 0.0)
         pre_loss = telemetry.links[1].packet_loss_pct if len(telemetry.links) > 1 else (telemetry.links[0].packet_loss_pct if telemetry.links else 0.0)
@@ -238,7 +274,8 @@ class BenchmarkRunner:
                 post_assess = llm_gateway.assess_post_remediation(fb_pkg)
                 post_action_llm_assessment = post_assess.model_dump(mode="json")
         elif not policy_passed:
-            verification_result = "SAFETY_POLICY_ENFORCED"
+            if remediation_decision != "BLOCKED_LLM_FAILURE":
+                verification_result = "SAFETY_POLICY_ENFORCED"
 
         overall_wall_end = time.perf_counter()
         total_elapsed_ms = (overall_wall_end - overall_wall_start) * 1000.0
@@ -252,7 +289,7 @@ class BenchmarkRunner:
             environment=EvaluationEnvironment.SIMULATED,
             dataset_or_scenario_id=sc_id,
             ground_truth_fault_label=gt_label,
-            predicted_fault_label=final_diagnosis,
+            predicted_fault_label=cadd_diag.fault_type,
             ground_truth_location=gt_location,
             predicted_location=cadd_diag.impacted_elements[0] if cadd_diag.impacted_elements else gt_location,
             start_time=start_ts,
@@ -268,10 +305,11 @@ class BenchmarkRunner:
             total_raw_evidence_count=raw_telemetry_count,
             token_count=pipeline_token_metrics.get("total_tokens") if pipeline_token_metrics else None,
             raw_token_count=direct_token_metrics.get("total_tokens") if direct_token_metrics else None,
-            llm_invocation_count=1 if llm_escalated else 0,
+            llm_invocation_count=1 if (llm_escalated and allow_llm) else 0,
             llm_escalated=llm_escalated,
             pre_llm_diagnosis=cadd_diag.fault_type,
-            post_llm_diagnosis=final_diagnosis,
+            post_llm_diagnosis=post_llm_diagnosis,
+            llm_status=llm_status_recorded,
             verification_scope=sc_def.expected_fault_domain,
             remediation_decision=remediation_decision,
             remediation_status=remediation_status,

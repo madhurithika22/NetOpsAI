@@ -54,7 +54,7 @@ This independent audit evaluates the scientific validity, methodological soundne
 - **Source Code**: `backend/app/scenarios/case04_hybrid.py` (`generate_case04_telemetry`).
 - **Observation Characteristics**: Returns a 48-node hybrid edge/DC/cloud overlay telemetry snapshot. Active fault `NOVEL_COMPOSITE_ANOMALY` induces `edge-gw-01` CPU 58%, RTT 85ms, loss 7.5%, and route metric 150.
 - **Seed Dependence**: `generate_case04_telemetry` does NOT consume the `seed` parameter. Repetitions $r=1..10$ generate identical `NetworkState` objects.
-- **Fault Taxonomy Mapping**: `NOVEL_COMPOSITE_ANOMALY` evaluates `UNKNOWN_COMPOSITE_ANOMALY` in CADE when candidate scores $< 0.70$ and anomalies are detected. It represents a valid multi-layer overlay anomaly class.
+- **Fault Taxonomy & Scoring Decision**: `NOVEL_COMPOSITE_ANOMALY` (ground truth) and `UNKNOWN_COMPOSITE_ANOMALY` (CADE fallback prediction) are distinct labels with different semantic meanings and are NOT automatically aliased. Under literal string equality, CADE's fallback prediction scores 0% diagnostic accuracy on `CASE_04`. In class metrics, `UNKNOWN_COMPOSITE_ANOMALY` is included in the union of observed classes and counted as a false positive. In operational execution, this uncertainty triggers escalation to the LLM Gateway (`LLMGateway`), while the primary three-arm benchmark evaluates strictly pre-LLM predictions.
 
 ### Eligibility Decision
 - **Retention Status**: **`RETAIN`** for descriptive offline evaluation (`dataset_only = True`).

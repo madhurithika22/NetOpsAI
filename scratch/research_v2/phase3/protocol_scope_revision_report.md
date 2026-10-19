@@ -42,7 +42,7 @@ The research protocol [`scratch/research_v2/phase3/experimental_protocol.md`](fi
 - **Primary Scope**: Arms 3, 4, 5 evaluating Scenarios `CASE_01`–`CASE_04`.
 - **Core Research Questions**:
   - **RQ1**: Diagnostic accuracy, precision, recall, and Macro-F1 comparison across Arms 3–5.
-  - **RQ2**: Wall-clock observation latency $T_{\text{mttd}} = t_{\text{diagnosis}} - t_{\text{observe}}$ from telemetry ingestion to diagnostic output emission.
+  - **RQ2**: Diagnostic execution latency $T_{\text{exec}} = t_{\text{diag\_end}} - t_{\text{diag\_start}}$ measuring the duration of the diagnostic function call (stored under the compatibility field name `mttd`, which does not represent end-to-end incident detection time in this implementation).
   - **RQ3**: Verification of zero ground-truth leakage into operational input telemetry.
   - **RQ4**: Incremental diagnostic value of CADE candidate scoring over un-escalated rule engines.
   - **RQ6**: Repeated-run variance across $N=10$ repetitions per arm-scenario pairing.
@@ -65,7 +65,7 @@ The metric specification [`scratch/research_v2/phase3/metric_specification.md`](
 3. **Verification Scope Reduction (VSR)**: Kept as `NOT_MEASURED` with reason `"Verification probe target scope telemetry not recorded"`. VSR is strictly isolated from diagnostic evidence counts.
 4. **Remediation & Recovery Metrics (RSR, Recovery Latency, Verification Failure Rate)**: Set to `NOT_APPLICABLE` for Arms 3–5 with reason `"No eligible active remediation actions were executed in this experiment group"`.
 5. **CADE Confidence Characterization**: CADE candidate scores $S(c) \in [0, 1]$ are characterized as relative heuristic rank weightings, explicitly NOT calibrated statistical probabilities.
-6. **Timing Boundary**: MTTD measured as wall-clock elapsed time from input snapshot ingestion to diagnosis emission ($t_{\text{diagnosis}} - t_{\text{observe}}$).
+6. **Timing Boundary**: Diagnostic Execution Latency measures wall-clock execution time of the diagnostic function call ($t_{\text{diag\_end}} - t_{\text{diag\_start}}$). The stored `mttd` metric field is a compatibility name and does not represent end-to-end incident detection time.
 
 ---
 

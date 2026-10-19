@@ -1,7 +1,7 @@
 import pytest
 import os
 import csv
-from scratch.research_v2.phase3.validate_experiment_matrix import validate_matrix
+from scratch.research_v2.phase3.validate_experiment_matrix import validate_matrix, validate_matrix_v2
 
 def test_experiment_matrix_structure_and_constraints():
     """
@@ -39,3 +39,67 @@ def test_experiment_matrix_exact_counts():
     assert len(pair_counts) == 42, f"Expected 42 arm-scenario pairs, got {len(pair_counts)}"
     for key, count in pair_counts.items():
         assert count == 10, f"Pair {key} expected 10 repetitions, got {count}"
+
+
+def test_v2_matrix_exact_seeds_and_arm_names():
+    """
+    Validates that the 120-row V2 experiment matrix passes all validation rules,
+    including exact declared seed equation and arm display names.
+    """
+    v2_csv = "scratch/research_v2/phase3/experiment_matrix_v2.csv"
+    assert os.path.exists(v2_csv), f"V2 Matrix CSV does not exist at {v2_csv}"
+    
+    success, errors = validate_matrix_v2(v2_csv)
+    assert success, f"V2 Matrix validation failed with errors: {errors}"
+
+
+def test_v2_matrix_detects_incorrect_seed(tmp_path):
+    """
+    Proves that validate_matrix_v2 detects an incorrect seed that deviates from
+    seed = 42 + 1000*a + 100*s + r.
+    """
+    v2_csv = "scratch/research_v2/phase3/experiment_matrix_v2.csv"
+    with open(v2_csv, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        fieldnames = reader.fieldnames
+        rows = list(reader)
+
+    # Intentionally corrupt the seed of the first row (e.g. legacy seed 3101 instead of 3143)
+    rows[0]["seed"] = "3101"
+
+    corrupted_csv = str(tmp_path / "corrupted_seed_matrix.csv")
+    with open(corrupted_csv, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+    success, errors = validate_matrix_v2(corrupted_csv)
+    assert not success, "Validation should have failed for corrupted seed"
+    assert any("Seed mismatch" in e for e in errors), f"Expected 'Seed mismatch' error, got: {errors}"
+
+
+def test_v2_matrix_detects_incorrect_arm4_display_label(tmp_path):
+    """
+    Proves that validate_matrix_v2 detects an incorrect Arm 4 display label
+    (e.g., 'Phase 2 Frozen Baseline' instead of 'Modified Phase 2-Derived Baseline').
+    """
+    v2_csv = "scratch/research_v2/phase3/experiment_matrix_v2.csv"
+    with open(v2_csv, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        fieldnames = reader.fieldnames
+        rows = list(reader)
+
+    # Corrupt Arm 4's arm_name back to historical "Phase 2 Frozen Baseline"
+    arm4_idx = next(i for i, r in enumerate(rows) if r["arm_id"] == "ARM_4_PHASE2_BASELINE")
+    rows[arm4_idx]["arm_name"] = "Phase 2 Frozen Baseline"
+
+    corrupted_csv = str(tmp_path / "corrupted_label_matrix.csv")
+    with open(corrupted_csv, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+    success, errors = validate_matrix_v2(corrupted_csv)
+    assert not success, "Validation should have failed for incorrect Arm 4 arm_name"
+    assert any("Expected arm_name 'Modified Phase 2-Derived Baseline'" in e for e in errors), f"Expected arm_name error, got: {errors}"
+
