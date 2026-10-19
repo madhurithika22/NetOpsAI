@@ -27,7 +27,7 @@
 
 ## Arm Readiness Summary
 
-- **Runnable Arms (3 Arms)**: `ARM_3_RULE_BASED`, `ARM_4_PHASE2_BASELINE`, `ARM_5_CESO_CADE_NO_LLM` (Ready when authorized).
+- **Runnable Arms (3 Arms)**: `ARM_3_RULE_BASED`, `ARM_4_PHASE2_BASELINE` (Modified Phase 2-Derived Baseline), `ARM_5_CESO_CADE_NO_LLM` (Ready when authorized).
 - **Unimplemented Baseline Arms (2 Arms)**: `ARM_1_STATIC_THRESHOLD`, `ARM_2_ROLLING_STATISTICAL` (Code must be written prior to execution).
 - **Blocked External Service Arms (2 Arms)**: `ARM_6_CESO_CADE_OLLAMA_LLM` (Ollama daemon unavailable in WSL), `ARM_7_CLOSED_LOOP_NETOPS` (Phase 4 remediation hooks pending).
 
@@ -35,4 +35,4 @@
 
 ## Final Execution Constraint
 
-Phase 3 experimental execution remains **STRICTLY PROHIBITED**. Zero research runs have been executed, and frozen Phase 2 algorithm behavior remains untouched.
+Phase 3 experimental execution remains **STRICTLY PROHIBITED**. Zero research runs have been executed, and the historical Phase 2 baseline is preserved separately while Arm 4 executes the Modified Phase 2-Derived Baseline.

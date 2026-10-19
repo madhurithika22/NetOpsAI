@@ -11,7 +11,7 @@
 This report documents the formal revision of the NetOps Research V2 Phase 3 experimental design, research protocol, metric specification, scenario mapping, and experiment matrix.
 
 In accordance with user-approved decisions:
-1. The primary Phase 3 matrix has been narrowed from 420 runs to **120 planned runs** comprising 3 primary arms (**ARM_3_RULE_BASED**, **ARM_4_PHASE2_BASELINE**, and **ARM_5_CESO_CADE_NO_LLM**) across 4 retained scenarios (**CASE_01**, **CASE_02**, **CASE_03**, and **CASE_04**).
+1. The primary Phase 3 matrix has been narrowed from 420 runs to **120 planned runs** comprising 3 primary arms (**ARM_3_RULE_BASED**, **ARM_4_PHASE2_BASELINE** [Scientific Display Name: *Modified Phase 2-Derived Baseline*], and **ARM_5_CESO_CADE_NO_LLM**) across 4 retained scenarios (**CASE_01**, **CASE_02**, **CASE_03**, and **CASE_04**).
 2. **ARM_2_ROLLING_STATISTICAL** is deferred as a potential future extension using a rolling-window z-score detector and excluded from the primary matrix.
 3. **ARM_7_CLOSED_LOOP_NETOPS** (real Linux namespace remediation) is deferred to a separate development track; no remediation is implemented or executed in this task.
 4. **ARM_6_CESO_CADE_OLLAMA_LLM** is excluded from the primary comparison matrix.
@@ -51,7 +51,7 @@ The research protocol [`scratch/research_v2/phase3/experimental_protocol.md`](fi
   where $a \in \{3, 4, 5\}$, $s \in \{1, 2, 3, 4\}$, $r \in \{1..10\}$.
 - **Matrix Sizing**: $3 \text{ Arms} \times 4 \text{ Scenarios} \times 10 \text{ Repetitions} = 120 \text{ Planned Runs}$.
 - **Causal Inferencing Disclosure**: Explicitly documents that Arms 3–5 compare CADE candidate scoring against rule engines on static/simulated snapshots. It does **NOT** isolate LLM reasoning effects (Arm 6) or closed-loop remediation/recovery mechanics (Arm 7).
-- **Phase 2 Code Provenance**: Discloses that the Phase 2 baseline source file hash does not match the original freeze manifest hash byte-for-byte; functional parity is verified by unit tests, but binary preservation is not claimed.
+- **Phase 2 Code Provenance & Baseline Distinction**: Discloses that Arm 4 is scientifically designated as the **Modified Phase 2-Derived Baseline** executing `backend/app/cadd/engine.py` (SHA-256: `97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8`, Git baseline commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`). The historical frozen Phase 2 baseline engine was separately recovered from IDE transcripts and preserved under `research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py` (SHA-256: `ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326`, 20,498 bytes) with documented incomplete formal Git SCM provenance. It is not imported into runtime execution. Passing unit tests prove behavioral compliance, not binary equivalence.
 - **Execution Guard**: Explicitly states that Phase 3 has not been authorized for execution (`phase3_execution_authorized = false`).
 
 ---

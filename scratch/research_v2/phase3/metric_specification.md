@@ -39,6 +39,11 @@ Every metric has been audited against the narrowed primary experimental design (
    - $S(c)$ MUST NOT be described or presented as a calibrated statistical probability.
 4. **Timing Boundary for Latency**:
    - Mean Time to Diagnosis ($T_{\text{mttd}}$) is measured strictly as wall-clock elapsed time from telemetry snapshot ingestion ($t_{\text{observe}}$) to diagnosis emission ($t_{\text{diagnosis}}$). It does NOT include pre-observation simulation warm-up.
+5. **Arm 4 Baseline Designation & Provenance Boundary**:
+   - For all metric evaluations, Arm 4 is scientifically designated as the **Modified Phase 2-Derived Baseline** (internal programmatic compatibility ID: `ARM_4_PHASE2_BASELINE`).
+   - Arm 4 evaluates the modified Phase 2-derived engine currently in `backend/app/cadd/engine.py` (SHA-256: `97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8`, Git baseline commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`).
+   - The original frozen Phase 2 engine is preserved separately in `research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py` (SHA-256: `ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326`) and is not imported by the benchmark suite.
+   - CASE_04 repetitions remain descriptive-only; identical deterministic repetitions across all arms are reliability checks and must not be treated as independent stochastic observations.
 
 ---
 

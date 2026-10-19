@@ -233,17 +233,18 @@ The provenance strength is evaluated across four distinct dimensions:
 
 ## 9. Implications for Phase 3 Arm 4
 
-1. **Baseline Source Recoverability**:
-   - The original Phase 2 implementation of the CADE diagnostic engine has been located and verified byte-for-byte in session recovery artifacts.
-   - Because this audit is strictly read-only, **no restoration of the recovered file to disk was performed**.
+1. **Baseline Source Recoverability and Separate Historical Archival**:
+   - The original Phase 2 implementation of the CADE diagnostic engine has been located and verified byte-for-byte from session recovery artifacts.
+   - It is preserved as a separate historical research artifact under [`research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py`](file:///d:/NetOpsAI/research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py) (SHA-256: `ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326`, 20,498 bytes).
+   - In accordance with safety rules, the historical source is strictly NOT restored over the current runtime file and is NOT imported into the application.
 2. **Current Working-Tree Arm 4 State**:
-   - Arm 4 in the current working tree executes the modified version (`97227c88...`), which incorporates Arm 3 methods and patches to route filtering, interface failure scoring, and empty healthy evidence chains.
-   - If Phase 3 is executed using the current working tree, Arm 4 must be scientifically labeled as a **`Modified Phase 2-Derived Engine`** rather than the literal frozen Phase 2 baseline.
+   - Arm 4 in the current working tree executes the modified version (`97227c88...`, Git baseline commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`), which incorporates Arm 3 methods and patches to route filtering, interface failure scoring, and empty healthy evidence chains.
+   - For all Phase 3 evaluation and documentation, Arm 4 must be scientifically labeled as the **`Modified Phase 2-Derived Baseline`** (retaining `ARM_4_PHASE2_BASELINE` strictly as an internal programmatic compatibility identifier for runner and matrix schemas).
 3. **Restoration Protocol Requirements**:
-   - Restoration of the recovered Phase 2 engine (`CANDIDATE-03`) to `backend/app/cadd/engine.py` cannot occur within an audit turn.
-   - Any future restoration must be conducted under a separate, explicitly approved change-management workflow with full re-validation against unit test suites and protocol requirements.
+   - Restoration of the recovered Phase 2 engine (`CANDIDATE-03`) to `backend/app/cadd/engine.py` cannot occur within an audit or baseline preservation turn.
+   - Any future substitution would require an explicitly approved architectural design decision and separate re-validation.
 4. **Execution Gate**:
-   - The recovery of the Phase 2 source does **NOT** authorize Phase 3 research execution. `phase3_execution_authorized` remains `false`.
+   - Archival and recovery of the Phase 2 source does **NOT** authorize Phase 3 research execution. `phase3_execution_authorized` remains `false`.
 
 ---
 

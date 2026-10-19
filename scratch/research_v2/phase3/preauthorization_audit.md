@@ -114,7 +114,7 @@ Phase 3 experimental execution is **BLOCKED** from authorization review until th
 | **ARM_1** | Static-Threshold Detector | `NOT IMPLEMENTED` (No static single-metric threshold script exists in repo) | `NetworkState` $\to$ `DiagnosticReport` | Yes | `BLOCKED` |
 | **ARM_2** | Rolling-Statistical Detector | `NOT IMPLEMENTED` (No z-score / rolling window detector script exists in repo) | `NetworkState` $\to$ `DiagnosticReport` | Yes | `BLOCKED` |
 | **ARM_3** | Rule-Based Diagnosis | `PARTIALLY IMPLEMENTED` (Rule logic exists within `engine.py`) | `NetworkState` $\to$ `DiagnosticReport` | Yes | `READY` |
-| **ARM_4** | Frozen Phase 2 Baseline | `IMPLEMENTED` (`ExplainableRuleEngine` v2.0.0-phase2 in `backend/app/cadd/engine.py`) | `NetworkState` $\to$ `DiagnosticReport` | Yes | `READY` |
+| **ARM_4** | Modified Phase 2-Derived Baseline | `IMPLEMENTED` (`ExplainableRuleEngine` modified Phase 2-derived in `backend/app/cadd/engine.py`; historical baseline separately archived) | `NetworkState` $\to$ `DiagnosticReport` | Yes | `READY` |
 | **ARM_5** | CESO + CADE (No LLM) | `IMPLEMENTED` (CESO state extraction + CADE engine diagnosis without LLM fallback) | `NetworkState` $\to$ `DiagnosticReport` | Yes | `READY` |
 | **ARM_6** | CESO + CADE (With LLM) | `BLOCKED` (Ollama daemon / `llama3.2:3b` unavailable in WSL) | `NetworkState` $\to$ `DiagnosticReport` + LLM prompt/response | Yes | `BLOCKED` |
 | **ARM_7** | Full Closed-Loop NetOps | `BLOCKED` (Requires live Mininet testbed, automated remediation hooks, and post-verification cycles) | `NetworkState` $\to$ ActionPlan $\to$ Execution $\to$ Verification | Yes | `BLOCKED` |

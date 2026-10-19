@@ -42,7 +42,7 @@ All protocol, matrix, and documentation defects identified in the pre-authorizat
 | **ARM_1** | Static-Threshold Detector | Code not written in repo | `NOT_IMPLEMENTED` | **No** |
 | **ARM_2** | Rolling-Statistical Detector | Code not written in repo | `NOT_IMPLEMENTED` | **No** |
 | **ARM_3** | Rule-Based Diagnosis | Standard engine matching | `PLANNED_READY` | Yes (when authorized) |
-| **ARM_4** | Frozen Phase 2 Baseline | `ExplainableRuleEngine` v2.0.0-phase2 | `PLANNED_READY` | Yes (when authorized) |
+| **ARM_4** | Modified Phase 2-Derived Baseline | `ExplainableRuleEngine` (Modified Phase 2-Derived in `backend/app/cadd/engine.py`) | `PLANNED_READY` | Yes (when authorized) |
 | **ARM_5** | CESO + CADE (No LLM) | CESO state + CADE diagnosis | `PLANNED_READY` | Yes (when authorized) |
 | **ARM_6** | CESO + CADE (With LLM) | Ollama service unavailable in WSL | `BLOCKED_OLLAMA_UNAVAILABLE` | **No** |
 | **ARM_7** | Full Closed-Loop NetOps | Live remediation hooks pending Phase 4 | `BLOCKED_PHASE4_HOOKS_PENDING` | **No** |

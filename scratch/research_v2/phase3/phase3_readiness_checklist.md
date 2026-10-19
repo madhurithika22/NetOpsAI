@@ -23,7 +23,7 @@
 
 ## Arm Readiness Summary
 
-- **Runnable Arms (3 Arms)**: `ARM_3_RULE_BASED`, `ARM_4_PHASE2_BASELINE`, `ARM_5_CESO_CADE_NO_LLM`
+- **Runnable Arms (3 Arms)**: `ARM_3_RULE_BASED`, `ARM_4_PHASE2_BASELINE` (Modified Phase 2-Derived Baseline), `ARM_5_CESO_CADE_NO_LLM`
 - **Unimplemented Arms (2 Arms)**: `ARM_1_STATIC_THRESHOLD`, `ARM_2_ROLLING_STATISTICAL`
 - **Blocked Arms (2 Arms)**: `ARM_6_CESO_CADE_OLLAMA_LLM` (Ollama unavailable), `ARM_7_CLOSED_LOOP_NETOPS` (Phase 4 hooks pending)
 

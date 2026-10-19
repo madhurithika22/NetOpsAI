@@ -14,7 +14,7 @@ The Phase 3 experimental design has been formally narrowed to evaluate three pri
 
 ### Primary Research Questions & Hypotheses
 
-- **RQ1 (Diagnostic Accuracy & Effectiveness)**: How does CADE candidate scoring without LLM escalation (Arm 5) compare to un-escalated rule engines (Arm 3) and the frozen Phase 2 baseline engine (Arm 4) in overall diagnostic accuracy, precision, recall, and Macro-F1?
+- **RQ1 (Diagnostic Accuracy & Effectiveness)**: How does CADE candidate scoring without LLM escalation (Arm 5) compare to un-escalated rule engines (Arm 3) and the modified Phase 2-derived baseline engine (Arm 4, display name: Modified Phase 2-Derived Baseline) in overall diagnostic accuracy, precision, recall, and Macro-F1?
   - *Hypothesis $H_{1a}$*: Arm 5 achieves higher Macro-F1 than Arm 3 and Arm 4 on multi-layer scenarios (`CASE_02`, `CASE_03`, `CASE_04`) by integrating multi-metric context.
 - **RQ2 (Diagnostic Observation Latency)**: What is the wall-clock execution latency $T_{\text{mttd}} = t_{\text{diagnosis}} - t_{\text{observe}}$ measured from telemetry input ingestion to diagnosis emission across Arms 3–5?
   - *Hypothesis $H_{2a}$*: Arm 3 and Arm 4 exhibit lower mean observation latency than Arm 5 due to direct pattern matching without candidate graph evaluation.
@@ -40,7 +40,7 @@ The primary experiment matrix consists of exactly 3 arms:
 | Arm ID | Arm Name | Diagnostic Algorithm | Telemetry Input Pipeline | LLM Escalation | Remediation Loop | Execution Status |
 |---|---|---|---|---|---|---|
 | **ARM_3_RULE_BASED** | Rule-Based Diagnosis | Standard rule matching engine | CESO `NetworkState` snapshot | None | None | `PLANNED_NOT_EXECUTED` |
-| **ARM_4_PHASE2_BASELINE** | Phase 2 Frozen Baseline | `ExplainableRuleEngine` v2.0.0-phase2 | CESO `NetworkState` snapshot | None | None | `PLANNED_NOT_EXECUTED` |
+| **ARM_4_PHASE2_BASELINE** | Modified Phase 2-Derived Baseline | `ExplainableRuleEngine` (Modified Phase 2-Derived) | CESO `NetworkState` snapshot | None | None | `PLANNED_NOT_EXECUTED` |
 | **ARM_5_CESO_CADE_NO_LLM** | CESO + CADE (No LLM) | CADE Candidate Scoring $S(c)$ | CESO `NetworkState` snapshot | None | None | `PLANNED_NOT_EXECUTED` |
 
 ### Detailed Algorithm & Treatment Descriptions
@@ -50,8 +50,12 @@ The primary experiment matrix consists of exactly 3 arms:
    - *Input*: Identical CESO `NetworkState` snapshot.
    - *Output*: Diagnostic label and matched rule string.
 
-2. **ARM_4_PHASE2_BASELINE**:
-   - *Treatment*: Preserved `ExplainableRuleEngine` v2.0.0-phase2 implementation. Applies Phase 2 heuristic decision tree and evidence extraction logic.
+2. **ARM_4_PHASE2_BASELINE** (Scientific Display Name: **Modified Phase 2-Derived Baseline**):
+   - *Scientific Designation & Treatment*: Evaluates the Phase 2-derived heuristic candidate scoring implementation in `backend/app/cadd/engine.py`. Applies continuous feature normalization $\psi(x)$, heuristic candidate scoring $S(c)$, and evidence extraction.
+   - *Implementation Separation & Provenance Distinction*:
+     - **Historical Phase 2 Engine**: The original frozen Phase 2 source is preserved separately as a historical research artifact at [`research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py`](file:///d:/NetOpsAI/research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py) (SHA-256: `ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326`, 20,498 bytes, 433 lines). It was recovered from local IDE interaction logs and has documented incomplete formal Git SCM provenance. It is retained strictly for historical reproducibility and is **not** imported into the application or runtime benchmark pipeline.
+     - **Current Arm 4 Runtime Implementation**: Arm 4 executes the modified Phase 2-derived engine currently present in [`backend/app/cadd/engine.py`](file:///d:/NetOpsAI/backend/app/cadd/engine.py) (actual SHA-256: `97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8`, 29,116 bytes, 477 lines, baseline Git commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`). This implementation contains Arm 3 methods (`diagnose_rule_based`), updated route misconfiguration filtering (`r.destination != "10.0.1.0/24"`), down-interface candidate scoring, and empty healthy evidence chains.
+     - **Compatibility Identifier Notice**: The identifier `ARM_4_PHASE2_BASELINE` is retained strictly as an internal programmatic identifier for backward compatibility with the existing experiment matrix (`experiment_matrix_v2.csv`) and runner schema (`backend/app/evaluation/runner.py`). It does **not** signify exact byte-for-byte reproduction of the frozen Phase 2 engine.
    - *Input*: Identical CESO `NetworkState` snapshot.
    - *Output*: Diagnostic label, confidence score, and selected evidence list.
 
@@ -126,17 +130,23 @@ The choice of $N=10$ repetitions per arm-scenario pair is a **proposed design pa
 - **What the Arms 3–5 Comparison CAN Establish**:
   - The relative diagnostic accuracy and evidence compression of CADE candidate scoring vs. rule-engine baselines on identical telemetry inputs.
   - The computational observation latency difference between candidate graph evaluation and static rule matching.
-- **What the Arms 3–5 Comparison CANNOT Establish**:
-  - Does **NOT** isolate the causal contribution of LLM reasoning (Arm 6 excluded).
-  - Does **NOT** evaluate closed-loop remediation safety, recovery latency, or verification success (Arm 7 deferred).
-  - Does **NOT** prove real-time live network dynamic response (evaluated on synthetic snapshots and static dataset evidence).
+- **Strict Methodological Restrictions & Bounded Claims**:
+  - **Arm 4 Identity Boundary**: Arm 4 is a **Modified Phase 2-Derived Baseline** and is **not** an exact reproduction of the original frozen Phase 2 engine when it invokes the modified current implementation in `backend/app/cadd/engine.py` (`97227c88...`).
+  - **CASE_04 Descriptive-Only Restriction**: Telemetry generation for `CASE_04` is deterministic and non-stochastic. Repetitions $r=1..10$ yield identical static snapshots. Therefore, `CASE_04` is retained for descriptive offline evaluation only (`dataset_only = True`) and MUST NOT be pooled as 10 independent observations for inferential hypothesis testing or ANOVA.
+  - **Deterministic Repetition Boundary**: Identical deterministic repetitions across all arms test software execution determinism and reliability; they must NOT be treated as independent stochastic observations.
+  - **Metric Status Preservation**: Verification and remediation metrics (M-08 through M-11) retain their pre-registered `NOT_MEASURED` or `NOT_APPLICABLE` status because no eligible active remediation actions or probe scope measurements are executed.
+  - **No LLM Causal Claims**: Does **NOT** isolate the causal contribution of LLM reasoning (Arm 6 excluded). No LLM causal claims may be made from the three-arm study.
+  - **No Production Performance Claims**: Does **NOT** evaluate closed-loop remediation safety, recovery latency, or verification success (Arm 7 deferred), and introduces no unsupported claims regarding live production networks.
 
 ---
 
-## 7. Provenance & Phase 2 Freeze Disclosure
+## 7. Provenance, Historical Baseline Preservation & Phase 2 Freeze Disclosure
 
 > [!WARNING]
-> **Phase 2 Code Preserved via Parity, Not Hash**: Method-level and integration unit tests confirm functional parity for the Phase 2 baseline engine (`ExplainableRuleEngine` v2.0.0-phase2). However, the source file hash does not match the original freeze manifest hash byte-for-byte. Method-level tests prove functional output preservation, not binary file identity.
+> **Separation of Historical Baseline Archive from Current Arm 4 Implementation**:
+> 1. **Historical Frozen Phase 2 Engine Preserved**: The original frozen Phase 2 engine has been recovered from IDE session history and preserved in a dedicated historical archive at [`research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py`](file:///d:/NetOpsAI/research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py) (SHA-256: `ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326`, 20,498 bytes). It exactly matches the Phase 2 freeze manifest but possesses incomplete formal Git SCM provenance. It is NOT imported into the runtime application.
+> 2. **Current Arm 4 Is a Modified Engine**: The runtime engine in `backend/app/cadd/engine.py` (SHA-256: `97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8`, Git baseline commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`) is a Modified Phase 2-Derived Engine.
+> 3. **Method-Level Unit Tests Do Not Establish Binary Equivalence**: Passing unit tests confirm behavioral specification compliance, but do not establish byte-for-byte binary equivalence with the frozen Phase 2 manifest.
 
 ---
 

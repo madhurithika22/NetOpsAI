@@ -125,3 +125,19 @@ npm run dev
 
 * **Simulated Mode**: Verified 100% functional on all platforms (Windows, Linux, macOS) without requiring root privileges.
 * **Linux Testbed Mode**: Fully implemented with safe command lists, ownership validation, and fallback telemetry parser for Windows/unprivileged testing environments.
+
+---
+
+## Phase 3 Experimental Design & Baseline Provenance
+
+The planned Phase 3 experimental matrix evaluates 3 primary diagnostic arms across 4 retained scenarios (`CASE_01` to `CASE_04`) with 120 planned rows:
+
+1. **ARM_3_RULE_BASED**: Standard rule-matching engine (`RULE_BASED_VERSION = "1.0.0-arm3-rule-based"`).
+2. **ARM_4_PHASE2_BASELINE** (Scientific Display Name: **Modified Phase 2-Derived Baseline**):
+   - Evaluates the continuous heuristic candidate scoring engine currently implemented in [`backend/app/cadd/engine.py`](file:///d:/NetOpsAI/backend/app/cadd/engine.py) (SHA-256: `97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8`, baseline Git commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`).
+   - The historical frozen Phase 2 engine is preserved separately as an archival research artifact under [`research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py`](file:///d:/NetOpsAI/research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py) (SHA-256: `ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326`, 20,498 bytes) with documented incomplete formal Git SCM provenance. It is **not** imported into runtime execution.
+   - The identifier `ARM_4_PHASE2_BASELINE` is retained strictly as an internal programmatic compatibility identifier for runner and matrix schemas.
+3. **ARM_5_CESO_CADE_NO_LLM**: Context-Aware Diagnosis Engine (CADE) candidate scoring with CESO telemetry extraction without secondary LLM invocation.
+
+> [!IMPORTANT]
+> **Safety Guard**: Phase 3 research execution remains strictly unauthorized (`phase3_execution_authorized = false`). No experiment rows, live benchmarks, or fault injections are authorized.

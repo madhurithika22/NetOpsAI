@@ -82,7 +82,7 @@ Each experimental arm was independently inspected and classified according to it
 | **ARM_1** | Static-Threshold Detector | None in repository | `NOT_IMPLEMENTED` | **UNAUTHORIZED** |
 | **ARM_2** | Rolling-Statistical Detector | None in repository | `NOT_IMPLEMENTED` | **UNAUTHORIZED** |
 | **ARM_3** | Rule-Based Diagnosis | [`backend/app/cadd/engine.py:161-230`](file:///mnt/d/NetOpsAI/backend/app/cadd/engine.py#L161-L230) | `READY_FOR_AUTHORIZATION` | **AUTHORIZED** (Offline / Testbed Diagnosis) |
-| **ARM_4** | Frozen Phase 2 Baseline | [`backend/app/cadd/engine.py:25-155`](file:///mnt/d/NetOpsAI/backend/app/cadd/engine.py#L25-L155) | `READY_FOR_AUTHORIZATION` | **AUTHORIZED** (Offline / Testbed Diagnosis) |
+| **ARM_4** | Modified Phase 2-Derived Baseline | [`backend/app/cadd/engine.py:25-155`](file:///mnt/d/NetOpsAI/backend/app/cadd/engine.py#L25-L155) | `READY_FOR_AUTHORIZATION` | **AUTHORIZED** (Offline / Testbed Diagnosis) |
 | **ARM_5** | CESO + CADE (No LLM) | [`backend/app/ceso/service.py:17`](file:///mnt/d/NetOpsAI/backend/app/ceso/service.py#L17) + `engine.py` | `READY_FOR_AUTHORIZATION` | **AUTHORIZED** (Offline / Testbed Diagnosis) |
 | **ARM_6** | CESO + CADE (With LLM) | [`backend/app/llm/providers/ollama.py:10`](file:///mnt/d/NetOpsAI/backend/app/llm/providers/ollama.py#L10) | `IMPLEMENTED_BUT_ENVIRONMENT_BLOCKED` | **UNAUTHORIZED** (Ollama daemon unavailable) |
 | **ARM_7** | Full Closed-Loop NetOps | [`backend/app/research_v2/testbed/remediation.py`](file:///mnt/d/NetOpsAI/backend/app/research_v2/testbed/remediation.py) | `IMPLEMENTED_BUT_ENVIRONMENT_BLOCKED` | **UNAUTHORIZED** (Phase 4 hooks pending) |

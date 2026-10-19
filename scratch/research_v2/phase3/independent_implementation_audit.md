@@ -22,7 +22,7 @@
 
 ### Frozen Baseline Provenance Assessment
 - **Phase 2 Baseline Preservation**: `ExplainableRuleEngine.diagnose_state()` in `backend/app/cadd/engine.py` retains algorithm version `2.0.0-phase2`, continuous candidate scoring formulas $S(c)$, tie-breaking priority list, and heuristic margin confidence formula $C = \text{round}(S(c^*)(1 - 0.5 S(c^{(2)})), 4)$.
-- **Provenance Note**: The addition of `diagnose_rule_based()` to `engine.py` updated its SHA-256 digest from the recorded hash in `freeze_manifest.json` (`ea483491...`). However, the existing `diagnose_state()` logic for `ARM_4_PHASE2_BASELINE` was preserved 100% untouched.
+- **Provenance Note**: The addition of `diagnose_rule_based()` and subsequent bug fixes to `engine.py` updated its SHA-256 digest from the recorded hash in `freeze_manifest.json` (`ea483491...`) to `97227c88...`. Consequently, Arm 4 is scientifically designated as the **Modified Phase 2-Derived Baseline** (internal compatibility ID: `ARM_4_PHASE2_BASELINE`, Git baseline commit: `0cc7a40fedea656a486117aa0201210a3dfa4661`). The original frozen Phase 2 baseline source is preserved separately in `research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py` (SHA-256: `ea483491...`).
 
 ---
 

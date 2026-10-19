@@ -192,8 +192,14 @@
   "arm4_implications": {
     "source_recovered": true,
     "source_restored_in_working_tree": false,
+    "historical_archive_path": "research/archive/phase2_baseline_recovered/engine_phase2_frozen_recovered.py",
+    "historical_archive_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+    "current_runtime_engine_sha256": "97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8",
+    "git_baseline_commit": "0cc7a40fedea656a486117aa0201210a3dfa4661",
     "current_working_tree_classification": "MODIFIED_PHASE2_DERIVED_BASELINE",
-    "execution_recommendation": "If Phase 3 is executed with current working tree, Arm 4 must be labeled as Modified Phase 2-Derived Baseline. Restoring the recovered Phase 2 baseline requires separate change authorization."
+    "scientific_display_name": "Modified Phase 2-Derived Baseline",
+    "compatibility_identifier": "ARM_4_PHASE2_BASELINE",
+    "execution_recommendation": "Arm 4 is scientifically designated as Modified Phase 2-Derived Baseline. Historical Phase 2 baseline is archived separately and not imported into runtime execution. Phase 3 execution remains unauthorized."
   },
   "integrity_and_safety_attestation": {
     "working_tree_source_unchanged": true,
