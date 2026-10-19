@@ -1,0 +1,4678 @@
+{
+  "experiment_id": "exp-phase1-e270f859",
+  "run_id": "run-8b6188",
+  "timestamp": "2026-10-08T18:41:45.121455Z",
+  "testbed_version": "2.0.0-phase1",
+  "system_info": {
+    "platform": "linux",
+    "os_name": "posix",
+    "python_version": "3.12.15 (main, Oct  1 2026, 20:59:04) [Clang 22.1.3 ]",
+    "system_release": "6.18.33.2-microsoft-standard-WSL2",
+    "machine": "x86_64"
+  },
+  "topology_definition": {
+    "topology_name": "4-node-linear-netns",
+    "namespaces": {
+      "rns-host-a": {
+        "ip": "10.0.1.10/24",
+        "gateway": "10.0.1.1"
+      },
+      "rns-router-1": {
+        "ips": [
+          "10.0.1.1/24",
+          "10.0.2.1/24"
+        ],
+        "routes": {
+          "10.0.3.0/24": "10.0.2.2"
+        }
+      },
+      "rns-router-2": {
+        "ips": [
+          "10.0.2.2/24",
+          "10.0.3.1/24"
+        ],
+        "routes": {
+          "10.0.1.0/24": "10.0.2.1"
+        }
+      },
+      "rns-host-b": {
+        "ip": "10.0.3.10/24",
+        "gateway": "10.0.3.1"
+      }
+    },
+    "is_present": false
+  },
+  "baseline_snapshot": {
+    "snapshot_id": "snap-7141ce32",
+    "experiment_id": "exp-phase1-e270f859",
+    "timestamp": "2026-10-08T18:41:39.323995Z",
+    "source_namespace": "rns-host-a",
+    "destination_ip": "10.0.3.10",
+    "link_latency": {
+      "source_node": "rns-host-a",
+      "target_node": "rns-host-b",
+      "target_ip": "10.0.3.10",
+      "packets_tx": 5,
+      "packets_rx": 5,
+      "packet_loss_pct": 0.0,
+      "rtt_min_ms": 0.085,
+      "rtt_avg_ms": 0.409,
+      "rtt_max_ms": 1.632,
+      "rtt_mdev_ms": 0.611
+    },
+    "interface_states": {
+      "rns-host-a:lo": {
+        "name": "rns-host-a:lo",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 65536
+      },
+      "rns-host-a:veth-ha-r1": {
+        "name": "rns-host-a:veth-ha-r1",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 1500
+      },
+      "rns-router-1:lo": {
+        "name": "rns-router-1:lo",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 65536
+      },
+      "rns-router-1:veth-r1-ha": {
+        "name": "rns-router-1:veth-r1-ha",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 1500
+      },
+      "rns-router-1:veth-r1-r2": {
+        "name": "rns-router-1:veth-r1-r2",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 1500
+      },
+      "rns-router-2:lo": {
+        "name": "rns-router-2:lo",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 65536
+      },
+      "rns-router-2:veth-r2-r1": {
+        "name": "rns-router-2:veth-r2-r1",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 1500
+      },
+      "rns-router-2:veth-r2-hb": {
+        "name": "rns-router-2:veth-r2-hb",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 1500
+      },
+      "rns-host-b:lo": {
+        "name": "rns-host-b:lo",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 65536
+      },
+      "rns-host-b:veth-hb-r2": {
+        "name": "rns-host-b:veth-hb-r2",
+        "is_up": true,
+        "mac_address": null,
+        "ip_addresses": [],
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "rx_errors": 0,
+        "tx_errors": 0,
+        "rx_drops": 0,
+        "tx_drops": 0,
+        "mtu": 1500
+      }
+    },
+    "routes": [
+      {
+        "destination": "default",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-host-a: default via 10.0.1.1 dev veth-ha-r1"
+      },
+      {
+        "destination": "10.0.1.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-host-a: 10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10"
+      },
+      {
+        "destination": "10.0.1.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-router-1: 10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1"
+      },
+      {
+        "destination": "10.0.2.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-router-1: 10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1"
+      },
+      {
+        "destination": "10.0.3.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-router-1: 10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2"
+      },
+      {
+        "destination": "10.0.1.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-router-2: 10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1"
+      },
+      {
+        "destination": "10.0.2.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-router-2: 10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2"
+      },
+      {
+        "destination": "10.0.3.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-router-2: 10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1"
+      },
+      {
+        "destination": "default",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-host-b: default via 10.0.3.1 dev veth-hb-r2"
+      },
+      {
+        "destination": "10.0.3.0/24",
+        "gateway": null,
+        "interface": null,
+        "metric": null,
+        "raw_route": "rns-host-b: 10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10"
+      }
+    ],
+    "qdiscs": [
+      {
+        "namespace": "rns-host-a",
+        "interface": "lo",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+      },
+      {
+        "namespace": "rns-host-a",
+        "interface": "veth-ha-r1",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev veth-ha-r1 root refcnt 2"
+      },
+      {
+        "namespace": "rns-router-1",
+        "interface": "lo",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+      },
+      {
+        "namespace": "rns-router-1",
+        "interface": "veth-r1-ha",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev veth-r1-ha root refcnt 2"
+      },
+      {
+        "namespace": "rns-router-1",
+        "interface": "veth-r1-r2",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev veth-r1-r2 root refcnt 2"
+      },
+      {
+        "namespace": "rns-router-2",
+        "interface": "lo",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+      },
+      {
+        "namespace": "rns-router-2",
+        "interface": "veth-r2-r1",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev veth-r2-r1 root refcnt 2"
+      },
+      {
+        "namespace": "rns-router-2",
+        "interface": "veth-r2-hb",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev veth-r2-hb root refcnt 2"
+      },
+      {
+        "namespace": "rns-host-b",
+        "interface": "lo",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+      },
+      {
+        "namespace": "rns-host-b",
+        "interface": "veth-hb-r2",
+        "qdisc_type": "noqueue",
+        "handle": null,
+        "parent": null,
+        "options_raw": "qdisc noqueue 0: dev veth-hb-r2 root refcnt 2"
+      }
+    ],
+    "raw_commands": [
+      {
+        "original_command": [
+          "ping",
+          "-c",
+          "5",
+          "-i",
+          "0.2",
+          "-W",
+          "1",
+          "10.0.3.10"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-a",
+          "ping",
+          "-c",
+          "5",
+          "-i",
+          "0.2",
+          "-W",
+          "1",
+          "10.0.3.10"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-a",
+        "started_at": "2026-10-08T18:41:39.324000Z",
+        "finished_at": "2026-10-08T18:41:40.149729Z",
+        "duration_ms": 825.72,
+        "return_code": 0,
+        "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=1.63 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=0.085 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=0.137 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=0.085 ms\n64 bytes from 10.0.3.10: icmp_seq=5 ttl=62 time=0.110 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 5 received, 0% packet loss, time 810ms\nrtt min/avg/max/mdev = 0.085/0.409/1.632/0.611 ms\n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-a",
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-a",
+        "started_at": "2026-10-08T18:41:40.150698Z",
+        "finished_at": "2026-10-08T18:41:40.183517Z",
+        "duration_ms": 32.81,
+        "return_code": 0,
+        "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-router-1",
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-router-1",
+        "started_at": "2026-10-08T18:41:40.185506Z",
+        "finished_at": "2026-10-08T18:41:40.205299Z",
+        "duration_ms": 19.78,
+        "return_code": 0,
+        "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-router-2",
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-router-2",
+        "started_at": "2026-10-08T18:41:40.205474Z",
+        "finished_at": "2026-10-08T18:41:40.224273Z",
+        "duration_ms": 18.8,
+        "return_code": 0,
+        "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-b",
+          "ip",
+          "-s",
+          "link",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-b",
+        "started_at": "2026-10-08T18:41:40.224367Z",
+        "finished_at": "2026-10-08T18:41:40.237049Z",
+        "duration_ms": 12.68,
+        "return_code": 0,
+        "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "route",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-a",
+          "ip",
+          "route",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-a",
+        "started_at": "2026-10-08T18:41:40.237140Z",
+        "finished_at": "2026-10-08T18:41:40.250878Z",
+        "duration_ms": 13.73,
+        "return_code": 0,
+        "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "route",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-router-1",
+          "ip",
+          "route",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-router-1",
+        "started_at": "2026-10-08T18:41:40.250949Z",
+        "finished_at": "2026-10-08T18:41:40.264812Z",
+        "duration_ms": 13.86,
+        "return_code": 0,
+        "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "route",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-router-2",
+          "ip",
+          "route",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-router-2",
+        "started_at": "2026-10-08T18:41:40.264877Z",
+        "finished_at": "2026-10-08T18:41:40.276177Z",
+        "duration_ms": 11.3,
+        "return_code": 0,
+        "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "ip",
+          "route",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-b",
+          "ip",
+          "route",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-b",
+        "started_at": "2026-10-08T18:41:40.276257Z",
+        "finished_at": "2026-10-08T18:41:40.288574Z",
+        "duration_ms": 12.31,
+        "return_code": 0,
+        "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-a",
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-a",
+        "started_at": "2026-10-08T18:41:40.288639Z",
+        "finished_at": "2026-10-08T18:41:40.300903Z",
+        "duration_ms": 12.26,
+        "return_code": 0,
+        "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-router-1",
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-router-1",
+        "started_at": "2026-10-08T18:41:40.300981Z",
+        "finished_at": "2026-10-08T18:41:40.313567Z",
+        "duration_ms": 12.58,
+        "return_code": 0,
+        "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc noqueue 0: dev veth-r1-r2 root refcnt 2 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-router-2",
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-router-2",
+        "started_at": "2026-10-08T18:41:40.313636Z",
+        "finished_at": "2026-10-08T18:41:40.324805Z",
+        "duration_ms": 11.16,
+        "return_code": 0,
+        "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+        "stderr": ""
+      },
+      {
+        "original_command": [
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "effective_command": [
+          "sudo",
+          "-n",
+          "ip",
+          "netns",
+          "exec",
+          "rns-host-b",
+          "tc",
+          "qdisc",
+          "show"
+        ],
+        "privileged": true,
+        "namespace": "rns-host-b",
+        "started_at": "2026-10-08T18:41:40.324874Z",
+        "finished_at": "2026-10-08T18:41:40.337610Z",
+        "duration_ms": 12.73,
+        "return_code": 0,
+        "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+        "stderr": ""
+      }
+    ],
+    "is_healthy": true,
+    "summary": "RTT avg=0.409ms, loss=0.0%, healthy=True"
+  },
+  "fault_definition": {
+    "fault_id": "flt-001",
+    "fault_type": "HIGH_LATENCY_CONGESTION",
+    "target_namespace": "rns-router-1",
+    "target_interface": "veth-r1-r2",
+    "parameters": {
+      "delay_ms": 150,
+      "loss_pct": 20
+    },
+    "injection_command": [
+      "tc",
+      "qdisc",
+      "add",
+      "dev",
+      "veth-r1-r2",
+      "root",
+      "netem",
+      "delay",
+      "150ms",
+      "loss",
+      "20%"
+    ],
+    "reset_command": [
+      "tc",
+      "qdisc",
+      "del",
+      "dev",
+      "veth-r1-r2",
+      "root"
+    ]
+  },
+  "fault_injection_record": {
+    "fault_id": "flt-001",
+    "fault_type": "HIGH_LATENCY_CONGESTION",
+    "target_namespace": "rns-router-1",
+    "target_interface": "veth-r1-r2",
+    "parameters": {
+      "delay_ms": 150,
+      "loss_pct": 20
+    },
+    "injection_command_record": {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "add",
+        "dev",
+        "veth-r1-r2",
+        "root",
+        "netem",
+        "delay",
+        "150ms",
+        "loss",
+        "20%"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "add",
+        "dev",
+        "veth-r1-r2",
+        "root",
+        "netem",
+        "delay",
+        "150ms",
+        "loss",
+        "20%"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:41.364991Z",
+      "finished_at": "2026-10-08T18:41:41.381460Z",
+      "duration_ms": 16.47,
+      "return_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "injection_timestamp": "2026-10-08T18:41:41.364979Z",
+    "status": "ACTIVE",
+    "pre_fault_snapshot": {
+      "snapshot_id": "snap-46afec46",
+      "experiment_id": "exp-phase1-e270f859",
+      "timestamp": "2026-10-08T18:41:40.337781Z",
+      "source_namespace": "rns-host-a",
+      "destination_ip": "10.0.3.10",
+      "link_latency": {
+        "source_node": "rns-host-a",
+        "target_node": "rns-host-b",
+        "target_ip": "10.0.3.10",
+        "packets_tx": 5,
+        "packets_rx": 5,
+        "packet_loss_pct": 0.0,
+        "rtt_min_ms": 0.082,
+        "rtt_avg_ms": 0.108,
+        "rtt_max_ms": 0.151,
+        "rtt_mdev_ms": 0.024
+      },
+      "interface_states": {
+        "rns-host-a:lo": {
+          "name": "rns-host-a:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-a:veth-ha-r1": {
+          "name": "rns-host-a:veth-ha-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:lo": {
+          "name": "rns-router-1:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-1:veth-r1-ha": {
+          "name": "rns-router-1:veth-r1-ha",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:veth-r1-r2": {
+          "name": "rns-router-1:veth-r1-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:lo": {
+          "name": "rns-router-2:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-2:veth-r2-r1": {
+          "name": "rns-router-2:veth-r2-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:veth-r2-hb": {
+          "name": "rns-router-2:veth-r2-hb",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-host-b:lo": {
+          "name": "rns-host-b:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-b:veth-hb-r2": {
+          "name": "rns-host-b:veth-hb-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        }
+      },
+      "routes": [
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: default via 10.0.1.1 dev veth-ha-r1"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: 10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1"
+        },
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: default via 10.0.3.1 dev veth-hb-r2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: 10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10"
+        }
+      ],
+      "qdiscs": [
+        {
+          "namespace": "rns-host-a",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-a",
+          "interface": "veth-ha-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-ha-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-ha",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r1-ha root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-r2",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r1-r2 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-hb",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-hb root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "veth-hb-r2",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-hb-r2 root refcnt 2"
+        }
+      ],
+      "raw_commands": [
+        {
+          "original_command": [
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:40.337787Z",
+          "finished_at": "2026-10-08T18:41:41.164919Z",
+          "duration_ms": 827.13,
+          "return_code": 0,
+          "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=0.101 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=0.090 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=0.082 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=0.151 ms\n64 bytes from 10.0.3.10: icmp_seq=5 ttl=62 time=0.117 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 5 received, 0% packet loss, time 813ms\nrtt min/avg/max/mdev = 0.082/0.108/0.151/0.024 ms\n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:41.165183Z",
+          "finished_at": "2026-10-08T18:41:41.196555Z",
+          "duration_ms": 31.37,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          1448      16      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1448      16      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:41.196667Z",
+          "finished_at": "2026-10-08T18:41:41.214782Z",
+          "duration_ms": 18.11,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n          1448      16      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1448      16      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          1538      17      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1448      16      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:41.214899Z",
+          "finished_at": "2026-10-08T18:41:41.230334Z",
+          "duration_ms": 15.43,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          1448      16      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1538      17      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n          1448      16      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1448      16      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:41.230439Z",
+          "finished_at": "2026-10-08T18:41:41.244386Z",
+          "duration_ms": 13.94,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          1448      16      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1448      16      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:41.244554Z",
+          "finished_at": "2026-10-08T18:41:41.256403Z",
+          "duration_ms": 11.84,
+          "return_code": 0,
+          "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:41.256470Z",
+          "finished_at": "2026-10-08T18:41:41.271270Z",
+          "duration_ms": 14.8,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:41.271339Z",
+          "finished_at": "2026-10-08T18:41:41.286334Z",
+          "duration_ms": 14.99,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:41.286402Z",
+          "finished_at": "2026-10-08T18:41:41.302634Z",
+          "duration_ms": 16.23,
+          "return_code": 0,
+          "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:41.302716Z",
+          "finished_at": "2026-10-08T18:41:41.317827Z",
+          "duration_ms": 15.11,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:41.317919Z",
+          "finished_at": "2026-10-08T18:41:41.332674Z",
+          "duration_ms": 14.75,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc noqueue 0: dev veth-r1-r2 root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:41.332745Z",
+          "finished_at": "2026-10-08T18:41:41.346504Z",
+          "duration_ms": 13.75,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:41.346634Z",
+          "finished_at": "2026-10-08T18:41:41.364799Z",
+          "duration_ms": 18.16,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+          "stderr": ""
+        }
+      ],
+      "is_healthy": true,
+      "summary": "RTT avg=0.108ms, loss=0.0%, healthy=True"
+    },
+    "post_fault_snapshot": {
+      "snapshot_id": "snap-b61397ff",
+      "experiment_id": "exp-phase1-e270f859",
+      "timestamp": "2026-10-08T18:41:41.396055Z",
+      "source_namespace": "rns-host-a",
+      "destination_ip": "10.0.3.10",
+      "link_latency": {
+        "source_node": "rns-host-a",
+        "target_node": "rns-host-b",
+        "target_ip": "10.0.3.10",
+        "packets_tx": 5,
+        "packets_rx": 4,
+        "packet_loss_pct": 20.0,
+        "rtt_min_ms": 150.235,
+        "rtt_avg_ms": 150.373,
+        "rtt_max_ms": 150.537,
+        "rtt_mdev_ms": 0.136
+      },
+      "interface_states": {
+        "rns-host-a:lo": {
+          "name": "rns-host-a:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-a:veth-ha-r1": {
+          "name": "rns-host-a:veth-ha-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:lo": {
+          "name": "rns-router-1:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-1:veth-r1-ha": {
+          "name": "rns-router-1:veth-r1-ha",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:veth-r1-r2": {
+          "name": "rns-router-1:veth-r1-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:lo": {
+          "name": "rns-router-2:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-2:veth-r2-r1": {
+          "name": "rns-router-2:veth-r2-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:veth-r2-hb": {
+          "name": "rns-router-2:veth-r2-hb",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-host-b:lo": {
+          "name": "rns-host-b:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-b:veth-hb-r2": {
+          "name": "rns-host-b:veth-hb-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        }
+      },
+      "routes": [
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: default via 10.0.1.1 dev veth-ha-r1"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: 10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1"
+        },
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: default via 10.0.3.1 dev veth-hb-r2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: 10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10"
+        }
+      ],
+      "qdiscs": [
+        {
+          "namespace": "rns-host-a",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-a",
+          "interface": "veth-ha-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-ha-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-ha",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r1-ha root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-r2",
+          "qdisc_type": "netem",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc netem 8004: dev veth-r1-r2 root refcnt 9 limit 1000 delay 150ms loss 20% seed 17840143521480207884"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-hb",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-hb root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "veth-hb-r2",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-hb-r2 root refcnt 2"
+        }
+      ],
+      "raw_commands": [
+        {
+          "original_command": [
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:41.396064Z",
+          "finished_at": "2026-10-08T18:41:42.517540Z",
+          "duration_ms": 1121.47,
+          "return_code": 0,
+          "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=151 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=150 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 4 received, 20% packet loss, time 803ms\nrtt min/avg/max/mdev = 150.235/150.373/150.537/0.136 ms\n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:42.518075Z",
+          "finished_at": "2026-10-08T18:41:42.546779Z",
+          "duration_ms": 28.7,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2028      22      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:42.546981Z",
+          "finished_at": "2026-10-08T18:41:42.564280Z",
+          "duration_ms": 17.29,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n          2028      22      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc netem state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:42.564388Z",
+          "finished_at": "2026-10-08T18:41:42.578050Z",
+          "duration_ms": 13.66,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:42.578169Z",
+          "finished_at": "2026-10-08T18:41:42.591687Z",
+          "duration_ms": 13.51,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:42.591786Z",
+          "finished_at": "2026-10-08T18:41:42.604918Z",
+          "duration_ms": 13.13,
+          "return_code": 0,
+          "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:42.605014Z",
+          "finished_at": "2026-10-08T18:41:42.618692Z",
+          "duration_ms": 13.67,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:42.618753Z",
+          "finished_at": "2026-10-08T18:41:42.632207Z",
+          "duration_ms": 13.45,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:42.632288Z",
+          "finished_at": "2026-10-08T18:41:42.645961Z",
+          "duration_ms": 13.67,
+          "return_code": 0,
+          "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:42.646022Z",
+          "finished_at": "2026-10-08T18:41:42.657963Z",
+          "duration_ms": 11.94,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:42.658041Z",
+          "finished_at": "2026-10-08T18:41:42.671876Z",
+          "duration_ms": 13.83,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc netem 8004: dev veth-r1-r2 root refcnt 9 limit 1000 delay 150ms loss 20% seed 17840143521480207884\n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:42.671948Z",
+          "finished_at": "2026-10-08T18:41:42.684708Z",
+          "duration_ms": 12.76,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:42.684789Z",
+          "finished_at": "2026-10-08T18:41:42.699222Z",
+          "duration_ms": 14.43,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+          "stderr": ""
+        }
+      ],
+      "is_healthy": false,
+      "summary": "RTT avg=150.373ms, loss=20.0%, healthy=False"
+    },
+    "activation_verified": true,
+    "observed_rtt_ms": 150.373,
+    "observed_loss_pct": 20.0
+  },
+  "remediation_plan": {
+    "plan_id": "plan-7fb3a45d",
+    "fault_id": "flt-001",
+    "remediation_type": "REMOVE_NETEM_QDISC",
+    "target_namespace": "rns-router-1",
+    "target_interface": "veth-r1-r2",
+    "remediation_command": [
+      "tc",
+      "qdisc",
+      "del",
+      "dev",
+      "veth-r1-r2",
+      "root"
+    ],
+    "parameters": {}
+  },
+  "remediation_execution_record": {
+    "execution_id": "exec-c13e9733",
+    "plan_id": "plan-7fb3a45d",
+    "executed_at": "2026-10-08T18:41:44.002728Z",
+    "command_record": {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "del",
+        "dev",
+        "veth-r1-r2",
+        "root"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "del",
+        "dev",
+        "veth-r1-r2",
+        "root"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:44.002737Z",
+      "finished_at": "2026-10-08T18:41:44.020360Z",
+      "duration_ms": 17.62,
+      "return_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "status": "EXECUTED",
+    "pre_remediation_snapshot": {
+      "snapshot_id": "snap-8ab4c2cf",
+      "experiment_id": "exp-phase1-e270f859",
+      "timestamp": "2026-10-08T18:41:42.699467Z",
+      "source_namespace": "rns-host-a",
+      "destination_ip": "10.0.3.10",
+      "link_latency": {
+        "source_node": "rns-host-a",
+        "target_node": "rns-host-b",
+        "target_ip": "10.0.3.10",
+        "packets_tx": 5,
+        "packets_rx": 4,
+        "packet_loss_pct": 20.0,
+        "rtt_min_ms": 150.241,
+        "rtt_avg_ms": 150.296,
+        "rtt_max_ms": 150.398,
+        "rtt_mdev_ms": 0.06
+      },
+      "interface_states": {
+        "rns-host-a:lo": {
+          "name": "rns-host-a:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-a:veth-ha-r1": {
+          "name": "rns-host-a:veth-ha-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:lo": {
+          "name": "rns-router-1:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-1:veth-r1-ha": {
+          "name": "rns-router-1:veth-r1-ha",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:veth-r1-r2": {
+          "name": "rns-router-1:veth-r1-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:lo": {
+          "name": "rns-router-2:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-2:veth-r2-r1": {
+          "name": "rns-router-2:veth-r2-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:veth-r2-hb": {
+          "name": "rns-router-2:veth-r2-hb",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-host-b:lo": {
+          "name": "rns-host-b:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-b:veth-hb-r2": {
+          "name": "rns-host-b:veth-hb-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        }
+      },
+      "routes": [
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: default via 10.0.1.1 dev veth-ha-r1"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: 10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1"
+        },
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: default via 10.0.3.1 dev veth-hb-r2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: 10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10"
+        }
+      ],
+      "qdiscs": [
+        {
+          "namespace": "rns-host-a",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-a",
+          "interface": "veth-ha-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-ha-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-ha",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r1-ha root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-r2",
+          "qdisc_type": "netem",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc netem 8004: dev veth-r1-r2 root refcnt 9 limit 1000 delay 150ms loss 20% seed 17840143521480207884"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-hb",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-hb root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "veth-hb-r2",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-hb-r2 root refcnt 2"
+        }
+      ],
+      "raw_commands": [
+        {
+          "original_command": [
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:42.699472Z",
+          "finished_at": "2026-10-08T18:41:43.818985Z",
+          "duration_ms": 1119.51,
+          "return_code": 0,
+          "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=5 ttl=62 time=150 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 4 received, 20% packet loss, time 803ms\nrtt min/avg/max/mdev = 150.241/150.296/150.398/0.060 ms\n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:43.819224Z",
+          "finished_at": "2026-10-08T18:41:43.850679Z",
+          "duration_ms": 31.45,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          2322      25      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2518      27      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:43.850854Z",
+          "finished_at": "2026-10-08T18:41:43.871634Z",
+          "duration_ms": 20.77,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n          2518      27      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2322      25      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc netem state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          2322      25      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2322      25      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:43.871775Z",
+          "finished_at": "2026-10-08T18:41:43.886209Z",
+          "duration_ms": 14.43,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          2322      25      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2322      25      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n          2322      25      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2322      25      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:43.886311Z",
+          "finished_at": "2026-10-08T18:41:43.899934Z",
+          "duration_ms": 13.62,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          2322      25      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2322      25      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:43.900027Z",
+          "finished_at": "2026-10-08T18:41:43.912073Z",
+          "duration_ms": 12.04,
+          "return_code": 0,
+          "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:43.912137Z",
+          "finished_at": "2026-10-08T18:41:43.923418Z",
+          "duration_ms": 11.28,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:43.923485Z",
+          "finished_at": "2026-10-08T18:41:43.936478Z",
+          "duration_ms": 12.99,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:43.936550Z",
+          "finished_at": "2026-10-08T18:41:43.950897Z",
+          "duration_ms": 14.34,
+          "return_code": 0,
+          "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:43.950966Z",
+          "finished_at": "2026-10-08T18:41:43.962604Z",
+          "duration_ms": 11.63,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:43.962683Z",
+          "finished_at": "2026-10-08T18:41:43.973632Z",
+          "duration_ms": 10.95,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc netem 8004: dev veth-r1-r2 root refcnt 9 limit 1000 delay 150ms loss 20% seed 17840143521480207884\n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:43.973705Z",
+          "finished_at": "2026-10-08T18:41:43.986352Z",
+          "duration_ms": 12.64,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:43.986425Z",
+          "finished_at": "2026-10-08T18:41:44.002619Z",
+          "duration_ms": 16.19,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+          "stderr": ""
+        }
+      ],
+      "is_healthy": false,
+      "summary": "RTT avg=150.296ms, loss=20.0%, healthy=False"
+    }
+  },
+  "independent_verification_record": {
+    "verification_id": "ver-e250e7b1",
+    "plan_id": "plan-7fb3a45d",
+    "timestamp": "2026-10-08T18:41:44.020497Z",
+    "verification_snapshot": {
+      "snapshot_id": "snap-dcbf85a9",
+      "experiment_id": "exp-phase1-e270f859",
+      "timestamp": "2026-10-08T18:41:44.020505Z",
+      "source_namespace": "rns-host-a",
+      "destination_ip": "10.0.3.10",
+      "link_latency": {
+        "source_node": "rns-host-a",
+        "target_node": "rns-host-b",
+        "target_ip": "10.0.3.10",
+        "packets_tx": 5,
+        "packets_rx": 5,
+        "packet_loss_pct": 0.0,
+        "rtt_min_ms": 0.041,
+        "rtt_avg_ms": 0.092,
+        "rtt_max_ms": 0.154,
+        "rtt_mdev_ms": 0.036
+      },
+      "interface_states": {
+        "rns-host-a:lo": {
+          "name": "rns-host-a:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-a:veth-ha-r1": {
+          "name": "rns-host-a:veth-ha-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:lo": {
+          "name": "rns-router-1:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-1:veth-r1-ha": {
+          "name": "rns-router-1:veth-r1-ha",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-1:veth-r1-r2": {
+          "name": "rns-router-1:veth-r1-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:lo": {
+          "name": "rns-router-2:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-router-2:veth-r2-r1": {
+          "name": "rns-router-2:veth-r2-r1",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-router-2:veth-r2-hb": {
+          "name": "rns-router-2:veth-r2-hb",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        },
+        "rns-host-b:lo": {
+          "name": "rns-host-b:lo",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 65536
+        },
+        "rns-host-b:veth-hb-r2": {
+          "name": "rns-host-b:veth-hb-r2",
+          "is_up": true,
+          "mac_address": null,
+          "ip_addresses": [],
+          "rx_bytes": 0,
+          "tx_bytes": 0,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drops": 0,
+          "tx_drops": 0,
+          "mtu": 1500
+        }
+      },
+      "routes": [
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: default via 10.0.1.1 dev veth-ha-r1"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-a: 10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-1: 10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2"
+        },
+        {
+          "destination": "10.0.1.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1"
+        },
+        {
+          "destination": "10.0.2.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-router-2: 10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1"
+        },
+        {
+          "destination": "default",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: default via 10.0.3.1 dev veth-hb-r2"
+        },
+        {
+          "destination": "10.0.3.0/24",
+          "gateway": null,
+          "interface": null,
+          "metric": null,
+          "raw_route": "rns-host-b: 10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10"
+        }
+      ],
+      "qdiscs": [
+        {
+          "namespace": "rns-host-a",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-a",
+          "interface": "veth-ha-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-ha-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-ha",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r1-ha root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-1",
+          "interface": "veth-r1-r2",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r1-r2 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-r1",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-r1 root refcnt 2"
+        },
+        {
+          "namespace": "rns-router-2",
+          "interface": "veth-r2-hb",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-r2-hb root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "lo",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev lo root refcnt 2"
+        },
+        {
+          "namespace": "rns-host-b",
+          "interface": "veth-hb-r2",
+          "qdisc_type": "noqueue",
+          "handle": null,
+          "parent": null,
+          "options_raw": "qdisc noqueue 0: dev veth-hb-r2 root refcnt 2"
+        }
+      ],
+      "raw_commands": [
+        {
+          "original_command": [
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ping",
+            "-c",
+            "5",
+            "-i",
+            "0.2",
+            "-W",
+            "1",
+            "10.0.3.10"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:44.020509Z",
+          "finished_at": "2026-10-08T18:41:44.853408Z",
+          "duration_ms": 832.89,
+          "return_code": 0,
+          "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=0.041 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=0.095 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=0.154 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=0.084 ms\n64 bytes from 10.0.3.10: icmp_seq=5 ttl=62 time=0.090 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 5 received, 0% packet loss, time 815ms\nrtt min/avg/max/mdev = 0.041/0.092/0.154/0.036 ms\n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:44.853659Z",
+          "finished_at": "2026-10-08T18:41:44.884446Z",
+          "duration_ms": 30.78,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          2854      31      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          3120      34      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:44.884634Z",
+          "finished_at": "2026-10-08T18:41:44.906854Z",
+          "duration_ms": 22.21,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n          3120      34      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2854      31      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          2924      32      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2854      31      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:44.906980Z",
+          "finished_at": "2026-10-08T18:41:44.923513Z",
+          "duration_ms": 16.53,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          2854      31      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2924      32      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n          2854      31      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2924      32      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "-s",
+            "link",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:44.923626Z",
+          "finished_at": "2026-10-08T18:41:44.939816Z",
+          "duration_ms": 16.19,
+          "return_code": 0,
+          "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          2924      32      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2854      31      0       0       0       0 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:44.939911Z",
+          "finished_at": "2026-10-08T18:41:44.953850Z",
+          "duration_ms": 13.94,
+          "return_code": 0,
+          "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:44.953916Z",
+          "finished_at": "2026-10-08T18:41:44.966950Z",
+          "duration_ms": 13.03,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:44.967024Z",
+          "finished_at": "2026-10-08T18:41:44.982686Z",
+          "duration_ms": 15.66,
+          "return_code": 0,
+          "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "ip",
+            "route",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "ip",
+            "route",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:44.982805Z",
+          "finished_at": "2026-10-08T18:41:44.998536Z",
+          "duration_ms": 15.73,
+          "return_code": 0,
+          "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-a",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-a",
+          "started_at": "2026-10-08T18:41:44.998599Z",
+          "finished_at": "2026-10-08T18:41:45.014649Z",
+          "duration_ms": 16.04,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-1",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-1",
+          "started_at": "2026-10-08T18:41:45.014787Z",
+          "finished_at": "2026-10-08T18:41:45.027618Z",
+          "duration_ms": 12.83,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc noqueue 0: dev veth-r1-r2 root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-router-2",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-router-2",
+          "started_at": "2026-10-08T18:41:45.027722Z",
+          "finished_at": "2026-10-08T18:41:45.040212Z",
+          "duration_ms": 12.49,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+          "stderr": ""
+        },
+        {
+          "original_command": [
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "effective_command": [
+            "sudo",
+            "-n",
+            "ip",
+            "netns",
+            "exec",
+            "rns-host-b",
+            "tc",
+            "qdisc",
+            "show"
+          ],
+          "privileged": true,
+          "namespace": "rns-host-b",
+          "started_at": "2026-10-08T18:41:45.040286Z",
+          "finished_at": "2026-10-08T18:41:45.053469Z",
+          "duration_ms": 13.18,
+          "return_code": 0,
+          "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+          "stderr": ""
+        }
+      ],
+      "is_healthy": true,
+      "summary": "RTT avg=0.092ms, loss=0.0%, healthy=True"
+    },
+    "reachability_healthy": true,
+    "loss_healthy": true,
+    "rtt_healthy": true,
+    "qdisc_absent": true,
+    "overall_passed": true,
+    "criteria_details": {
+      "reachability_healthy": true,
+      "loss_observed_pct": 0.0,
+      "loss_threshold_pct": 5.0,
+      "loss_healthy": true,
+      "rtt_observed_ms": 0.092,
+      "rtt_threshold_ms": 20.0,
+      "rtt_healthy": true,
+      "qdisc_netem_absent": true,
+      "tc_qdisc_raw": "qdisc noqueue 0: root refcnt 2"
+    }
+  },
+  "final_status": "RECOVERED",
+  "raw_command_history": [
+    {
+      "original_command": [
+        "ping",
+        "-c",
+        "5",
+        "-i",
+        "0.2",
+        "-W",
+        "1",
+        "10.0.3.10"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ping",
+        "-c",
+        "5",
+        "-i",
+        "0.2",
+        "-W",
+        "1",
+        "10.0.3.10"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:39.324000Z",
+      "finished_at": "2026-10-08T18:41:40.149729Z",
+      "duration_ms": 825.72,
+      "return_code": 0,
+      "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=1.63 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=0.085 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=0.137 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=0.085 ms\n64 bytes from 10.0.3.10: icmp_seq=5 ttl=62 time=0.110 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 5 received, 0% packet loss, time 810ms\nrtt min/avg/max/mdev = 0.085/0.409/1.632/0.611 ms\n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:40.150698Z",
+      "finished_at": "2026-10-08T18:41:40.183517Z",
+      "duration_ms": 32.81,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:40.185506Z",
+      "finished_at": "2026-10-08T18:41:40.205299Z",
+      "duration_ms": 19.78,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:40.205474Z",
+      "finished_at": "2026-10-08T18:41:40.224273Z",
+      "duration_ms": 18.8,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:40.224367Z",
+      "finished_at": "2026-10-08T18:41:40.237049Z",
+      "duration_ms": 12.68,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n           798       9      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n           798       9      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:40.237140Z",
+      "finished_at": "2026-10-08T18:41:40.250878Z",
+      "duration_ms": 13.73,
+      "return_code": 0,
+      "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:40.250949Z",
+      "finished_at": "2026-10-08T18:41:40.264812Z",
+      "duration_ms": 13.86,
+      "return_code": 0,
+      "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:40.264877Z",
+      "finished_at": "2026-10-08T18:41:40.276177Z",
+      "duration_ms": 11.3,
+      "return_code": 0,
+      "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:40.276257Z",
+      "finished_at": "2026-10-08T18:41:40.288574Z",
+      "duration_ms": 12.31,
+      "return_code": 0,
+      "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:40.288639Z",
+      "finished_at": "2026-10-08T18:41:40.300903Z",
+      "duration_ms": 12.26,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:40.300981Z",
+      "finished_at": "2026-10-08T18:41:40.313567Z",
+      "duration_ms": 12.58,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc noqueue 0: dev veth-r1-r2 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:40.313636Z",
+      "finished_at": "2026-10-08T18:41:40.324805Z",
+      "duration_ms": 11.16,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:40.324874Z",
+      "finished_at": "2026-10-08T18:41:40.337610Z",
+      "duration_ms": 12.73,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "add",
+        "dev",
+        "veth-r1-r2",
+        "root",
+        "netem",
+        "delay",
+        "150ms",
+        "loss",
+        "20%"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "add",
+        "dev",
+        "veth-r1-r2",
+        "root",
+        "netem",
+        "delay",
+        "150ms",
+        "loss",
+        "20%"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:41.364991Z",
+      "finished_at": "2026-10-08T18:41:41.381460Z",
+      "duration_ms": 16.47,
+      "return_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ping",
+        "-c",
+        "5",
+        "-i",
+        "0.2",
+        "-W",
+        "1",
+        "10.0.3.10"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ping",
+        "-c",
+        "5",
+        "-i",
+        "0.2",
+        "-W",
+        "1",
+        "10.0.3.10"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:41.396064Z",
+      "finished_at": "2026-10-08T18:41:42.517540Z",
+      "duration_ms": 1121.47,
+      "return_code": 0,
+      "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=151 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=150 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=150 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 4 received, 20% packet loss, time 803ms\nrtt min/avg/max/mdev = 150.235/150.373/150.537/0.136 ms\n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:42.518075Z",
+      "finished_at": "2026-10-08T18:41:42.546779Z",
+      "duration_ms": 28.7,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2028      22      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:42.546981Z",
+      "finished_at": "2026-10-08T18:41:42.564280Z",
+      "duration_ms": 17.29,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n          2028      22      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc netem state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:42.564388Z",
+      "finished_at": "2026-10-08T18:41:42.578050Z",
+      "duration_ms": 13.66,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:42.578169Z",
+      "finished_at": "2026-10-08T18:41:42.591687Z",
+      "duration_ms": 13.51,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          1930      21      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          1930      21      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:42.591786Z",
+      "finished_at": "2026-10-08T18:41:42.604918Z",
+      "duration_ms": 13.13,
+      "return_code": 0,
+      "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:42.605014Z",
+      "finished_at": "2026-10-08T18:41:42.618692Z",
+      "duration_ms": 13.67,
+      "return_code": 0,
+      "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:42.618753Z",
+      "finished_at": "2026-10-08T18:41:42.632207Z",
+      "duration_ms": 13.45,
+      "return_code": 0,
+      "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:42.632288Z",
+      "finished_at": "2026-10-08T18:41:42.645961Z",
+      "duration_ms": 13.67,
+      "return_code": 0,
+      "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:42.646022Z",
+      "finished_at": "2026-10-08T18:41:42.657963Z",
+      "duration_ms": 11.94,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:42.658041Z",
+      "finished_at": "2026-10-08T18:41:42.671876Z",
+      "duration_ms": 13.83,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc netem 8004: dev veth-r1-r2 root refcnt 9 limit 1000 delay 150ms loss 20% seed 17840143521480207884\n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:42.671948Z",
+      "finished_at": "2026-10-08T18:41:42.684708Z",
+      "duration_ms": 12.76,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:42.684789Z",
+      "finished_at": "2026-10-08T18:41:42.699222Z",
+      "duration_ms": 14.43,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "del",
+        "dev",
+        "veth-r1-r2",
+        "root"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "del",
+        "dev",
+        "veth-r1-r2",
+        "root"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:44.002737Z",
+      "finished_at": "2026-10-08T18:41:44.020360Z",
+      "duration_ms": 17.62,
+      "return_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ping",
+        "-c",
+        "5",
+        "-i",
+        "0.2",
+        "-W",
+        "1",
+        "10.0.3.10"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ping",
+        "-c",
+        "5",
+        "-i",
+        "0.2",
+        "-W",
+        "1",
+        "10.0.3.10"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:44.020509Z",
+      "finished_at": "2026-10-08T18:41:44.853408Z",
+      "duration_ms": 832.89,
+      "return_code": 0,
+      "stdout": "PING 10.0.3.10 (10.0.3.10) 56(84) bytes of data.\n64 bytes from 10.0.3.10: icmp_seq=1 ttl=62 time=0.041 ms\n64 bytes from 10.0.3.10: icmp_seq=2 ttl=62 time=0.095 ms\n64 bytes from 10.0.3.10: icmp_seq=3 ttl=62 time=0.154 ms\n64 bytes from 10.0.3.10: icmp_seq=4 ttl=62 time=0.084 ms\n64 bytes from 10.0.3.10: icmp_seq=5 ttl=62 time=0.090 ms\n\n--- 10.0.3.10 ping statistics ---\n5 packets transmitted, 5 received, 0% packet loss, time 815ms\nrtt min/avg/max/mdev = 0.041/0.092/0.154/0.036 ms\n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:44.853659Z",
+      "finished_at": "2026-10-08T18:41:44.884446Z",
+      "duration_ms": 30.78,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n28: veth-ha-r1@if27: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether c6:79:62:56:24:21 brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          2854      31      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          3120      34      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:44.884634Z",
+      "finished_at": "2026-10-08T18:41:44.906854Z",
+      "duration_ms": 22.21,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n27: veth-r1-ha@if28: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether da:c7:19:49:46:4e brd ff:ff:ff:ff:ff:ff link-netns rns-host-a\n    RX:  bytes packets errors dropped  missed   mcast           \n          3120      34      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2854      31      0       0       0       0 \n30: veth-r1-r2@if29: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 52:7e:d5:da:39:ae brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          2924      32      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2854      31      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:44.906980Z",
+      "finished_at": "2026-10-08T18:41:44.923513Z",
+      "duration_ms": 16.53,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n29: veth-r2-r1@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 02:bd:eb:b0:a4:bb brd ff:ff:ff:ff:ff:ff link-netns rns-router-1\n    RX:  bytes packets errors dropped  missed   mcast           \n          2854      31      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2924      32      0       0       0       0 \n32: veth-r2-hb@if31: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 26:fb:0c:25:a7:d6 brd ff:ff:ff:ff:ff:ff link-netns rns-host-b\n    RX:  bytes packets errors dropped  missed   mcast           \n          2854      31      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2924      32      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "ip",
+        "-s",
+        "link",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:44.923626Z",
+      "finished_at": "2026-10-08T18:41:44.939816Z",
+      "duration_ms": 16.19,
+      "return_code": 0,
+      "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    RX:  bytes packets errors dropped  missed   mcast           \n             0       0      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n             0       0      0       0       0       0 \n31: veth-hb-r2@if32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether 6a:c1:a1:1f:77:54 brd ff:ff:ff:ff:ff:ff link-netns rns-router-2\n    RX:  bytes packets errors dropped  missed   mcast           \n          2924      32      0       0       0       0 \n    TX:  bytes packets errors dropped carrier collsns           \n          2854      31      0       0       0       0 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:44.939911Z",
+      "finished_at": "2026-10-08T18:41:44.953850Z",
+      "duration_ms": 13.94,
+      "return_code": 0,
+      "stdout": "default via 10.0.1.1 dev veth-ha-r1 \n10.0.1.0/24 dev veth-ha-r1 proto kernel scope link src 10.0.1.10 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:44.953916Z",
+      "finished_at": "2026-10-08T18:41:44.966950Z",
+      "duration_ms": 13.03,
+      "return_code": 0,
+      "stdout": "10.0.1.0/24 dev veth-r1-ha proto kernel scope link src 10.0.1.1 \n10.0.2.0/24 dev veth-r1-r2 proto kernel scope link src 10.0.2.1 \n10.0.3.0/24 via 10.0.2.2 dev veth-r1-r2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:44.967024Z",
+      "finished_at": "2026-10-08T18:41:44.982686Z",
+      "duration_ms": 15.66,
+      "return_code": 0,
+      "stdout": "10.0.1.0/24 via 10.0.2.1 dev veth-r2-r1 \n10.0.2.0/24 dev veth-r2-r1 proto kernel scope link src 10.0.2.2 \n10.0.3.0/24 dev veth-r2-hb proto kernel scope link src 10.0.3.1 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "ip",
+        "route",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "ip",
+        "route",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:44.982805Z",
+      "finished_at": "2026-10-08T18:41:44.998536Z",
+      "duration_ms": 15.73,
+      "return_code": 0,
+      "stdout": "default via 10.0.3.1 dev veth-hb-r2 \n10.0.3.0/24 dev veth-hb-r2 proto kernel scope link src 10.0.3.10 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-a",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-a",
+      "started_at": "2026-10-08T18:41:44.998599Z",
+      "finished_at": "2026-10-08T18:41:45.014649Z",
+      "duration_ms": 16.04,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-ha-r1 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-1",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-1",
+      "started_at": "2026-10-08T18:41:45.014787Z",
+      "finished_at": "2026-10-08T18:41:45.027618Z",
+      "duration_ms": 12.83,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r1-ha root refcnt 2 \nqdisc noqueue 0: dev veth-r1-r2 root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-router-2",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-router-2",
+      "started_at": "2026-10-08T18:41:45.027722Z",
+      "finished_at": "2026-10-08T18:41:45.040212Z",
+      "duration_ms": 12.49,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-r2-r1 root refcnt 2 \nqdisc noqueue 0: dev veth-r2-hb root refcnt 2 \n",
+      "stderr": ""
+    },
+    {
+      "original_command": [
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "effective_command": [
+        "sudo",
+        "-n",
+        "ip",
+        "netns",
+        "exec",
+        "rns-host-b",
+        "tc",
+        "qdisc",
+        "show"
+      ],
+      "privileged": true,
+      "namespace": "rns-host-b",
+      "started_at": "2026-10-08T18:41:45.040286Z",
+      "finished_at": "2026-10-08T18:41:45.053469Z",
+      "duration_ms": 13.18,
+      "return_code": 0,
+      "stdout": "qdisc noqueue 0: dev lo root refcnt 2 \nqdisc noqueue 0: dev veth-hb-r2 root refcnt 2 \n",
+      "stderr": ""
+    }
+  ]
+}

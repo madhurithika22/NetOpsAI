@@ -1,0 +1,212 @@
+{
+  "audit_metadata": {
+    "report_name": "NetOps Phase 2 Baseline Source Recovery and Provenance Audit (Corrected)",
+    "timestamp_utc": "2026-10-19T16:45:00Z",
+    "auditor_role": "Independent Software Provenance Auditor, Reproducible-Research Reviewer & Senior Python Engineer",
+    "target_file": "backend/app/cadd/engine.py",
+    "expected_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+    "previously_reported_current_sha256": "07e1bfe7bf26c82447dfe5959f75adcffc963857fba44574278bff3209c23504",
+    "actual_current_file_sha256": "97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8",
+    "actual_current_file_size_bytes": 29116,
+    "actual_current_file_line_count": 477,
+    "current_file_hash_match": false,
+    "reconstructed_source_revalidated": true,
+    "reconstructed_source_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+    "reconstructed_source_size_bytes": 20498,
+    "reconstructed_source_line_count": 433,
+    "reconstructed_source_hash_match": true
+  },
+  "freeze_manifest_inspection": {
+    "manifest_path": "scratch/research_v2/phase2/freeze_manifest.json",
+    "manifest_sha256": "97abaf470754fae34f5362cac8e3c64203a169649a1665ef535d04cabedf95fd",
+    "freeze_timestamp_utc": "2026-10-09T07:23:57.280899+00:00",
+    "recorded_engine_entry": {
+      "path": "backend/app/cadd/engine.py",
+      "sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326"
+    },
+    "recorded_algorithm_version": "2.0.0-phase2",
+    "recorded_git_provenance": {
+      "commit": "unpinned",
+      "is_dirty": true,
+      "error": "Command '['git', 'rev-parse', 'HEAD']' returned non-zero exit status 128."
+    },
+    "documentation_git_commit": "dfa8241b7e28901a8ef1c0e359a4918ef9b4186c",
+    "documentation_git_status": "UNVERIFIED_PHANTOM_COMMIT"
+  },
+  "git_history_investigation": {
+    "is_tracked_by_git": false,
+    "git_repository_present": false,
+    "git_status_output": "fatal: not a git repository (or any of the parent directories): .git",
+    "reachable_commits_count": 0,
+    "local_branches_count": 0,
+    "local_tags_count": 0,
+    "reflogs_available": false,
+    "expected_source_in_reachable_commit": false,
+    "commit_dfa8241b_resolvable": false,
+    "divergence_recorded_in_git": false
+  },
+  "archive_and_backup_investigation": {
+    "git_bundles_found": 0,
+    "source_patches_found": 0,
+    "source_archives_found": 0,
+    "external_data_archives_found": 16,
+    "external_data_archives_note": "AIOps Challenge 2020 external competition telemetry ZIPs in data/external/aiops_challenge_2020/ contain CSV telemetry only, no source code.",
+    "bytecode_cache_artifacts": [
+      {
+        "path": "backend/app/cadd/__pycache__/engine.cpython-310.pyc",
+        "file_sha256": "68e3e350f0b022910547887c24987c89873b39538851569385f28b8185223e96",
+        "size_bytes": 16549,
+        "mtime_utc": "2026-10-09T10:02:20Z",
+        "source_size_bytes": 29435,
+        "correlated_intermediate_source_hash": "07e1bfe7bf26c82447dfe5959f75adcffc963857fba44574278bff3209c23504",
+        "role": "Intermediate bytecode compiled immediately following Step 482 Arm 3 addition"
+      },
+      {
+        "path": "backend/app/cadd/__pycache__/engine.cpython-312.pyc",
+        "file_sha256": "bfae496f86115ff3ecf37052dfae076a5bf901a5dc880aaeee9d3937fafb3525",
+        "size_bytes": 24894,
+        "mtime_utc": "2026-10-09T18:32:30Z",
+        "source_size_bytes": 29116,
+        "correlated_current_source_hash": "97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8",
+        "role": "Current bytecode corresponding to current working-tree file"
+      }
+    ],
+    "ide_transcript_artifacts_inspected": [
+      {
+        "conversation_id": "c4dbdd2b-06db-4867-9dca-2f0a3c1723a2",
+        "log_path": "C:/Users/Ln/.gemini/antigravity-ide/brain/c4dbdd2b-06db-4867-9dca-2f0a3c1723a2/.system_generated/logs/transcript_full.jsonl",
+        "file_sha256": "b4dc6468f2f7f5d4851ea01f078d8ce19fe945d9af1070d5b618b602c3a05d8d",
+        "file_size_bytes": 1644395,
+        "step_index": 20,
+        "timestamp_utc": "2026-10-09T05:44:00Z",
+        "operation": "view_file",
+        "captured_file": "backend/app/cadd/engine.py",
+        "extracted_source_lines": 433,
+        "extracted_source_bytes": 20498,
+        "extracted_source_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+        "exact_match_to_freeze_manifest": true
+      }
+    ]
+  },
+  "candidate_comparison": [
+    {
+      "candidate_id": "CANDIDATE-01",
+      "source_type": "Current working-tree file",
+      "source_reference": "d:/NetOpsAI/backend/app/cadd/engine.py",
+      "candidate_file_sha256": "97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8",
+      "extracted_source_sha256": "97227c88ee345b53474d11491912f3c960e2a2414f5059f7bf02d4a4c050bad8",
+      "expected_manifest_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "expected_hash_match": "NO",
+      "provenance_strength": "ACTIVE_WORKING_TREE_MODIFIED",
+      "limitations": "Post-freeze modifications; fails expected hash match."
+    },
+    {
+      "candidate_id": "CANDIDATE-02",
+      "source_type": "Intermediate bytecode cache",
+      "source_reference": "backend/app/cadd/__pycache__/engine.cpython-310.pyc",
+      "candidate_file_sha256": "68e3e350f0b022910547887c24987c89873b39538851569385f28b8185223e96",
+      "extracted_source_sha256": "NOT_EXTRACTABLE",
+      "expected_manifest_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "expected_hash_match": "NO",
+      "provenance_strength": "CORROBORATIVE_BYTECODE_CACHE",
+      "limitations": "Compiled Python bytecode artifact; source is not directly extractable; header metadata records source size 29,435 B, correlating with intermediate source 07e1bfe7...; fails expected hash match."
+    },
+    {
+      "candidate_id": "CANDIDATE-03",
+      "source_type": "Local IDE interaction transcript artifact",
+      "source_reference": "C:/Users/Ln/.gemini/antigravity-ide/brain/c4dbdd2b-06db-4867-9dca-2f0a3c1723a2/.system_generated/logs/transcript_full.jsonl (step 20, lines 1-433)",
+      "candidate_file_sha256": "b4dc6468f2f7f5d4851ea01f078d8ce19fe945d9af1070d5b618b602c3a05d8d",
+      "extracted_source_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "expected_manifest_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "expected_hash_match": "YES",
+      "provenance_strength": "HIGH_CONTENT_IDENTITY_INCOMPLETE_SCM",
+      "limitations": "Extracted from local IDE interaction log container rather than standalone SCM repository; Git repository tracking is absent."
+    },
+    {
+      "candidate_id": "CANDIDATE-04",
+      "source_type": "Git repository commits/tags",
+      "source_reference": "git:HEAD, git:dfa8241b7e28901a8ef1c0e359a4918ef9b4186c",
+      "candidate_file_sha256": "UNABLE_TO_VERIFY",
+      "extracted_source_sha256": "UNABLE_TO_VERIFY",
+      "expected_manifest_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "expected_hash_match": "UNABLE_TO_VERIFY",
+      "provenance_strength": "NON_EXISTENT",
+      "limitations": "Workspace is not a Git repository; commit dfa8241b... is unresolvable."
+    },
+    {
+      "candidate_id": "CANDIDATE-05",
+      "source_type": "Workspace ZIP archives",
+      "source_reference": "data/external/aiops_challenge_2020/*.zip",
+      "candidate_file_sha256": "MULTIPLE_DATASET_ARCHIVES",
+      "extracted_source_sha256": "NOT_APPLICABLE",
+      "expected_manifest_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "expected_hash_match": "NO",
+      "provenance_strength": "UNRELATED_EXTERNAL_DATA",
+      "limitations": "Contains competition network telemetry CSVs only; no Python source code."
+    }
+  ],
+  "divergence_analysis": {
+    "total_changes_detected": 4,
+    "changes": [
+      {
+        "change_id": "DIV-01",
+        "description": "Addition of Arm 3 Rule-Based Engine",
+        "affected_locations": "backend/app/cadd/engine.py:33, 58-220",
+        "historical_behavior": "Only VERSION = '2.0.0-phase2' and diagnose_state() existed.",
+        "current_behavior": "Added RULE_BASED_VERSION = '1.0.0-arm3-rule-based' and complete diagnose_rule_based() method (162 lines).",
+        "experimental_impact": "Enables Arm 3 discrete rule evaluation; does not modify continuous diagnose_state() logic."
+      },
+      {
+        "change_id": "DIV-02",
+        "description": "Route Misconfiguration Filtering in diagnose_state()",
+        "affected_locations": "backend/app/cadd/engine.py:234-237",
+        "historical_behavior": "misconfigured_routes flagged all routes on rtr1-eth0, veth-r1-ha, loopback or metric >= 999.",
+        "current_behavior": "misconfigured_routes explicitly excludes destination '10.0.1.0/24' (r.destination != '10.0.1.0/24').",
+        "experimental_impact": "Suppresses false-positive ROUTING_MISCONFIGURATION candidate scores on normal LAN connected routes."
+      },
+      {
+        "change_id": "DIV-03",
+        "description": "Interface Failure Candidate Scoring Formula",
+        "affected_locations": "backend/app/cadd/engine.py:261",
+        "historical_behavior": "candidate_scores['INTERFACE_FAILURE'] = round(f_down if f_down > 0 else (1.0 if down_ifaces else 0.0), 4)",
+        "current_behavior": "candidate_scores['INTERFACE_FAILURE'] = round(1.0 if down_ifaces else 0.0, 4)",
+        "experimental_impact": "Forces score to 1.0 on down interfaces, removing dependency on fractional f_down ratio."
+      },
+      {
+        "change_id": "DIV-04",
+        "description": "Healthy State Evidence Chain",
+        "affected_locations": "backend/app/cadd/engine.py:417",
+        "historical_behavior": "Appended RULE_BASELINE_HEALTHY DiagnosticEvidence to evidence_chain.",
+        "current_behavior": "pass (leaves evidence_chain empty for healthy state).",
+        "experimental_impact": "Changes Evidence Compression Ratio (ECR) for healthy runs from 1.0 - (1/N) to 1.0 - (0/N) = 1.0."
+      }
+    ]
+  },
+  "provenance_classification": {
+    "content_identity": "EXACT_MATCH_VERIFIED",
+    "manifest_linkage": "VERIFIED",
+    "historical_custody_evidence": "PLAUSIBLE_SESSION_EVIDENCE",
+    "independent_scm_provenance": "INCOMPLETE_ABSENT",
+    "classification_summary": "Source code bytes reconstructed from the local IDE interaction transcript match the freeze-manifest expected SHA-256 bit-for-bit. However, formal provenance linking that transcript to an independently verifiable repository commit, signed release, or immutable SCM tag remains incomplete due to the absence of a local Git repository."
+  },
+  "arm4_implications": {
+    "source_recovered": true,
+    "source_restored_in_working_tree": false,
+    "current_working_tree_classification": "MODIFIED_PHASE2_DERIVED_BASELINE",
+    "execution_recommendation": "If Phase 3 is executed with current working tree, Arm 4 must be labeled as Modified Phase 2-Derived Baseline. Restoring the recovered Phase 2 baseline requires separate change authorization."
+  },
+  "integrity_and_safety_attestation": {
+    "working_tree_source_unchanged": true,
+    "git_index_and_repo_unchanged": true,
+    "freeze_manifest_unchanged": true,
+    "experiment_matrix_unchanged": true,
+    "experimental_protocol_unchanged": true,
+    "research_runners_executed_during_task": false,
+    "matrix_rows_completed_during_task": 0,
+    "scenario_or_fault_injection_executed_during_task": false,
+    "network_config_changed_during_task": false,
+    "source_restoration_performed": "NONE",
+    "phase3_execution_authorized": false
+  },
+  "final_verdict": "EXACT_HASH_MATCH_FOUND_PROVENANCE_INCOMPLETE"
+}

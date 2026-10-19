@@ -1,0 +1,76 @@
+{
+  "formulas": [
+    {
+      "name": "Accuracy",
+      "status": "CODE_IMPLEMENTED_AND_TESTED",
+      "location": "evaluation/metrics.py:82",
+      "formula": "correct / total * 100.0"
+    },
+    {
+      "name": "Precision / Recall / F1",
+      "status": "CODE_IMPLEMENTED_AND_TESTED",
+      "location": "evaluation/metrics.py:94",
+      "formula": "sklearn macro average F1"
+    },
+    {
+      "name": "Evidence Compression Ratio (ECR)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:108",
+      "formula": "(1 - evidence_tokens / raw_tokens) * 100.0"
+    },
+    {
+      "name": "Token Reduction Ratio (TRR)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:115",
+      "formula": "(1 - llm_tokens / raw_tokens) * 100.0"
+    },
+    {
+      "name": "Critical Path Recall (CPR)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:122",
+      "formula": "predicted_in_ground_truth / total * 100.0"
+    },
+    {
+      "name": "Mean Time to Diagnosis (MTTD)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:129",
+      "formula": "sum(latencies_ms) / N"
+    },
+    {
+      "name": "LLM Invocation Rate (LIR)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:136",
+      "formula": "escalated_runs / total_runs * 100.0"
+    },
+    {
+      "name": "Escalation Efficiency (EE)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:141",
+      "formula": "(post_acc - pre_acc) / escalated_runs * 100.0"
+    },
+    {
+      "name": "Verification Scope Reduction (VSR)",
+      "status": "HARDCODED_RESEARCH_VALUE",
+      "location": "evaluation/metrics.py:149",
+      "formula": "Hardcoded 66.7%"
+    },
+    {
+      "name": "Unsafe Recommendation Rate (URR)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:152",
+      "formula": "executed_unsafe / unsafe_attempts * 100.0"
+    },
+    {
+      "name": "Remediation Success Rate (RSR)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:157",
+      "formula": "verified_healthy / remediated * 100.0"
+    },
+    {
+      "name": "NetOps Efficiency-Safety Score (NESS)",
+      "status": "CODE_IMPLEMENTED",
+      "location": "evaluation/metrics.py:165",
+      "formula": "0.3*Acc + 0.2*ECR + 0.2*(1-LIR) + 0.3*(1-URR)"
+    }
+  ]
+}

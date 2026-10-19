@@ -1,0 +1,115 @@
+{
+  "status": "INDEPENDENTLY_VERIFIED",
+  "total_runs_evaluated": 40,
+  "overall_accuracy": 1.0,
+  "macro_precision": 1.0,
+  "macro_recall": 1.0,
+  "macro_f1_score": 1.0,
+  "confusion_matrix": {
+    "OSPF_ADJACENCY_INSTABILITY": {
+      "OSPF_ADJACENCY_INSTABILITY": 10,
+      "WAN_PATH_DEGRADATION_AND_CONGESTION": 0,
+      "MTU_MISMATCH_FRAGMENTATION_CASCADE": 0,
+      "UNKNOWN_COMPOSITE_ANOMALY": 0
+    },
+    "WAN_PATH_DEGRADATION_AND_CONGESTION": {
+      "OSPF_ADJACENCY_INSTABILITY": 0,
+      "WAN_PATH_DEGRADATION_AND_CONGESTION": 10,
+      "MTU_MISMATCH_FRAGMENTATION_CASCADE": 0,
+      "UNKNOWN_COMPOSITE_ANOMALY": 0
+    },
+    "MTU_MISMATCH_FRAGMENTATION_CASCADE": {
+      "OSPF_ADJACENCY_INSTABILITY": 0,
+      "WAN_PATH_DEGRADATION_AND_CONGESTION": 0,
+      "MTU_MISMATCH_FRAGMENTATION_CASCADE": 10,
+      "UNKNOWN_COMPOSITE_ANOMALY": 0
+    },
+    "UNKNOWN_COMPOSITE_ANOMALY": {
+      "OSPF_ADJACENCY_INSTABILITY": 0,
+      "WAN_PATH_DEGRADATION_AND_CONGESTION": 0,
+      "MTU_MISMATCH_FRAGMENTATION_CASCADE": 0,
+      "UNKNOWN_COMPOSITE_ANOMALY": 10
+    }
+  },
+  "per_class_metrics": {
+    "OSPF_ADJACENCY_INSTABILITY": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "tn": 30,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "WAN_PATH_DEGRADATION_AND_CONGESTION": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "tn": 30,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "MTU_MISMATCH_FRAGMENTATION_CASCADE": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "tn": 30,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "UNKNOWN_COMPOSITE_ANOMALY": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "tn": 30,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  },
+  "per_scenario_metrics": {
+    "CASE_01": {
+      "total_runs": 10,
+      "correct_runs": 10,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "CASE_02": {
+      "total_runs": 10,
+      "correct_runs": 10,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "CASE_03": {
+      "total_runs": 10,
+      "correct_runs": 10,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "CASE_04": {
+      "total_runs": 10,
+      "correct_runs": 10,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  },
+  "comparison_with_phase7a": {
+    "phase7a_reported_accuracy": 1.0,
+    "recalculated_accuracy": 1.0,
+    "matches": true
+  }
+}

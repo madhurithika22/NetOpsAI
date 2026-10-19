@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.venv-linux/
+venv/
+
+# Frontend dependencies and builds
+node_modules/
+dist/
+build/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Generated local artifacts
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Large downloaded datasets
+data/external/

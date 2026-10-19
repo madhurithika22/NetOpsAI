@@ -1,0 +1,100 @@
+{
+  "run_id": "run-exp-case_04-01-d6b4",
+  "timestamp": "2026-10-07T16:06:30.812654+00:00",
+  "environment": "SIMULATED",
+  "dataset_or_scenario_id": "CASE_04",
+  "ground_truth_fault_label": "NOVEL_COMPOSITE_ANOMALY",
+  "predicted_fault_label": "NOVEL_COMPOSITE_ANOMALY",
+  "ground_truth_location": "edge-gw-01 + wan-rtr-01 + cloud-gw-01",
+  "predicted_location": "edge-gw-01",
+  "start_time": "2026-10-07T16:06:30.812654+00:00",
+  "end_time": "2026-10-07T16:06:30.813853+00:00",
+  "diagnosis_latency_ms": 0.04460010677576065,
+  "evidence_selected": [
+    "Cross-Domain Multi-Metric Anomaly Aggregator"
+  ],
+  "evidence_count": 1,
+  "total_raw_evidence_count": 10,
+  "token_count": 703,
+  "raw_token_count": 874,
+  "llm_invocation_count": 1,
+  "llm_escalated": true,
+  "pre_llm_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+  "post_llm_diagnosis": "NOVEL_COMPOSITE_ANOMALY",
+  "verification_scope": "Hybrid Edge/Cloud Overlay",
+  "remediation_decision": "APPROVED",
+  "remediation_status": "SUCCESS",
+  "verification_result": "VERIFIED_HEALTHY",
+  "pre_remediation_rtt_ms": 45.0,
+  "post_remediation_rtt_ms": 8.0,
+  "pre_remediation_loss_pct": 3.2,
+  "post_remediation_loss_pct": 0.0,
+  "seed": 42,
+  "raw_telemetry_count": 10,
+  "ceso_context": {
+    "snapshot_id": "snap-case04",
+    "anomalies_detected": true
+  },
+  "cadd_confidence": 0.47,
+  "escalation_decision": true,
+  "msvs_decision": "APPROVED",
+  "llm_request_payload": "{\n  \"incident_id\": \"inc-558ee5cc\",\n  \"scenario_id\": \"CASE_04\",\n  \"timestamp\": \"2026-10-07T16:06:30.812654+00:00\",\n  \"topology_summary\": {\n    \"node_count\": 48,\n    \"link_count\": 22\n  },\n  \"affected_nodes\": [\n    \"edge-gw-01\",\n    \"wan-rtr-01\",\n    \"cloud-gw-01\"\n  ],\n  \"affected_links\": [\n    \"edge-gw-01<->wan-rtr-01\",\n    \"wan-rtr-01<->cloud-gw-01\"\n  ],\n  \"ceso_findings\": [\n    \"Anomaly detected on Hybrid Edge / Data Center / Cloud\"\n  ],\n  \"relevant_telemetry\": {\n    \"anomalies_detected\": true\n  },\n  \"correlated_anomalies\": [\n    \"Composite cross-domain degradation: edge gateway CPU overload, DNS cache contention, BGP route metric shift, and WAN micro-burst congestion.\"\n  ],\n  \"cadd_diagnosis\": \"UNKNOWN_COMPOSITE_ANOMALY\",\n  \"diagnosis_confidence\": 0.47,\n  \"candidate_causes\": [\n    \"Edge gateway resolver cache contention\",\n    \"BGP local preference route drift\",\n    \"Cross-cloud WAN micro-burst congestion\"\n  ],\n  \"msvs_safety_constraints\": [\n    \"Do not modify protected interface eth0\"\n  ],\n  \"candidate_remediation_actions\": [\n    {\n      \"action_id\": \"act-case04-remed\",\n      \"command_type\": \"RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE\",\n      \"target_device\": \"edge-gw-01\",\n      \"parameters\": {\n        \"service\": \"dns-resolver\",\n        \"target_gateway\": \"edge-gw-01\",\n        \"action\": \"FLUSH_DNS_CACHE_AND_RESTORE_BGP_LOCAL_PREF\",\n        \"bgp_neighbor\": \"cloud-gw-01\",\n        \"local_pref\": 200\n      },\n      \"reversion_action\": {\n        \"target_gateway\": \"edge-gw-01\",\n        \"action\": \"SET_BGP_LOCAL_PREF\",\n        \"local_pref\": 50\n      },\n      \"description\": \"Flush edge resolver DNS cache lock and restore BGP local preference on edge-gw-01 towards cloud-gw-01.\",\n      \"is_destructive\": true\n    }\n  ],\n  \"verification_requirements\": {\n    \"max_rtt_ms\": 15.0,\n    \"max_packet_loss_pct\": 1.0,\n    \"max_dns_latency_ms\": 5.0\n  }\n}",
+  "llm_response_payload": "{\n  \"diagnosis\": \"NOVEL_COMPOSITE_ANOMALY\",\n  \"reasoning_summary\": \"Multidimensional analysis indicates DNS resolver cache lock contention on edge-gw-01 combined with BGP local-preference route shift towards secondary WAN.\",\n  \"evidence\": [\n    \"edge-gw-01 CPU utilization at 58% due to resolver lock\",\n    \"BGP route metric shift to 150 on wan0\",\n    \"Packet loss at 7.5% on edge-to-wan path\"\n  ],\n  \"confidence\": 0.88,\n  \"recommended_action\": {\n    \"action_id\": \"act-case04-remed\",\n    \"command_type\": \"RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE\",\n    \"target_device\": \"edge-gw-01\",\n    \"parameters\": {\n      \"service\": \"dns-resolver\",\n      \"target_gateway\": \"edge-gw-01\",\n      \"action\": \"FLUSH_DNS_CACHE_AND_RESTORE_BGP_LOCAL_PREF\",\n      \"bgp_neighbor\": \"cloud-gw-01\",\n      \"local_pref\": 200\n    }\n  },\n  \"alternatives\": [\n    \"RESTART_EDGE_GATEWAY_SERVICE\"\n  ],\n  \"uncertainty\": \"Requires post-action monitoring of cloud sync latency\"\n}",
+  "direct_token_metrics": {
+    "input_tokens": 691,
+    "output_tokens": 183,
+    "total_tokens": 874,
+    "latency_ms": 0.03,
+    "measurement_method": "estimated"
+  },
+  "pipeline_token_metrics": {
+    "input_tokens": 520,
+    "output_tokens": 183,
+    "total_tokens": 703,
+    "latency_ms": 0.02,
+    "measurement_method": "estimated"
+  },
+  "input_token_reduction_pct": 24.75,
+  "total_token_reduction_pct": 19.57,
+  "feedback_package": {
+    "action_id": "act-case04-remed",
+    "result": "SUCCESS",
+    "verification_passed": true,
+    "pre_action_metrics": {
+      "rtt_ms": 45.0,
+      "packet_loss_pct": 3.2
+    },
+    "post_action_metrics": {
+      "rtt_ms": 8.0,
+      "packet_loss_pct": 0.0
+    },
+    "metric_deltas": {
+      "rtt_ms_delta": -37.0,
+      "packet_loss_pct_delta": -3.2
+    },
+    "affected_services": [
+      "Real-Time Telemetry Analytics Engine",
+      "Hybrid Cloud Database Sync",
+      "Edge Resolver Cache"
+    ],
+    "observed_side_effects": []
+  },
+  "post_action_llm_assessment": {
+    "diagnosis_supported": true,
+    "remediation_effective": true,
+    "additional_action_required": false,
+    "observation_recommended": true,
+    "assessment_summary": "{\n  \"diagnosis\": \"NETWORK_INCIDENT_DIAGNOSED\",\n  \"reasoning_summary\": \"LLM evaluated context package and confirmed target node degradation.\",\n  \"evidence\": [\n    \"High latency observed on core link\"\n  ],\n  \"confidence\": 0.85,\n  \"recommended_action\": {\n    \"action_id\": \"act-mock-remed\",\n    \"command_type\": \"REROUTE_TRAFFIC\",\n    \"target_device\": \"core-rtr01\",\n    \"parameters\": {\n      \"interface\": \"eth2\",\n      \"new_metric\": 100\n    }\n  },\n  \"alternatives\": [],\n  \"uncertainty\": \"None\"\n}",
+    "raw_response": "{\n  \"diagnosis\": \"NETWORK_INCIDENT_DIAGNOSED\",\n  \"reasoning_summary\": \"LLM evaluated context package and confirmed target node degradation.\",\n  \"evidence\": [\n    \"High latency observed on core link\"\n  ],\n  \"confidence\": 0.85,\n  \"recommended_action\": {\n    \"action_id\": \"act-mock-remed\",\n    \"command_type\": \"REROUTE_TRAFFIC\",\n    \"target_device\": \"core-rtr01\",\n    \"parameters\": {\n      \"interface\": \"eth2\",\n      \"new_metric\": 100\n    }\n  },\n  \"alternatives\": [],\n  \"uncertainty\": \"None\"\n}",
+    "token_metrics": {
+      "input_tokens": 340,
+      "output_tokens": 95,
+      "total_tokens": 435,
+      "latency_ms": 0.03,
+      "measurement_method": "estimated"
+    }
+  },
+  "is_completed": true,
+  "error_message": null,
+  "metrics": {}
+}

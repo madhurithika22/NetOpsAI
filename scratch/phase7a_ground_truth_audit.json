@@ -1,0 +1,287 @@
+{
+  "audit_passed": true,
+  "total_runs_audited": 40,
+  "leaked_runs_count": 0,
+  "audit_details": [
+    {
+      "run_id": "run-p7a-case_01-01-e464",
+      "scenario_id": "CASE_01",
+      "seed": 101,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-02-e05b",
+      "scenario_id": "CASE_01",
+      "seed": 102,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-03-67f3",
+      "scenario_id": "CASE_01",
+      "seed": 103,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-04-1631",
+      "scenario_id": "CASE_01",
+      "seed": 104,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-05-d9c8",
+      "scenario_id": "CASE_01",
+      "seed": 105,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-06-033c",
+      "scenario_id": "CASE_01",
+      "seed": 106,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-07-00ae",
+      "scenario_id": "CASE_01",
+      "seed": 107,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-08-a44f",
+      "scenario_id": "CASE_01",
+      "seed": 108,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-09-726d",
+      "scenario_id": "CASE_01",
+      "seed": 109,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_01-10-010f",
+      "scenario_id": "CASE_01",
+      "seed": 110,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-01-f36b",
+      "scenario_id": "CASE_02",
+      "seed": 201,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-02-a149",
+      "scenario_id": "CASE_02",
+      "seed": 202,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-03-edbb",
+      "scenario_id": "CASE_02",
+      "seed": 203,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-04-0385",
+      "scenario_id": "CASE_02",
+      "seed": 204,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-05-b615",
+      "scenario_id": "CASE_02",
+      "seed": 205,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-06-fee5",
+      "scenario_id": "CASE_02",
+      "seed": 206,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-07-c21d",
+      "scenario_id": "CASE_02",
+      "seed": 207,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-08-b6ac",
+      "scenario_id": "CASE_02",
+      "seed": 208,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-09-6f0b",
+      "scenario_id": "CASE_02",
+      "seed": 209,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_02-10-8c51",
+      "scenario_id": "CASE_02",
+      "seed": 210,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-01-80cc",
+      "scenario_id": "CASE_03",
+      "seed": 301,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-02-8af9",
+      "scenario_id": "CASE_03",
+      "seed": 302,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-03-b388",
+      "scenario_id": "CASE_03",
+      "seed": 303,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-04-c7b5",
+      "scenario_id": "CASE_03",
+      "seed": 304,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-05-1b84",
+      "scenario_id": "CASE_03",
+      "seed": 305,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-06-0519",
+      "scenario_id": "CASE_03",
+      "seed": 306,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-07-dfe5",
+      "scenario_id": "CASE_03",
+      "seed": 307,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-08-ccef",
+      "scenario_id": "CASE_03",
+      "seed": 308,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-09-bce1",
+      "scenario_id": "CASE_03",
+      "seed": 309,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_03-10-bf0c",
+      "scenario_id": "CASE_03",
+      "seed": 310,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-01-80a8",
+      "scenario_id": "CASE_04",
+      "seed": 401,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-02-32ef",
+      "scenario_id": "CASE_04",
+      "seed": 402,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-03-e617",
+      "scenario_id": "CASE_04",
+      "seed": 403,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-04-0e96",
+      "scenario_id": "CASE_04",
+      "seed": 404,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-05-a041",
+      "scenario_id": "CASE_04",
+      "seed": 405,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-06-1abb",
+      "scenario_id": "CASE_04",
+      "seed": 406,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-07-a958",
+      "scenario_id": "CASE_04",
+      "seed": 407,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-08-a0d7",
+      "scenario_id": "CASE_04",
+      "seed": 408,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-09-9d66",
+      "scenario_id": "CASE_04",
+      "seed": 409,
+      "leakage_passed": true,
+      "leaked_terms": []
+    },
+    {
+      "run_id": "run-p7a-case_04-10-ca20",
+      "scenario_id": "CASE_04",
+      "seed": 410,
+      "leakage_passed": true,
+      "leaked_terms": []
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "remediation_causality": [
+    {
+      "fault": "Case 01 OSPF Adjacency Instability",
+      "injection": "Synthetic boolean flag setting metric=999 & rx_errors=142",
+      "remediation": "RESET_OSPF_NEIGHBOR_AND_METRIC (ProposedAction)",
+      "causal_match": false,
+      "injector_active_during_remediation": true,
+      "independent_verification": false,
+      "status": "INVALID",
+      "explanation": "MSVSService.execute_action_plan does not execute RESET_OSPF_NEIGHBOR_AND_METRIC. It logs [SIMULATED EXECUTION] and calls ceso_service.reset_simulation(). Recovery is caused by simulator reset, not remediation."
+    },
+    {
+      "fault": "Case 02 WAN Path Congestion",
+      "injection": "Synthetic boolean flag setting secondary_iface utilization=95%",
+      "remediation": "APPLY_SDWAN_QOS_TRAFFIC_SHAPING (ProposedAction)",
+      "causal_match": false,
+      "injector_active_during_remediation": true,
+      "independent_verification": false,
+      "status": "INVALID",
+      "explanation": "Action commands are logged as strings and environment is reset via reset_simulation(). No QoS rules are applied to any network interface."
+    },
+    {
+      "fault": "Case 03 Leaf-Spine MTU Mismatch",
+      "injection": "Synthetic MTU=1400 and rx_drops=1250 on spine-01-eth3",
+      "remediation": "SET_INTERFACE_MTU (ProposedAction)",
+      "causal_match": false,
+      "injector_active_during_remediation": true,
+      "independent_verification": false,
+      "status": "INVALID",
+      "explanation": "No ip link set mtu 9000 command is run on any interface. State recovery is entirely driven by ceso_service.reset_simulation()."
+    },
+    {
+      "fault": "Case 04 Unknown Composite Anomaly",
+      "injection": "Synthetic moderate multi-metric degradation across edge/wan/cloud",
+      "remediation": "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE (ProposedAction)",
+      "causal_match": false,
+      "injector_active_during_remediation": true,
+      "independent_verification": false,
+      "status": "INVALID",
+      "explanation": "Simulated action log only; environment reset restores healthy baseline."
+    },
+    {
+      "fault": "Linux Testbed Netem Delay/Loss",
+      "injection": "tc qdisc add dev veth-r1-r2 root netem delay 145ms loss 15%",
+      "remediation": "REROUTE_TRAFFIC / RESET_TESTBED_FAULTS",
+      "causal_match": false,
+      "injector_active_during_remediation": true,
+      "independent_verification": false,
+      "status": "INVALID",
+      "explanation": "In testbed mode, MSVS execution still calls reset_simulation() which clears netns active_fault in Python memory, but does NOT run tc qdisc del on the netns interface unless reset_testbed_faults() is explicitly invoked. Netem injector remains active on Linux interface while Python state claims recovery."
+    }
+  ]
+}

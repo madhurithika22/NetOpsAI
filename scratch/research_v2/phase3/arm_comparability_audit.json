@@ -1,0 +1,159 @@
+{
+  "audit_metadata": {
+    "timestamp": "2026-10-09T15:15:00+05:30",
+    "repository_root": "/mnt/d/NetOpsAI",
+    "execution_environment": {
+      "platform": "linux",
+      "interpreter": "/mnt/d/NetOpsAI/.venv-linux/bin/python",
+      "os": "Ubuntu WSL2 on Windows"
+    },
+    "git_status_before": "NOT_AVAILABLE (Directory is not a git repository)",
+    "git_status_after": "NOT_AVAILABLE (Directory is not a git repository)"
+  },
+  "audited_source_files": [
+    {
+      "path": "backend/app/cadd/engine.py",
+      "sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "description": "CADD explainable rule engine and candidate scoring implementation (v2.0.0-phase2)"
+    },
+    {
+      "path": "backend/app/ceso/service.py",
+      "sha256": "e018695173262ecba6189b2f6c390f52a9bf3fb97ad09f4c01974ae54d335469",
+      "description": "CESO telemetry aggregation service mapping raw metrics to NetworkState"
+    },
+    {
+      "path": "backend/app/evaluation/runner.py",
+      "sha256": "d4ec4e43d370d979a8f51606d0e1958f43e42fa5bd80de22d7f7f2143f992c02",
+      "description": "Benchmark runner orchestrating testbed scenarios across experimental arms"
+    },
+    {
+      "path": "scratch/run_phase2_experiment.py",
+      "sha256": "591ab2e40484719ed0eb800204cac4cbb5b89db27a68a64e64929952934f331a",
+      "description": "Phase 2 end-to-end experiment reference script"
+    },
+    {
+      "path": "scratch/research_v2/phase3/experiment_matrix.csv",
+      "sha256": "949817a7efb02d36d213ad6a67b6e90948de72172154b512573ff8d3cae766a9",
+      "description": "Phase 3 420-row experimental matrix"
+    }
+  ],
+  "arm_implementations": {
+    "ARM_3_RULE_BASED": {
+      "algorithm_name": "Discrete Diagnostic Rule Engine (CADD DiagnosticEvidence)",
+      "version": "v2.0.0-phase2",
+      "source_file": "backend/app/cadd/engine.py",
+      "lines": "161-230",
+      "telemetry_consumed": [
+        "interfaces[].rtt_ms",
+        "interfaces[].packet_loss_pct",
+        "interfaces[].is_up",
+        "rx_errors",
+        "metric",
+        "mtu"
+      ],
+      "preprocessing_and_rules": "Evaluates discrete boolean conditions (e.g., packet_loss_pct > 15.0, rtt_ms > 100.0, is_up == False). Matches exact rule patterns to trigger DiagnosticEvidence outputs.",
+      "ceso_invoked": false,
+      "cade_invoked": false,
+      "llm_invoked": false,
+      "confidence_logic": "Fixed binary or threshold confidence without continuous margin discounting.",
+      "prediction_mapping": "Returns standard diagnosis labels (e.g. LINK_FLAPPING, ROUTE_LEAK, HARDWARE_FAULT) matching evaluation target schema.",
+      "determinism": "Deterministic given identical NetworkState input."
+    },
+    "ARM_4_PHASE2_BASELINE": {
+      "algorithm_name": "Continuous Multi-Attribute Candidate Scoring Engine",
+      "version": "v2.0.0-phase2",
+      "source_file": "backend/app/cadd/engine.py",
+      "lines": "231-380",
+      "telemetry_consumed": [
+        "interfaces[].rtt_ms",
+        "interfaces[].packet_loss_pct",
+        "interfaces[].is_up",
+        "rx_errors",
+        "metric",
+        "mtu",
+        "routes"
+      ],
+      "preprocessing_and_rules": "Computes continuous multi-attribute candidate score S(c) in [0, 1]. Applies deterministic tie-breaking priority list and heuristic margin confidence formula: C = round(S(c*)(1 - 0.5 * S(c^(2))), 4).",
+      "ceso_invoked": false,
+      "cade_invoked": true,
+      "llm_invoked": false,
+      "confidence_logic": "Margin discounting based on second-highest candidate score. Escalates if confidence falls below baseline threshold.",
+      "prediction_mapping": "Maps candidate c* to standard evaluation diagnosis category.",
+      "determinism": "Fully deterministic for pre-extracted static NetworkState."
+    },
+    "ARM_5_CESO_CADE_NO_LLM": {
+      "algorithm_name": "Live CESO Telemetry Aggregation + CADE Candidate Scoring",
+      "version": "v2.0.0-phase3-auth",
+      "source_file": "backend/app/ceso/service.py & backend/app/cadd/engine.py",
+      "lines": "backend/app/ceso/service.py: 45-180",
+      "telemetry_consumed": [
+        "Live network interface telemetry",
+        "active link latencies",
+        "route tables",
+        "node system metrics"
+      ],
+      "preprocessing_and_rules": "Dynamically aggregates multi-node live telemetry via CESOService into NetworkState, then executes CADE continuous candidate scoring S(c) and margin confidence discounting.",
+      "ceso_invoked": true,
+      "cade_invoked": true,
+      "llm_invoked": false,
+      "confidence_logic": "Margin-discounted continuous confidence computed from live aggregated telemetry state.",
+      "prediction_mapping": "Outputs diagnosis category mapped to evaluation target schema.",
+      "determinism": "Deterministic relative to recorded live telemetry snapshot."
+    }
+  },
+  "pairwise_classifications": {
+    "ARM_3_vs_ARM_4": {
+      "classification": "MEANINGFULLY_DISTINCT",
+      "rationale": "Arm 3 uses discrete boolean rule matching without continuous multi-attribute scoring or margin confidence discounting, whereas Arm 4 evaluates continuous candidate scores S(c) with second-highest score margin confidence calculation."
+    },
+    "ARM_3_vs_ARM_5": {
+      "classification": "MEANINGFULLY_DISTINCT",
+      "rationale": "Arm 3 processes static state with discrete rule matching, while Arm 5 combines dynamic multi-node live telemetry aggregation (CESO) with continuous candidate scoring (CADE)."
+    },
+    "ARM_4_vs_ARM_5": {
+      "classification": "MEANINGFULLY_DISTINCT",
+      "rationale": "Arm 4 evaluates static pre-extracted telemetry state snapshots, whereas Arm 5 integrates live end-to-end multi-metric telemetry extraction through CESOService prior to CADE scoring."
+    }
+  },
+  "ground_truth_isolation": {
+    "ARM_3_RULE_BASED": {
+      "status": "PASS",
+      "data_flow_path": "NetworkState -> Rule Matching -> Diagnostic output",
+      "evidence": "backend/app/cadd/engine.py (lines 161-230). Evaluates only telemetry fields (packet_loss_pct, rtt_ms, is_up); no access to expected fault labels or scenario metadata.",
+      "finding_type": "VERIFIED_ISOLATION"
+    },
+    "ARM_4_PHASE2_BASELINE": {
+      "status": "PASS",
+      "data_flow_path": "NetworkState -> Candidate Score S(c) -> Margin Discount -> Diagnostic output",
+      "evidence": "backend/app/cadd/engine.py (lines 231-380). Inputs only operational metrics; ground-truth labels are strictly isolated in benchmark evaluation code.",
+      "finding_type": "VERIFIED_ISOLATION"
+    },
+    "ARM_5_CESO_CADE_NO_LLM": {
+      "status": "PASS",
+      "data_flow_path": "Live Telemetry -> CESOService -> NetworkState -> CADE Engine -> Diagnostic output",
+      "evidence": "backend/app/ceso/service.py (lines 45-180). Telemetry collection queries raw interfaces/metrics without access to evaluation labels.",
+      "finding_type": "VERIFIED_ISOLATION"
+    }
+  },
+  "fairness_and_metric_support": {
+    "input_equivalence": "PASS — All arms receive identical network telemetry streams or state representations corresponding to the exact same observation window.",
+    "seed_control": "PASS — Paired execution seeds and fixed fault injection schedules ensure identical scenario progression across arms.",
+    "metric_support": {
+      "accuracy": "SUPPORTED",
+      "precision_recall_f1": "SUPPORTED",
+      "diagnosis_latency": "SUPPORTED",
+      "escalation_rate": "SUPPORTED"
+    }
+  },
+  "material_issues": [
+    {
+      "issue_id": "ISSUE-01",
+      "severity": "MINOR",
+      "description": "Live telemetry extraction in ARM_5 introduces slight measurement overhead relative to pre-extracted static state in ARM_4, which must be tracked as instrumentation latency.",
+      "evidence": "backend/app/ceso/service.py line 85",
+      "recommended_correction": "Measure raw CADE compute time separately from CESO data collection latency in evaluation metrics."
+    }
+  ],
+  "overall_decision": "PASS — COMPARABLE FOR SPECIFIED SCOPE",
+  "experiment_execution_status": "EXPERIMENTS_NOT_EXECUTED_AUDIT_ONLY"
+}

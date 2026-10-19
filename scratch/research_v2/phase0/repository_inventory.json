@@ -1,0 +1,164 @@
+{
+  "project_root": "d:\\NetOpsAI",
+  "python_environment": {
+    "version": "3.12.x / 3.10.x",
+    "framework": "FastAPI 0.110.0 / Uvicorn",
+    "pydantic_version": "v2"
+  },
+  "backend": {
+    "root": "backend/app",
+    "main_entry": "backend/app/main.py",
+    "total_files": 34,
+    "lines_of_code": 3480,
+    "modules": {
+      "adapters": [
+        "aiops2020_adapter.py"
+      ],
+      "api": [
+        "cadd_routes.py",
+        "ceso_routes.py",
+        "evaluation_routes.py",
+        "llm_routes.py",
+        "msvs_routes.py",
+        "router.py",
+        "scenario_routes.py",
+        "simulation_routes.py"
+      ],
+      "cadd": [
+        "engine.py",
+        "service.py"
+      ],
+      "ceso": [
+        "provider.py",
+        "service.py",
+        "simulator.py"
+      ],
+      "evaluation": [
+        "metrics.py",
+        "models.py",
+        "recorder.py",
+        "runner.py"
+      ],
+      "llm": [
+        "feedback.py",
+        "gateway.py",
+        "models.py",
+        "prompts.py",
+        "token_metrics.py",
+        "providers/base.py",
+        "providers/mock.py",
+        "providers/ollama.py",
+        "providers/openai.py"
+      ],
+      "models": [
+        "cadd_models.py",
+        "ceso_models.py",
+        "msvs_models.py"
+      ],
+      "msvs": [
+        "benchmark.py",
+        "metrics.py",
+        "policies.py",
+        "service.py"
+      ],
+      "scenarios": [
+        "base.py",
+        "case01_enterprise.py",
+        "case02_wan.py",
+        "case03_datacenter.py",
+        "case04_hybrid.py",
+        "registry.py"
+      ],
+      "testbed": [
+        "config.py",
+        "faults.py",
+        "manager.py"
+      ]
+    }
+  },
+  "frontend": {
+    "root": "frontend",
+    "framework": "React 18.2 / Vite",
+    "styling": "Vanilla CSS / Tailwind",
+    "components": [
+      "EvaluationDashboard.jsx",
+      "EvaluationTab.jsx",
+      "IncidentTab.jsx",
+      "LeftNavRail.jsx",
+      "LlmContextBoundary.jsx",
+      "NetworkTab.jsx",
+      "OverviewTab.jsx",
+      "RightInspector.jsx",
+      "SimulationCommandBar.jsx",
+      "SpatialNetworkGraph.jsx",
+      "TelemetryStrip.jsx",
+      "TopHeaderBar.jsx",
+      "TopologyMap.jsx"
+    ]
+  },
+  "tests": {
+    "unit": [
+      "test_aiops2020_adapter.py",
+      "test_cadd.py",
+      "test_ceso.py",
+      "test_evaluation_metrics.py",
+      "test_experiment_recorder.py",
+      "test_metrics.py",
+      "test_msvs.py",
+      "test_phase6_llm_gateway.py",
+      "test_phase6_scenarios.py"
+    ],
+    "integration": [
+      "test_evaluation_api.py",
+      "test_phase2_workflows.py",
+      "test_phase6_benchmark_e2e.py",
+      "test_workflow.py"
+    ],
+    "phase4": [
+      "test_msvs_testbed_safety.py",
+      "test_phase4_e2e_simulated_fallback.py",
+      "test_telemetry_provider.py",
+      "test_testbed_faults.py",
+      "test_testbed_manager.py"
+    ],
+    "experiments": [
+      "test_exp1_detection.py",
+      "test_exp2_remediation.py",
+      "test_exp3_safety.py",
+      "test_exp4_robustness.py",
+      "test_exp5_results_export.py"
+    ]
+  },
+  "datasets": {
+    "external": "data/external/aiops_challenge_2020/data_release_v3.5",
+    "experiments": "data/experiments/runs"
+  },
+  "scenarios": {
+    "registry": "backend/app/scenarios/registry.py",
+    "cases": [
+      "CASE_01_ENTERPRISE",
+      "CASE_02_WAN",
+      "CASE_03_DATACENTER",
+      "CASE_04_HYBRID"
+    ]
+  },
+  "evaluation": {
+    "metrics_engine": "backend/app/evaluation/metrics.py",
+    "runner": "backend/app/evaluation/runner.py",
+    "recorder": "backend/app/evaluation/recorder.py"
+  },
+  "llm": {
+    "gateway": "backend/app/llm/gateway.py",
+    "providers": [
+      "ollama",
+      "mock",
+      "openai"
+    ],
+    "prompts": "backend/app/llm/prompts.py"
+  },
+  "network_testbed": {
+    "manager": "backend/app/testbed/manager.py",
+    "faults": "backend/app/testbed/faults.py",
+    "config": "backend/app/testbed/config.py"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "integrity_verified": true,
+  "total_primary_runs": 40,
+  "runs_per_scenario": {
+    "CASE_01": 10,
+    "CASE_02": 10,
+    "CASE_03": 10,
+    "CASE_04": 10
+  },
+  "unique_run_ids": true,
+  "field_presence_counts": {
+    "run_id": 40,
+    "scenario_id": 40,
+    "seed": 40,
+    "timestamp": 40,
+    "execution_environment": 40,
+    "ground_truth_fault": 40,
+    "ground_truth_location": 40,
+    "cadd_diagnosis": 40,
+    "cadd_confidence": 40,
+    "escalated": 40,
+    "final_diagnosis": 40,
+    "correct_diagnosis": 40,
+    "msvs_decision": 40,
+    "remediation_status": 40,
+    "verification_result": 40,
+    "mttd_ms": 40,
+    "total_duration_ms": 40
+  },
+  "audit_timestamp": "2026-10-08T09:52:25.020126+00:00"
+}

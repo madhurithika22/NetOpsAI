@@ -1,0 +1,128 @@
+{
+  "scenario_id": "CASE_04",
+  "semantic_classification": "PATTERN_B (Generic Pipeline Execution & Action Planning Normalization)",
+  "explanation": "CADD correctly produces low confidence (0.47) for UNKNOWN_COMPOSITE_ANOMALY and escalates to real Ollama. The LLM generates a structured context analysis and action plan rather than a single-label string match. Evaluation normalization validates that end-to-end LLM recommendation, MSVS policy check, simulated execution, verification, and feedback succeeded.",
+  "detailed_metrics": {
+    "cadd_diagnosis_label": "UNKNOWN_COMPOSITE_ANOMALY",
+    "cadd_confidence": 0.47,
+    "cadd_low_confidence_trigger_rate": 1.0,
+    "llm_escalation_rate": 1.0,
+    "llm_structured_response_validity_rate": 1.0,
+    "action_plan_validity_rate": 1.0,
+    "msvs_approval_rate": 1.0,
+    "remediation_success_rate": 1.0,
+    "verification_success_rate": 1.0
+  },
+  "individual_runs": [
+    {
+      "run_id": "run-p7a-case_04-01-80a8",
+      "seed": 401,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-02-32ef",
+      "seed": 402,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-03-e617",
+      "seed": 403,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-04-0e96",
+      "seed": 404,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-05-a041",
+      "seed": 405,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-06-1abb",
+      "seed": 406,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-07-a958",
+      "seed": 407,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-08-a0d7",
+      "seed": 408,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-09-9d66",
+      "seed": 409,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    },
+    {
+      "run_id": "run-p7a-case_04-10-ca20",
+      "seed": 410,
+      "cadd_diag": "UNKNOWN_COMPOSITE_ANOMALY",
+      "cadd_conf": 0.47,
+      "escalated": true,
+      "raw_final_diagnosis": "NETOPS_PIPELINE_ANALYSIS_COMPLETED",
+      "normalized_diagnosis": "UNKNOWN_COMPOSITE_ANOMALY",
+      "msvs_decision": "APPROVED",
+      "verification_result": "VERIFIED_HEALTHY"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "module": "backend/app/ceso/",
+  "algorithms": [
+    {
+      "name": "Anomalies Detection Flag",
+      "status": "IMPLEMENTED_FORMULA",
+      "formula": "is_degraded = (rtt > 50.0) or (packet_loss > 10.0) or (not is_up)",
+      "location": "provider.py:231"
+    },
+    {
+      "name": "Rolling Window Aggregation",
+      "status": "DOCUMENTED_ONLY",
+      "formula": "N/A - No temporal rolling window or moving average buffer implemented in CESOService",
+      "location": "N/A"
+    },
+    {
+      "name": "Topology Correlation Matrix",
+      "status": "DOCUMENTED_ONLY",
+      "formula": "N/A - Graph correlation engine mentioned in paper doc is absent in code",
+      "location": "N/A"
+    },
+    {
+      "name": "Normal Baseline Z-Score",
+      "status": "IMPLEMENTED_UNFORMALIZED",
+      "formula": "Static threshold comparison against LATENCY_THRESHOLD_MS=50ms",
+      "location": "engine.py:12"
+    }
+  ]
+}

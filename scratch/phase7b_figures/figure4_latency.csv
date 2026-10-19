@@ -1,0 +1,5 @@
+scenario_id,mttd_ms,deterministic_pipeline_latency_ms,llm_inference_latency_s
+CASE_01,0.31,0.95,N/A
+CASE_02,0.16,0.82,N/A
+CASE_03,0.22,0.78,N/A
+CASE_04,0.45,N/A,109.0

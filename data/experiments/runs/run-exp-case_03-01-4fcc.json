@@ -1,0 +1,74 @@
+{
+  "run_id": "run-exp-case_03-01-4fcc",
+  "timestamp": "2026-10-07T16:08:44.542180+00:00",
+  "environment": "SIMULATED",
+  "dataset_or_scenario_id": "CASE_03",
+  "ground_truth_fault_label": "MTU_MISMATCH_FRAGMENTATION_CASCADE",
+  "predicted_fault_label": "MTU_MISMATCH_FRAGMENTATION_CASCADE",
+  "ground_truth_location": "spine-01<->leaf-03",
+  "predicted_location": "spine-01<->leaf-03",
+  "start_time": "2026-10-07T16:08:44.542180+00:00",
+  "end_time": "2026-10-07T16:08:44.543179+00:00",
+  "diagnosis_latency_ms": 0.04759989678859711,
+  "evidence_selected": [
+    "Leaf-Spine Fabric MTU Alignment Check"
+  ],
+  "evidence_count": 1,
+  "total_raw_evidence_count": 10,
+  "token_count": null,
+  "raw_token_count": null,
+  "llm_invocation_count": 0,
+  "llm_escalated": false,
+  "pre_llm_diagnosis": "MTU_MISMATCH_FRAGMENTATION_CASCADE",
+  "post_llm_diagnosis": "MTU_MISMATCH_FRAGMENTATION_CASCADE",
+  "verification_scope": "Leaf-Spine Fabric MTU Alignment",
+  "remediation_decision": "APPROVED",
+  "remediation_status": "SUCCESS",
+  "verification_result": "VERIFIED_HEALTHY",
+  "pre_remediation_rtt_ms": 0.2,
+  "post_remediation_rtt_ms": 0.2,
+  "pre_remediation_loss_pct": 0.0,
+  "post_remediation_loss_pct": 0.0,
+  "seed": 42,
+  "raw_telemetry_count": 10,
+  "ceso_context": {
+    "snapshot_id": "snap-case03",
+    "anomalies_detected": true
+  },
+  "cadd_confidence": 0.96,
+  "escalation_decision": false,
+  "msvs_decision": "APPROVED",
+  "llm_request_payload": null,
+  "llm_response_payload": null,
+  "direct_token_metrics": null,
+  "pipeline_token_metrics": null,
+  "input_token_reduction_pct": null,
+  "total_token_reduction_pct": null,
+  "feedback_package": {
+    "action_id": "act-b0f45cd3",
+    "result": "SUCCESS",
+    "verification_passed": true,
+    "pre_action_metrics": {
+      "rtt_ms": 0.2,
+      "packet_loss_pct": 0.0
+    },
+    "post_action_metrics": {
+      "rtt_ms": 0.2,
+      "packet_loss_pct": 0.0
+    },
+    "metric_deltas": {
+      "rtt_ms_delta": 0.0,
+      "packet_loss_pct_delta": 0.0
+    },
+    "affected_services": [
+      "Cloud Microservices Mesh",
+      "Distributed Database Cluster",
+      "In-Memory Cache Cluster"
+    ],
+    "observed_side_effects": []
+  },
+  "post_action_llm_assessment": null,
+  "is_completed": true,
+  "error_message": null,
+  "metrics": {}
+}

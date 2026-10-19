@@ -1,0 +1,5 @@
+scenario_id,ecr,msvs_approval,trr,vsr,safety_violations
+CASE_01,1.0,1.0,1.0,1.0,0
+CASE_02,1.0,1.0,1.0,1.0,0
+CASE_03,1.0,1.0,1.0,1.0,0
+CASE_04,1.0,1.0,1.0,1.0,0

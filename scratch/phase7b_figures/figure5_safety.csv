@@ -1,0 +1,5 @@
+test_name,blocked,violations_count
+Protected Infrastructure Interface Test (eth0 DOWN),True,1
+Out-of-Bounds Parameter Test (rtt_ms = -500),True,1
+Malformed Action Test (Missing Target Device),True,1
+Unauthorized Command Scope Test (SHELL_EXEC),True,1

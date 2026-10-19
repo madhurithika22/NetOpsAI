@@ -1,0 +1,116 @@
+{
+  "audit_verdict": "NOT READY — DESIGN OR IMPLEMENTATION BLOCKERS REMAIN",
+  "audit_timestamp_utc": "2026-10-09T17:40:00Z",
+  "research_experiments_executed": false,
+  "matrix_rows_completed": 0,
+  "live_fault_injections_performed": false,
+  "phase3_execution_authorized": false,
+  "arm_readiness_summary": {
+    "ARM_1_STATIC_THRESHOLD": {
+      "status": "MISSING",
+      "dispatchable": false,
+      "blocker": "Static single-metric SLA rule detector code is missing in backend/app/."
+    },
+    "ARM_2_ROLLING_STATISTICAL": {
+      "status": "MISSING",
+      "dispatchable": false,
+      "blocker": "Rolling-window z-score statistical detector code is missing in backend/app/."
+    },
+    "ARM_3_RULE_BASED": {
+      "status": "IMPLEMENTED",
+      "dispatchable": true,
+      "location": "backend/app/cadd/engine.py:58-217",
+      "blocker": null
+    },
+    "ARM_4_PHASE2_BASELINE": {
+      "status": "IMPLEMENTED",
+      "dispatchable": true,
+      "location": "backend/app/cadd/engine.py:219-462",
+      "baseline_file_sha256": "UNVERIFIED",
+      "blocker": null
+    },
+    "ARM_5_CESO_CADE_NO_LLM": {
+      "status": "IMPLEMENTED",
+      "dispatchable": true,
+      "location": "backend/app/ceso/service.py:37-41 & backend/app/cadd/engine.py:219-462",
+      "blocker": null
+    },
+    "ARM_6_CESO_CADE_OLLAMA_LLM": {
+      "status": "BLOCKED",
+      "dispatchable": false,
+      "location": "backend/app/llm/gateway.py",
+      "blocker": "Ollama daemon offline (http://localhost:11434 connection refused) and model llama3.2:3b missing."
+    },
+    "ARM_7_CLOSED_LOOP_NETOPS": {
+      "status": "BLOCKED",
+      "dispatchable": false,
+      "location": "backend/app/msvs/service.py",
+      "blocker": "Phase 4 live Linux netns remediation execution and active probe verification hooks missing."
+    }
+  },
+  "scenario_suitability_summary": {
+    "registered_scenarios_count": 4,
+    "matrix_scenarios_count": 6,
+    "registry_id_mismatch": true,
+    "missing_scenarios": [
+      "SCN_005_COMPOSITE_ANOMALY",
+      "SCN_006_BASELINE_HEALTHY"
+    ],
+    "finding": "ScenarioRegistry only registers CASE_01..04. Matrix scenario IDs SCN_001..006 fail at runtime in load_scenario. SCN_005 and SCN_006 have no generator code."
+  },
+  "blocking_issues": [
+    {
+      "id": "BLOCKER-01",
+      "severity": "CRITICAL",
+      "title": "Scenario Registry Mismatch & Missing Scenario Definitions",
+      "location": "backend/app/scenarios/registry.py:26-34",
+      "impact": "Runner load_scenario fails with ValueError for matrix IDs SCN_001..006. SCN_005 (Composite Anomaly) and SCN_006 (Baseline Healthy) lack scenario definitions and generator functions.",
+      "corrective_action": "Register SCN_001 through SCN_006 in ScenarioRegistry with explicit aliases/mappings to CASE_01..04, and implement generator functions for SCN_005 and SCN_006."
+    },
+    {
+      "id": "BLOCKER-02",
+      "severity": "CRITICAL",
+      "title": "Unimplemented Baseline Research Arms (Arms 1 and 2)",
+      "location": "backend/app/evaluation/runner.py:81-82",
+      "impact": "120 planned matrix rows for ARM_1 and ARM_2 cannot be executed. Dispatched runs fail closed with ValueError.",
+      "corrective_action": "Implement StaticThresholdDetector (Arm 1) and RollingStatisticalDetector (Arm 2) classes and add them to AUTHORIZED_ARMS in runner.py."
+    },
+    {
+      "id": "BLOCKER-03",
+      "severity": "HIGH",
+      "title": "Blocked Local LLM Service (Arm 6)",
+      "location": "backend/app/llm/gateway.py",
+      "impact": "60 planned matrix rows for ARM_6 cannot be executed due to missing Ollama daemon service.",
+      "corrective_action": "Start local Ollama service on port 11434, pull llama3.2:3b model, and authorize ARM_6 in runner.py."
+    },
+    {
+      "id": "BLOCKER-04",
+      "severity": "HIGH",
+      "title": "Missing Live Remediation & Probe Verification Hooks (Arm 7)",
+      "location": "backend/app/msvs/service.py:70-120",
+      "impact": "60 planned matrix rows for ARM_7 cannot execute live closed-loop remediation or active probe recovery verification.",
+      "corrective_action": "Implement Phase 4 netns shell execution hooks (ip link, tc qdisc, ip route) and live active probe verification suite."
+    },
+    {
+      "id": "BLOCKER-05",
+      "severity": "MEDIUM",
+      "title": "Phase 2 Baseline Engine File Hash Discrepancy",
+      "location": "scratch/research_v2/phase2/freeze_manifest.json:59 & backend/app/cadd/engine.py",
+      "impact": "File-level SHA-256 hash validation fails because engine.py was modified in Phase 3 to add diagnose_rule_based. Original pre-patch .py source artifact is unrecoverable.",
+      "corrective_action": "Retain explicit UNVERIFIED disclosure for file-level source integrity while documenting method-level behavioral test equivalence."
+    }
+  ],
+  "audited_source_hashes": {
+    "backend/app/cadd/engine.py": "07e1bfe7bf26c82447dfe5959f75adcffc963857fba44574278bff3209c23504",
+    "backend/app/cadd/service.py": "001eb662130faf773a328b5bf88811613bddbe85cb1dfeee21f22fe9e124c085",
+    "backend/app/ceso/service.py": "b45803c3e570100d3dd32d13249c75bf3135bdac97ce014e746866e9eb333035",
+    "backend/app/evaluation/runner.py": "9abb183b9a45cb98ca9e2fa4e76da01cfcf5104d9225641e73af0ff27e1c833e",
+    "backend/app/evaluation/metrics.py": "bc171734df4bab80b47c553837eb321f7bfcaa584381d3fc1e7bc468e668265c",
+    "backend/app/evaluation/models.py": "b624641f61a4d3cd3b02af92453dba1c4378c205a52f414610ec1ab6e3b524a3",
+    "backend/app/evaluation/recorder.py": "d91c9dc61c09016d4df6fc24b46f20f62639467c98c995ec249ffc9fe23f3ab5",
+    "backend/app/research_v2/guard.py": "1a550fa4b75a2f0c28f5223be23fd3fec6e215078535f5343a658e7f90340335",
+    "backend/app/scenarios/registry.py": "f30dbbfe1a71efef98a3b8fa3b7c805eb341d1a8c3d690a2be2fa89b52a5c531",
+    "scratch/research_v2/phase2/freeze_manifest.json": "97abaf470754fae34f5362cac8e3c64203a169649a1665ef535d04cabedf95fd",
+    "scratch/research_v2/phase3/experiment_matrix.csv": "949817a7efb02d36d213ad6a67b6e90948de72172154b512573ff8d3cae766a9"
+  }
+}

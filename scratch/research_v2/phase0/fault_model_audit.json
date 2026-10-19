@@ -1,0 +1,54 @@
+{
+  "fault_models": [
+    {
+      "fault_id": "FLT_CASE_01",
+      "scenario": "CASE_01_ENTERPRISE",
+      "layer": "routing-layer",
+      "remediation_layer": "routing-layer",
+      "misaligned": false,
+      "target": "core-rtr01-eth2",
+      "injection_cmd": "Synthetic state generator",
+      "remediation_cmd": "RESET_OSPF_NEIGHBOR_AND_METRIC"
+    },
+    {
+      "fault_id": "FLT_CASE_02",
+      "scenario": "CASE_02_WAN",
+      "layer": "transport-layer",
+      "remediation_layer": "service-layer",
+      "misaligned": true,
+      "target": "dc-gw02-wan1",
+      "injection_cmd": "Synthetic state generator",
+      "remediation_cmd": "APPLY_SDWAN_QOS_TRAFFIC_SHAPING"
+    },
+    {
+      "fault_id": "FLT_CASE_03",
+      "scenario": "CASE_03_DATACENTER",
+      "layer": "network-layer",
+      "remediation_layer": "network-layer",
+      "misaligned": false,
+      "target": "spine-01-eth3",
+      "injection_cmd": "Synthetic MTU change",
+      "remediation_cmd": "SET_INTERFACE_MTU"
+    },
+    {
+      "fault_id": "FLT_CASE_04",
+      "scenario": "CASE_04_HYBRID",
+      "layer": "composite",
+      "remediation_layer": "application-layer",
+      "misaligned": true,
+      "target": "edge-gw-01",
+      "injection_cmd": "Synthetic multi-metric degradation",
+      "remediation_cmd": "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE"
+    },
+    {
+      "fault_id": "FLT_TB_01",
+      "scenario": "LINUX_TESTBED",
+      "layer": "transport-layer",
+      "remediation_layer": "routing-layer",
+      "misaligned": true,
+      "target": "netops-rtr1:veth-r1-r2",
+      "injection_cmd": "tc qdisc add dev veth-r1-r2 root netem delay 145ms loss 15%",
+      "remediation_cmd": "REROUTE_TRAFFIC"
+    }
+  ]
+}

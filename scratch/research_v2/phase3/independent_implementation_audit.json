@@ -1,0 +1,70 @@
+{
+  "audit_metadata": {
+    "timestamp": "2026-10-09T15:45:00+05:30",
+    "auditor": "Independent Senior Research Software Auditor",
+    "repository_root": "/mnt/d/NetOpsAI",
+    "execution_environment": {
+      "platform": "linux",
+      "interpreter": "/mnt/d/NetOpsAI/.venv-linux/bin/python",
+      "os": "Ubuntu WSL2 on Windows"
+    }
+  },
+  "audit_status": "PASS — READY FOR SEPARATE EXPERIMENT-AUTHORIZATION REVIEW",
+  "audited_source_hashes": {
+    "backend/app/evaluation/models.py": "b624641f61a4d3cd3b02af92453dba1c4378c205a52f414610ec1ab6e3b524a3",
+    "backend/app/evaluation/runner.py": "022255ce480fb8fdc7f4da98b971bfa0cde96ff953657f77a9c1afc6c84e0f69",
+    "backend/app/cadd/engine.py": "07e1bfe7bf26c82447dfe5959f75adcffc963857fba44574278bff3209c23504",
+    "backend/app/evaluation/recorder.py": "d91c9dc61c09016d4df6fc24b46f20f62639467c98c995ec249ffc9fe23f3ab5",
+    "tests/unit/test_phase3_arm_corrections.py": "c1d7255210f1971e3ad890b822d6ba161deee63fc496ecb4f7ee78c9b5fc9806"
+  },
+  "defect_verdicts": {
+    "DEFECT-01_arm_dispatcher": {
+      "verdict": "PASS",
+      "source_reference": "backend/app/evaluation/runner.py:L18-67",
+      "evidence": "BenchmarkRunner implements explicit arm_id validation (AUTHORIZED_ARMS). Unimplemented (ARM_1, ARM_2) or blocked (ARM_6, ARM_7) arms fail closed with ValueError."
+    },
+    "DEFECT-02_arms3_and_4_distinction": {
+      "verdict": "PASS",
+      "source_reference": "backend/app/cadd/engine.py:L53-215 & tests/unit/test_phase3_arm_corrections.py:L33-59",
+      "evidence": "Arm 3 (diagnose_rule_based) evaluates discrete Boolean rules in priority order (1.0.0-arm3-rule-based). Arm 4 (diagnose_state) preserves continuous CADE candidate scoring (2.0.0-phase2). Distinct predictions verified on identical telemetry."
+    },
+    "DEFECT-03_ground_truth_leakage": {
+      "verdict": "PASS",
+      "source_reference": "backend/app/evaluation/runner.py:L90-93 & tests/unit/test_phase3_arm_corrections.py:L94-108",
+      "evidence": "Hardcoded sc_id == CASE_04 check removed from runner.py line 90. Escalation depends strictly on cadd_diag.escalation_required."
+    },
+    "DEFECT-04_ceso_integration": {
+      "verdict": "PASS",
+      "source_reference": "backend/app/evaluation/runner.py:L74-79 & backend/app/ceso/service.py:L37-55",
+      "evidence": "ARM_5_CESO_CADE_NO_LLM path connects to ceso_service.load_scenario(sc_id) and explicitly disables LLM calls. Evaluates simulated CESO telemetry collection pipeline."
+    },
+    "DEFECT-05_latency_instrumentation": {
+      "verdict": "PASS",
+      "source_reference": "backend/app/evaluation/runner.py:L70-150 & backend/app/evaluation/models.py:L40-48",
+      "evidence": "High-resolution monotonic timers measure telemetry_collection_latency_ms, diagnosis_latency_ms, llm_latency_ms, and total_elapsed_ms separately."
+    }
+  },
+  "additional_findings": [
+    {
+      "finding_id": "FINDING-01",
+      "type": "PROVENANCE_NOTE",
+      "description": "Addition of diagnose_rule_based() to engine.py changed file SHA-256 from Phase 2 freeze manifest recorded digest (ea483491...), but diagnose_state() algorithm version (2.0.0-phase2) and scoring logic remain 100% identical."
+    },
+    {
+      "finding_id": "FINDING-02",
+      "type": "SCOPE_CLASSIFICATION",
+      "description": "Arm 5 evaluates simulated CESO telemetry collection via scenario_registry in SIMULATED mode. It should be explicitly reported as simulated CESO telemetry collection, not live physical network observation."
+    }
+  ],
+  "tests_executed": [
+    {
+      "command": "pytest tests/unit/test_phase3_arm_corrections.py",
+      "status": "PASSED",
+      "passed_count": 6,
+      "failed_count": 0,
+      "duration_seconds": 1.38
+    }
+  ],
+  "research_experiments_executed": false,
+  "phase3_execution_authorized": false
+}

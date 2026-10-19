@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-10-10T00:03:30Z",
+  "audit_role": "IEEE Research-Methodology Reviewer & Senior Python Research-Software Engineer",
+  "protocol_status": "PRE_REGISTERED",
+  "verdict": "PROTOCOL REVISION COMPLETE — READY FOR INDEPENDENT REVIEW",
+  "safety_attestation": {
+    "research_experiments_executed": false,
+    "matrix_rows_completed": 0,
+    "live_fault_injections_performed": false,
+    "phase3_execution_authorized": false
+  },
+  "primary_arms": [
+    "ARM_3_RULE_BASED",
+    "ARM_4_PHASE2_BASELINE",
+    "ARM_5_CESO_CADE_NO_LLM"
+  ],
+  "retained_scenarios": [
+    "CASE_01",
+    "CASE_02",
+    "CASE_03",
+    "CASE_04"
+  ],
+  "excluded_scenarios": [
+    "SCN_005",
+    "SCN_006"
+  ],
+  "matrix_summary": {
+    "planned_row_count": 120,
+    "primary_arms_count": 3,
+    "retained_scenarios_count": 4,
+    "repetitions_per_pair": 10,
+    "seed_formula": "effective_seed(a, s, r) = 42 + 1000*a + 100*s + r",
+    "matrix_v2_file": "scratch/research_v2/phase3/experiment_matrix_v2.csv",
+    "historical_matrix_preserved": "scratch/research_v2/phase3/experiment_matrix.csv"
+  },
+  "test_summary": {
+    "test_command": "$env:PYTHONPATH=\".\"; .venv\\Scripts\\python.exe -m pytest tests/unit/",
+    "total_tests": 77,
+    "passed": 77,
+    "failed": 0,
+    "execution_time_seconds": 1.39
+  },
+  "changed_files": [
+    "scratch/research_v2/phase3/experimental_protocol.md",
+    "scratch/research_v2/phase3/metric_specification.md",
+    "scratch/research_v2/phase3/experiment_matrix_v2.csv",
+    "scratch/research_v2/phase3/validate_experiment_matrix.py",
+    "backend/app/scenarios/registry.py",
+    "backend/app/ceso/service.py",
+    "backend/app/evaluation/runner.py",
+    "backend/app/cadd/engine.py",
+    "tests/unit/test_phase3_protocol_v2.py"
+  ],
+  "remaining_blockers": [
+    "Independent peer review of revised 120-run protocol v2 and matrix v2",
+    "Explicit user authorization before changing phase3_execution_authorized to true"
+  ]
+}

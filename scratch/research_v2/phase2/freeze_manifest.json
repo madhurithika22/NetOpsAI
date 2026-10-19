@@ -1,0 +1,91 @@
+{
+  "freeze_manifest_version": "1.0.0",
+  "freeze_timestamp_utc": "2026-10-09T07:23:57.280899+00:00",
+  "audit_decision": "PASS \u2014 PHASE 2 BASELINE FREEZE ELIGIBLE",
+  "freeze_scope": "Preserves Phase 2 diagnostic engine (CADE v2.0.0-phase2), feature normalization, heuristic margin confidence calculation, ground-truth isolation, real Linux namespace testbed execution evidence, and validation guards.",
+  "git_provenance": {
+    "commit": "unpinned",
+    "is_dirty": true,
+    "error": "Command '['git', 'rev-parse', 'HEAD']' returned non-zero exit status 128."
+  },
+  "environment_identity": {
+    "platform": "linux",
+    "os_name": "posix",
+    "python_executable": "/mnt/d/NetOpsAI/.venv-linux/bin/python",
+    "python_version": "3.12.15 (main, Oct  1 2026, 20:59:04) [Clang 22.1.3 ]",
+    "requirements_file": "requirements.txt",
+    "requirements_sha256": null
+  },
+  "diagnostic_algorithm_configuration": {
+    "engine_class": "app.cadd.engine.ExplainableRuleEngine",
+    "algorithm_version": "2.0.0-phase2",
+    "latency_threshold_ms": 50.0,
+    "packet_loss_threshold_pct": 10.0,
+    "confidence_escalation_threshold": 0.7,
+    "latency_feature_formula": "f_lat = clip((RTT_ms - 50.0) / 50.0, 0, 1)",
+    "packet_loss_feature_formula": "f_loss = clip((loss_pct - 10.0) / 30.0, 0, 1)",
+    "high_latency_candidate_formula": "S(HIGH_LATENCY_CONGESTION) = 0.7 * f_lat + 0.3 * f_loss",
+    "packet_loss_candidate_formula": "S(PACKET_LOSS) = 0.8 * f_loss + 0.2 * f_lat",
+    "heuristic_confidence_formula": "C = round(S(best) * (1.0 - 0.5 * S(second)), 4)",
+    "tie_breaking_priority": [
+      "INTERFACE_FAILURE",
+      "ROUTING_MISCONFIGURATION",
+      "DC_MTU_MISMATCH",
+      "OSPF_ADJACENCY_FLAP",
+      "WAN_PATH_DEGRADATION",
+      "HIGH_LATENCY_CONGESTION",
+      "PACKET_LOSS",
+      "UNKNOWN_COMPOSITE_ANOMALY",
+      "HEALTHY"
+    ]
+  },
+  "frozen_experiment_records": [
+    {
+      "experiment_id": "exp-phase2-5c538333",
+      "filepath": "scratch/research_v2/phase2/runs/exp-phase2-5c538333.json",
+      "sha256": "4ae90e2c8d63c81dc6482901b3861500a7d39a6e6c5b879233b90b9c8e1b0cfc",
+      "status": "RECOVERED",
+      "role": "Primary verified Phase 2 baseline experiment record (N=30/50, tc -s qdisc counters, remediation & recovery)"
+    },
+    {
+      "experiment_id": "exp-phase2-04052fa5",
+      "filepath": "scratch/research_v2/phase2/runs/exp-phase2-04052fa5.json",
+      "sha256": "0ec73222fb18b16f08507705909544ebb746dc1487016b69b6bade9bd68832d9",
+      "status": "DIAGNOSED_PASS",
+      "role": "Historical Phase 2 run record (N=5, preserved untouched for historical provenance)"
+    }
+  ],
+  "file_checksums_sha256": {
+    "backend/app/cadd/engine.py": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+    "backend/app/cadd/service.py": "001eb662130faf773a328b5bf88811613bddbe85cb1dfeee21f22fe9e124c085",
+    "backend/app/models/cadd_models.py": "eee49fa8dec7297d02c944b96c4015418f3f6ad18a674be17b35842085c60bd6",
+    "backend/app/models/ceso_models.py": "0c4a68880c81a937fd806f22d6e75e476d455d10aad96041ce2a9d5d3d1bba20",
+    "backend/app/research_v2/guard.py": "1a550fa4b75a2f0c28f5223be23fd3fec6e215078535f5343a658e7f90340335",
+    "backend/app/research_v2/testbed/telemetry.py": "cd2988faa699fee2debf9688b6570a9e02114f5871a5f5f502ae4686f2604046",
+    "backend/app/research_v2/testbed/faults.py": "f768cf2af86891ba354eb2be1e7d171ea80542f60da21ec5f8ce289fe2f0ad98",
+    "backend/app/research_v2/testbed/remediation.py": "39558fc99a40c0d153de8ecce602410666f032807c3ff9c4cd35fbc930baa204",
+    "backend/app/research_v2/testbed/verification.py": "9b8f19ab331f66dcf763cd3f0691068a2796179757444562ba81cf3e46a2035d",
+    "backend/app/research_v2/testbed/topology.py": "47b7c9c98d92d60ad01d135cedc4784d88b780209192b736447ecb4b68f70927",
+    "backend/app/research_v2/testbed/models.py": "18ea7b0ad667b4c6306a0551543c94848566ff78a26447ee3c5299733ffc0aff",
+    "backend/app/research_v2/testbed/executor.py": "a54c862c1d01ea4453b27ff61025b4fe59665bb04c7fa0e9765f2bf8df2a941a",
+    "backend/app/research_v2/testbed/recorder.py": "75113d8762a5a1a6f0853bb1996928b40d945d6ccefdbabf7cdb6ec58d16952e",
+    "scratch/run_phase2_experiment.py": "591ab2e40484719ed0eb800204cac4cbb5b89db27a68a64e64929952934f331a",
+    "scratch/research_v2/phase2/algorithm_spec.md": "9f8b0f86a52eb25680a3e9d4d4c957eb1a90965cd74634897aa8463a9725c97e",
+    "scratch/research_v2/phase2/independent_record_verification.md": "005cd7c8591c3e279c25d3c489dd2f42124cc41e5f733338298673db5a132e55",
+    "scratch/research_v2/phase2/independent_record_verification_summary.md": "01fc901722ebd5cef96b8795cf694e09041a90045bac149e6a0796cac10c9b1e",
+    "scratch/research_v2/phase2/correction_report.md": "67e3969088652d41a801d1f2bd236844d4218db6306771a267b7fbdcbb9ceed4",
+    "scratch/research_v2/phase2/final_evidence_check.md": "7d907ddbe6e2d12f36ac5bea202a70b6406c41343804ece27b47c9e2afa05a40",
+    "scratch/research_v2/phase2/runs/exp-phase2-5c538333.json": "4ae90e2c8d63c81dc6482901b3861500a7d39a6e6c5b879233b90b9c8e1b0cfc",
+    "scratch/research_v2/phase2/runs/exp-phase2-04052fa5.json": "0ec73222fb18b16f08507705909544ebb746dc1487016b69b6bade9bd68832d9",
+    "tests/unit/test_phase2_formula_and_isolation.py": "892ecd563a887e5a102b431c3ea7ca74b495d297ab4f3e848946ebcbfbe342f7",
+    "tests/unit/test_phase2_guard.py": "c3b13de4713feda4fc352d4cae3e72c7e6892fe363bf385f29bff1f8b0e77e0e",
+    "requirements.txt": null
+  },
+  "known_limitations_and_scope_boundary": [
+    "Baseline freeze applies strictly to Phase 2 diagnosis requirements and testbed baseline state.",
+    "Confidence scores represent heuristic evidence margins in [0, 1], not calibrated Bayesian posterior probabilities.",
+    "Measured empirical evidence is bounded to the Linux network namespace testbed fault class (HIGH_LATENCY_CONGESTION: delay 150ms, loss 20%).",
+    "This freeze does NOT establish general diagnostic accuracy across all network fault classes, production readiness, or remediation success beyond measured testbed evidence.",
+    "Phase 3 research execution remains blocked until Phase 3 protocol approval."
+  ]
+}

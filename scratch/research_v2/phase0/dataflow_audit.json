@@ -1,0 +1,85 @@
+{
+  "pipeline_stages": [
+    {
+      "stage": "RAW INPUT / TELEMETRY",
+      "implementation": "backend/app/ceso/provider.py",
+      "input": "Linux ping/ip link output OR NetworkStateSimulator",
+      "output": "NetworkState model",
+      "is_real": false,
+      "measured_or_assigned": "MIXED",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "CESO",
+      "implementation": "backend/app/ceso/service.py",
+      "input": "NetworkState snapshot",
+      "output": "CESOSummary",
+      "is_real": true,
+      "measured_or_assigned": "Measured from input state",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "CADD DIAGNOSIS",
+      "implementation": "backend/app/cadd/engine.py",
+      "input": "NetworkState",
+      "output": "DiagnosticReport + ActionPlan",
+      "is_real": true,
+      "measured_or_assigned": "Heuristic rule matching",
+      "ground_truth_accessible": true
+    },
+    {
+      "stage": "CONFIDENCE & ESCALATION",
+      "implementation": "backend/app/cadd/engine.py",
+      "input": "DiagnosticReport",
+      "output": "escalation_required flag",
+      "is_real": false,
+      "measured_or_assigned": "Hardcoded per rule branch",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "LLM GATEWAY",
+      "implementation": "backend/app/llm/gateway.py",
+      "input": "Context package",
+      "output": "LLMResponse",
+      "is_real": true,
+      "measured_or_assigned": "LLM inference / Fallback mock",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "MSVS SAFETY",
+      "implementation": "backend/app/msvs/policies.py",
+      "input": "ActionPlan",
+      "output": "ValidationResult",
+      "is_real": true,
+      "measured_or_assigned": "Policy validation",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "EXECUTION",
+      "implementation": "backend/app/msvs/service.py",
+      "input": "plan_id",
+      "output": "ExecutionLog",
+      "is_real": false,
+      "measured_or_assigned": "Simulated state reset",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "VERIFICATION",
+      "implementation": "backend/app/msvs/service.py",
+      "input": "post_state",
+      "output": "post_verification_passed flag",
+      "is_real": false,
+      "measured_or_assigned": "Check reset state",
+      "ground_truth_accessible": false
+    },
+    {
+      "stage": "METRICS ENGINE",
+      "implementation": "backend/app/evaluation/metrics.py",
+      "input": "List[ExperimentRecord]",
+      "output": "Dict[str, MetricValue]",
+      "is_real": true,
+      "measured_or_assigned": "Calculated from run records",
+      "ground_truth_accessible": true
+    }
+  ]
+}

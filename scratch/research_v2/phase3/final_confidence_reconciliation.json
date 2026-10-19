@@ -1,0 +1,235 @@
+{
+  "audit_timestamp_utc": "2026-10-09T09:18:55.004462+00:00",
+  "reconciliation_status": "RESOLVED",
+  "git_provenance": {
+    "commit": "unpinned",
+    "git_error": "fatal: not a git repository (or any parent up to mount point /mnt)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).",
+    "is_dirty": false,
+    "dirty_file_count": 0,
+    "dirty_files": []
+  },
+  "file_metadata": {
+    "backend/app/cadd/engine.py": {
+      "path": "backend/app/cadd/engine.py",
+      "size_bytes": 20498,
+      "mtime_utc": "2026-10-09T04:48:56.013361+00:00",
+      "sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326"
+    },
+    "backend/app/cadd/service.py": {
+      "path": "backend/app/cadd/service.py",
+      "size_bytes": 1154,
+      "mtime_utc": "2026-10-03T09:03:16.108873+00:00",
+      "sha256": "001eb662130faf773a328b5bf88811613bddbe85cb1dfeee21f22fe9e124c085"
+    },
+    "backend/app/models/cadd_models.py": {
+      "path": "backend/app/models/cadd_models.py",
+      "size_bytes": 3254,
+      "mtime_utc": "2026-10-09T04:40:51.192836+00:00",
+      "sha256": "eee49fa8dec7297d02c944b96c4015418f3f6ad18a674be17b35842085c60bd6"
+    },
+    "backend/app/models/ceso_models.py": {
+      "path": "backend/app/models/ceso_models.py",
+      "size_bytes": 2938,
+      "mtime_utc": "2026-10-03T09:01:45.173281+00:00",
+      "sha256": "0c4a68880c81a937fd806f22d6e75e476d455d10aad96041ce2a9d5d3d1bba20"
+    },
+    "backend/app/research_v2/guard.py": {
+      "path": "backend/app/research_v2/guard.py",
+      "size_bytes": 5512,
+      "mtime_utc": "2026-10-09T04:41:40.774722+00:00",
+      "sha256": "1a550fa4b75a2f0c28f5223be23fd3fec6e215078535f5343a658e7f90340335"
+    },
+    "scratch/research_v2/phase2/runs/exp-phase2-5c538333.json": {
+      "path": "scratch/research_v2/phase2/runs/exp-phase2-5c538333.json",
+      "size_bytes": 204328,
+      "mtime_utc": "2026-10-09T06:05:34.147464+00:00",
+      "sha256": "4ae90e2c8d63c81dc6482901b3861500a7d39a6e6c5b879233b90b9c8e1b0cfc"
+    },
+    "scratch/research_v2/phase2/runs/exp-phase2-04052fa5.json": {
+      "path": "scratch/research_v2/phase2/runs/exp-phase2-04052fa5.json",
+      "size_bytes": 100221,
+      "mtime_utc": "2026-10-09T04:51:16.638521+00:00",
+      "sha256": "0ec73222fb18b16f08507705909544ebb746dc1487016b69b6bade9bd68832d9"
+    },
+    "scratch/research_v2/phase2/freeze_manifest.json": {
+      "path": "scratch/research_v2/phase2/freeze_manifest.json",
+      "size_bytes": 6109,
+      "mtime_utc": "2026-10-09T07:23:57.282126+00:00",
+      "sha256": "97abaf470754fae34f5362cac8e3c64203a169649a1665ef535d04cabedf95fd"
+    },
+    "scratch/research_v2/phase2/freeze_manifest.md": {
+      "path": "scratch/research_v2/phase2/freeze_manifest.md",
+      "size_bytes": 10792,
+      "mtime_utc": "2026-10-09T08:41:25.515495+00:00",
+      "sha256": "a8dc3e30153a4b9ceb57e71057570cdd38b77b760c14b31c0dd1ad3c04246c5d"
+    },
+    "scratch/research_v2/phase2/independent_record_verification.md": {
+      "path": "scratch/research_v2/phase2/independent_record_verification.md",
+      "size_bytes": 17567,
+      "mtime_utc": "2026-10-09T07:12:53.273903+00:00",
+      "sha256": "005cd7c8591c3e279c25d3c489dd2f42124cc41e5f733338298673db5a132e55"
+    },
+    "scratch/research_v2/phase2/final_evidence_check.md": {
+      "path": "scratch/research_v2/phase2/final_evidence_check.md",
+      "size_bytes": 8196,
+      "mtime_utc": "2026-10-09T06:41:29.038848+00:00",
+      "sha256": "7d907ddbe6e2d12f36ac5bea202a70b6406c41343804ece27b47c9e2afa05a40"
+    },
+    "scratch/research_v2/phase2/final_consistency_audit.md": {
+      "path": "scratch/research_v2/phase2/final_consistency_audit.md",
+      "size_bytes": 11848,
+      "mtime_utc": "2026-10-09T06:29:21.011257+00:00",
+      "sha256": "be8804a4dc7ac57971c6f4865dc054cb8114e2611932983644dfeaf5b442228f"
+    },
+    "scratch/research_v2/phase2/correction_report.md": {
+      "path": "scratch/research_v2/phase2/correction_report.md",
+      "size_bytes": 8817,
+      "mtime_utc": "2026-10-09T06:06:45.147068+00:00",
+      "sha256": "67e3969088652d41a801d1f2bd236844d4218db6306771a267b7fbdcbb9ceed4"
+    },
+    "scratch/research_v2/phase2/audit.md": {
+      "path": "scratch/research_v2/phase2/audit.md",
+      "size_bytes": 9098,
+      "mtime_utc": "2026-10-09T04:40:06.612875+00:00",
+      "sha256": "016fb6e701ecde9e40c56d301bd3672114baf3488394130b5efb3a00fdcd7f47"
+    },
+    "scratch/research_v2/phase3/preauthorization_audit.md": {
+      "path": "scratch/research_v2/phase3/preauthorization_audit.md",
+      "size_bytes": 14536,
+      "mtime_utc": "2026-10-09T08:37:25.801237+00:00",
+      "sha256": "651d29f7972ec9587b21cd6cec44f0dc2db459a8517f6a0ab7e8c85dffe4faac"
+    },
+    "scratch/research_v2/phase3/protocol_remediation_report.md": {
+      "path": "scratch/research_v2/phase3/protocol_remediation_report.md",
+      "size_bytes": 7164,
+      "mtime_utc": "2026-10-09T08:44:20.011217+00:00",
+      "sha256": "5ddbcc450c9cfff2b555f0f3259e1d6e44d4208ffb1012640bee1062ffcc7d05"
+    }
+  },
+  "records_analysis": {
+    "exp-phase2-5c538333": {
+      "record_id": "exp-phase2-5c538333",
+      "stored_diagnosis": "HIGH_LATENCY_CONGESTION",
+      "recomputed_diagnosis": "HIGH_LATENCY_CONGESTION",
+      "stored_confidence": 0.78,
+      "recomputed_confidence": 0.8667,
+      "stored_escalation": false,
+      "recomputed_escalation": false,
+      "stored_candidate_scores": {
+        "INTERFACE_FAILURE": 0.0,
+        "ROUTING_MISCONFIGURATION": 0.0,
+        "DC_MTU_MISMATCH": 0.0,
+        "OSPF_ADJACENCY_FLAP": 0.0,
+        "WAN_PATH_DEGRADATION": 0.0,
+        "HIGH_LATENCY_CONGESTION": 0.78,
+        "PACKET_LOSS": 0.0,
+        "UNKNOWN_COMPOSITE_ANOMALY": 0.0,
+        "HEALTHY": 0.0
+      },
+      "recomputed_candidate_scores": {
+        "INTERFACE_FAILURE": 0.0,
+        "ROUTING_MISCONFIGURATION": 0.0,
+        "DC_MTU_MISMATCH": 0.0,
+        "OSPF_ADJACENCY_FLAP": 0.0,
+        "WAN_PATH_DEGRADATION": 0.0,
+        "HIGH_LATENCY_CONGESTION": 0.8667,
+        "PACKET_LOSS": 0.0,
+        "UNKNOWN_COMPOSITE_ANOMALY": 0.0,
+        "HEALTHY": 0.0
+      },
+      "top_candidate": "HIGH_LATENCY_CONGESTION",
+      "top_score": 0.8667,
+      "second_candidate": "INTERFACE_FAILURE",
+      "second_score": 0.0,
+      "features": {
+        "f_down": 0.0,
+        "f_route": 0.0,
+        "f_lat": 1.0,
+        "f_loss": 0.5556666666666668,
+        "f_err": 0.0,
+        "f_util": 0.0,
+        "f_mtu": 0.0
+      },
+      "matches": {
+        "diagnosis": true,
+        "confidence": false,
+        "escalation": true,
+        "candidate_scores": false
+      }
+    },
+    "exp-phase2-04052fa5": {
+      "record_id": "exp-phase2-04052fa5",
+      "stored_diagnosis": "HIGH_LATENCY_CONGESTION",
+      "recomputed_diagnosis": "HIGH_LATENCY_CONGESTION",
+      "stored_confidence": 0.8,
+      "recomputed_confidence": 0.7,
+      "stored_escalation": false,
+      "recomputed_escalation": false,
+      "stored_candidate_scores": {
+        "INTERFACE_FAILURE": 0.0,
+        "ROUTING_MISCONFIGURATION": 0.0,
+        "DC_MTU_MISMATCH": 0.0,
+        "OSPF_ADJACENCY_FLAP": 0.0,
+        "WAN_PATH_DEGRADATION": 0.0,
+        "HIGH_LATENCY_CONGESTION": 0.8,
+        "PACKET_LOSS": 0.0,
+        "UNKNOWN_COMPOSITE_ANOMALY": 0.0,
+        "HEALTHY": 0.0
+      },
+      "recomputed_candidate_scores": {
+        "INTERFACE_FAILURE": 0.0,
+        "ROUTING_MISCONFIGURATION": 0.0,
+        "DC_MTU_MISMATCH": 0.0,
+        "OSPF_ADJACENCY_FLAP": 0.0,
+        "WAN_PATH_DEGRADATION": 0.0,
+        "HIGH_LATENCY_CONGESTION": 0.7,
+        "PACKET_LOSS": 0.0,
+        "UNKNOWN_COMPOSITE_ANOMALY": 0.0,
+        "HEALTHY": 0.0
+      },
+      "top_candidate": "HIGH_LATENCY_CONGESTION",
+      "top_score": 0.7,
+      "second_candidate": "INTERFACE_FAILURE",
+      "second_score": 0.0,
+      "features": {
+        "f_down": 0.0,
+        "f_route": 0.0,
+        "f_lat": 1.0,
+        "f_loss": 0.0,
+        "f_err": 0.0,
+        "f_util": 0.0,
+        "f_mtu": 0.0
+      },
+      "matches": {
+        "diagnosis": true,
+        "confidence": false,
+        "escalation": true,
+        "candidate_scores": false
+      }
+    }
+  },
+  "discrepancy_resolution": {
+    "reported_value_1": 0.595,
+    "reported_value_2": 0.78,
+    "resolution_summary": "The persisted JSON record exp-phase2-5c538333.json stores confidence 0.78, which is 100% mathematically exact under the frozen ExplainableRuleEngine v2.0.0-phase2 recomputation on recorded telemetry (f_lat=1.0000, f_loss=0.2667, S(best)=0.7800, S(second)=0.0000, C=0.7800). The value 0.5950 originated from an un-executed hypothetical prompt calculation assuming S(second)=0.3000 (0.7000 * 0.8500 = 0.5950), which never existed in the persisted JSON file.",
+    "hypothetical_formula_derivation": "0.7000 * (1.0 - 0.5 * 0.3000) = 0.5950",
+    "actual_persisted_formula_derivation": "0.7800 * (1.0 - 0.5 * 0.0000) = 0.7800"
+  },
+  "checksum_integrity": {
+    "backend/app/cadd/engine.py": {
+      "disk_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "manifest_sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326",
+      "match": true
+    },
+    "scratch/research_v2/phase2/runs/exp-phase2-5c538333.json": {
+      "disk_sha256": "4ae90e2c8d63c81dc6482901b3861500a7d39a6e6c5b879233b90b9c8e1b0cfc",
+      "manifest_sha256": "4ae90e2c8d63c81dc6482901b3861500a7d39a6e6c5b879233b90b9c8e1b0cfc",
+      "match": true
+    },
+    "scratch/research_v2/phase2/runs/exp-phase2-04052fa5.json": {
+      "disk_sha256": "0ec73222fb18b16f08507705909544ebb746dc1487016b69b6bade9bd68832d9",
+      "manifest_sha256": "0ec73222fb18b16f08507705909544ebb746dc1487016b69b6bade9bd68832d9",
+      "match": true
+    }
+  }
+}

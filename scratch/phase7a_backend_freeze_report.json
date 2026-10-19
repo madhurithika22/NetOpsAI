@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-10-08T03:47:40.273157+00:00",
+  "git_commit": "N/A",
+  "python_version": "3.12.7",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "ollama_status": {
+    "reachable": true,
+    "provider": "ollama",
+    "active_model": "qwen3:4b",
+    "health_status": "LLM_AVAILABLE",
+    "latency_ms": 1549.09
+  },
+  "registered_scenarios": [
+    {
+      "scenario_id": "CASE_01",
+      "name": "Enterprise Campus + Core",
+      "target_node_count": 20,
+      "target_link_count": 20,
+      "fault_type": "OSPF_ADJACENCY_INSTABILITY",
+      "expected_fault_domain": "Core Routing Layer (OSPF)",
+      "remediation_candidates_count": 1
+    },
+    {
+      "scenario_id": "CASE_02",
+      "name": "Multi-Site WAN / SD-WAN",
+      "target_node_count": 28,
+      "target_link_count": 33,
+      "fault_type": "WAN_PATH_DEGRADATION_AND_CONGESTION",
+      "expected_fault_domain": "WAN Edge & Secondary Path Congestion",
+      "remediation_candidates_count": 1
+    },
+    {
+      "scenario_id": "CASE_03",
+      "name": "Leaf-Spine Data Center",
+      "target_node_count": 36,
+      "target_link_count": 56,
+      "fault_type": "MTU_MISMATCH_FRAGMENTATION_CASCADE",
+      "expected_fault_domain": "Leaf-Spine Fabric MTU Alignment",
+      "remediation_candidates_count": 1
+    },
+    {
+      "scenario_id": "CASE_04",
+      "name": "Hybrid Edge / Data Center / Cloud",
+      "target_node_count": 48,
+      "target_link_count": 48,
+      "fault_type": "NOVEL_COMPOSITE_ANOMALY",
+      "expected_fault_domain": "Hybrid Edge/Cloud Overlay",
+      "remediation_candidates_count": 1
+    }
+  ],
+  "key_backend_interfaces": {
+    "scenario_registry": "app.scenarios.registry.scenario_registry",
+    "ceso_engine": "app.ceso.service.ceso_service",
+    "cadd_engine": "app.cadd.engine.ExplainableRuleEngine",
+    "llm_gateway": "app.llm.gateway.llm_gateway",
+    "msvs_policy_engine": "app.msvs.policies.SafetyPolicyEngine",
+    "msvs_service": "app.msvs.service.msvs_service",
+    "benchmark_runner": "app.evaluation.runner.BenchmarkRunner",
+    "experiment_recorder": "app.evaluation.recorder.ExperimentRecorder",
+    "evaluation_metrics": "app.evaluation.metrics"
+  },
+  "component_status_matrix": {
+    "scenario_registry": "READY",
+    "ceso_engine": "READY",
+    "cadd_engine": "READY",
+    "llm_gateway": "READY",
+    "msvs_safety": "READY",
+    "remediation_execution": "READY",
+    "verification_loop": "READY",
+    "feedback_loop": "READY",
+    "evaluation_runner": "READY"
+  },
+  "test_count": 55,
+  "passed_test_count": 53,
+  "skipped_test_count": 2,
+  "known_limitations": [
+    "Hardware is CPU-bound (Intel i5-1155G7, 8GB RAM), causing real Ollama inference latencies of ~60-85s per call",
+    "Linux namespace testbed execution is skipped on Windows environments in favor of full topology state simulation",
+    "AIOps 2020 dataset trace analysis is static and reported separately from interactive primary scenarios"
+  ],
+  "backend_frozen": true
+}

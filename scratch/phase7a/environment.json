@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-10-08T03:50:34.490504+00:00",
+  "python_version": "3.12.7",
+  "platform": "win32",
+  "llm_provider": "ollama",
+  "llm_model": "qwen3:4b",
+  "llm_reachable": true,
+  "ollama_latency_ms": 1543.33
+}

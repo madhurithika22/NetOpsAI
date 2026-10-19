@@ -1,0 +1,24 @@
+{
+  "experiment_id": "exp-phase1-2f99c27a",
+  "run_id": "run-1b2151",
+  "timestamp": "2026-10-08T18:04:14.799224Z",
+  "testbed_version": "2.0.0-phase1",
+  "system_info": {
+    "platform": "win32",
+    "os_name": "nt",
+    "python_version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+    "system_release": "10",
+    "machine": "AMD64"
+  },
+  "topology_definition": {
+    "error": "Platform lacks Linux network namespace support"
+  },
+  "baseline_snapshot": null,
+  "fault_definition": null,
+  "fault_injection_record": null,
+  "remediation_plan": null,
+  "remediation_execution_record": null,
+  "independent_verification_record": null,
+  "final_status": "CAPABILITY_CHECK_FAILED",
+  "raw_command_history": []
+}

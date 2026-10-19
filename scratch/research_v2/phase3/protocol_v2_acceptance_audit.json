@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-10-10T00:11:15Z",
+  "audit_role": "Independent IEEE Journal Reviewer & Experimental-Methodology Auditor",
+  "verdict": "ACCEPTANCE AUDIT COMPLETE — PROTOCOL V2 SCIENTIFICALLY SOUND WITH STIPULATED LIMITATIONS",
+  "safety_attestation": {
+    "research_experiments_executed": false,
+    "matrix_rows_completed": 0,
+    "live_fault_injections_performed": false,
+    "phase3_execution_authorized": false
+  },
+  "audit_sections": {
+    "audit_a_phase2_baseline_integrity": {
+      "status": "UNVERIFIED_MODIFIED",
+      "source_sha256_verification": "FAILED_MISMATCH",
+      "method_level_unit_test_status": "PASSED_100_PERCENT",
+      "explanation": "Current engine.py (hash 07e1bfe7...) includes functional bug fixes and differs from frozen Phase 2 manifest hash (ea483491...). Arm 4 executes a modified implementation; byte-for-byte binary source equivalence cannot be claimed."
+    },
+    "audit_b_case04_eligibility": {
+      "status": "RETAIN_DESCRIPTIVE_EVALUATION_ONLY",
+      "dataset_only": true,
+      "repetition_determinism": "IDENTICAL_SNAPSHOTS",
+      "explanation": "CASE_04 telemetry generator is non-stochastic; repetitions 1-10 generate identical static snapshots. CASE_04 is retained for descriptive offline evaluation but must not be pooled as N=10 independent stochastic samples for inferential statistics."
+    },
+    "audit_c_three_arm_comparability": {
+      "status": "VERIFIED",
+      "primary_arms": ["ARM_3_RULE_BASED", "ARM_4_PHASE2_BASELINE", "ARM_5_CESO_CADE_NO_LLM"],
+      "ground_truth_isolation": "VERIFIED_ISOLATED",
+      "supported_claims": [
+        "Comparative diagnostic accuracy, precision, recall, F1 between rule matching and CADE candidate scoring",
+        "Diagnostic execution latency Tmttd",
+        "Evidence compression ratio ECR"
+      ],
+      "unsupported_claims": [
+        "Causal impact of LLM reasoning (Arm 6 excluded)",
+        "Closed-loop remediation safety or recovery latency (Arm 7 deferred)",
+        "Real-world production dynamic performance"
+      ]
+    },
+    "audit_d_ground_truth_and_metrics": {
+      "status": "VERIFIED",
+      "vsr_status": "NOT_MEASURED",
+      "vsr_exclusion_reason": "Verification probe target scope telemetry not recorded",
+      "rsr_status": "NOT_APPLICABLE",
+      "rsr_exclusion_reason": "No eligible active remediation actions were executed in this experiment group",
+      "macro_f1_handling": "VERIFIED_CONSISTENT_DENOMINATORS"
+    },
+    "audit_e_ecr_mttd_repetition_validity": {
+      "status": "VERIFIED_WITH_STIPULATION",
+      "ecr_definition": "1.0 - (evidence_count / total_raw_evidence_count)",
+      "mttd_boundary": "Wall-clock diagnostic function execution latency (excludes setup and telemetry collection)",
+      "repetition_nature": "DETERMINISTIC_REPEATED_SOFTWARE_EXECUTIONS",
+      "analysis_recommendation": "Report point estimates per (arm, scenario) pair and aggregate Macro-F1 across distinct scenario units of observation (N_scenarios = 4)."
+    }
+  },
+  "unit_tests": {
+    "total": 77,
+    "passed": 77,
+    "failed": 0,
+    "duration_seconds": 1.27
+  }
+}

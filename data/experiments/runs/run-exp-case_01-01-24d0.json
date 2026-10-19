@@ -1,0 +1,75 @@
+{
+  "run_id": "run-exp-case_01-01-24d0",
+  "timestamp": "2026-10-07T15:51:41.190999+00:00",
+  "environment": "SIMULATED",
+  "dataset_or_scenario_id": "CASE_01",
+  "ground_truth_fault_label": "OSPF_ADJACENCY_INSTABILITY",
+  "predicted_fault_label": "OSPF_ADJACENCY_INSTABILITY",
+  "ground_truth_location": "core-rtr01<->core-rtr02",
+  "predicted_location": "core-rtr01<->core-rtr02",
+  "start_time": "2026-10-07T15:51:41.190999+00:00",
+  "end_time": "2026-10-07T15:51:41.190999+00:00",
+  "diagnosis_latency_ms": 0.09370013140141964,
+  "evidence_selected": [
+    "OSPF Neighbor State & Core Path Metric Check"
+  ],
+  "evidence_count": 1,
+  "total_raw_evidence_count": 13,
+  "token_count": null,
+  "raw_token_count": null,
+  "llm_invocation_count": 0,
+  "llm_escalated": false,
+  "pre_llm_diagnosis": "OSPF_ADJACENCY_INSTABILITY",
+  "post_llm_diagnosis": "OSPF_ADJACENCY_INSTABILITY",
+  "verification_scope": "Core Routing Layer (OSPF)",
+  "remediation_decision": "APPROVED",
+  "remediation_status": "SUCCESS",
+  "verification_result": "VERIFIED_HEALTHY",
+  "pre_remediation_rtt_ms": 162.5,
+  "post_remediation_rtt_ms": 3.8,
+  "pre_remediation_loss_pct": 18.5,
+  "post_remediation_loss_pct": 0.0,
+  "seed": 42,
+  "raw_telemetry_count": 13,
+  "ceso_context": {
+    "snapshot_id": "snap-case01",
+    "anomalies_detected": true
+  },
+  "cadd_confidence": 0.95,
+  "escalation_decision": false,
+  "msvs_decision": "APPROVED",
+  "llm_request_payload": null,
+  "llm_response_payload": null,
+  "direct_token_metrics": null,
+  "pipeline_token_metrics": null,
+  "input_token_reduction_pct": null,
+  "total_token_reduction_pct": null,
+  "feedback_package": {
+    "action_id": "act-e4be8c6f",
+    "result": "SUCCESS",
+    "verification_passed": true,
+    "pre_action_metrics": {
+      "rtt_ms": 162.5,
+      "packet_loss_pct": 18.5
+    },
+    "post_action_metrics": {
+      "rtt_ms": 3.8,
+      "packet_loss_pct": 0.0
+    },
+    "metric_deltas": {
+      "rtt_ms_delta": -158.7,
+      "packet_loss_pct_delta": -18.5
+    },
+    "affected_services": [
+      "DNS Service",
+      "RADIUS Auth",
+      "Enterprise Web App",
+      "PostgreSQL Cluster"
+    ],
+    "observed_side_effects": []
+  },
+  "post_action_llm_assessment": null,
+  "is_completed": true,
+  "error_message": null,
+  "metrics": {}
+}

@@ -1,0 +1,59 @@
+{
+  "module": "backend/app/cadd/engine.py",
+  "confidence_scores": [
+    {
+      "rule": "Case 01 OSPF Flap",
+      "confidence": 0.95,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Case 02 WAN Congestion",
+      "confidence": 0.94,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Case 03 DC MTU Mismatch",
+      "confidence": 0.96,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Case 04 Composite Anomaly",
+      "confidence": 0.47,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Interface Failure",
+      "confidence": 0.99,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Routing Misconfiguration",
+      "confidence": 0.98,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "High Latency Congestion",
+      "confidence": 0.95,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Packet Loss",
+      "confidence": 0.92,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    },
+    {
+      "rule": "Healthy Baseline",
+      "confidence": 1.0,
+      "source": "Hardcoded constant",
+      "is_reproducible_from_formula": false
+    }
+  ]
+}

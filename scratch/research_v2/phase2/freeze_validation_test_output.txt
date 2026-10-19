@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.15, pytest-9.1.1, pluggy-1.6.0 -- /mnt/d/NetOpsAI/.venv-linux/bin/python
+cachedir: .pytest_cache
+rootdir: /mnt/d/NetOpsAI
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collecting ... collected 29 items
+
+tests/unit/test_phase2_formula_and_isolation.py::test_01_hand_calculable_exact_scores PASSED [  3%]
+tests/unit/test_phase2_formula_and_isolation.py::test_02_normalization_and_weight_handling PASSED [  6%]
+tests/unit/test_phase2_formula_and_isolation.py::test_03_missing_feature_behavior PASSED [ 10%]
+tests/unit/test_phase2_formula_and_isolation.py::test_04_invalid_numeric_and_non_finite_input PASSED [ 13%]
+tests/unit/test_phase2_formula_and_isolation.py::test_05_zero_denominator_safety PASSED [ 17%]
+tests/unit/test_phase2_formula_and_isolation.py::test_06_candidate_ties_and_deterministic_tie_breaking PASSED [ 20%]
+tests/unit/test_phase2_formula_and_isolation.py::test_07_unknown_fault_handling PASSED [ 24%]
+tests/unit/test_phase2_formula_and_isolation.py::test_08_confidence_changes_with_relevant_evidence PASSED [ 27%]
+tests/unit/test_phase2_formula_and_isolation.py::test_09_no_change_in_prediction_when_evaluation_label_changes PASSED [ 31%]
+tests/unit/test_phase2_formula_and_isolation.py::test_10_no_access_to_expected_diagnoses_in_operational_pipeline PASSED [ 34%]
+tests/unit/test_phase2_formula_and_isolation.py::test_11_no_hardcoded_confidence_or_label_derived_paths PASSED [ 37%]
+tests/unit/test_phase2_formula_and_isolation.py::test_12_deterministic_repeated_execution PASSED [ 41%]
+tests/unit/test_phase2_formula_and_isolation.py::test_13_escalation_threshold_boundary_behavior PASSED [ 44%]
+tests/unit/test_phase2_formula_and_isolation.py::test_14_independent_score_recomputation_discrepancy PASSED [ 48%]
+tests/unit/test_phase2_guard.py::test_phase2_validator_linux_check PASSED [ 51%]
+tests/unit/test_phase2_guard.py::test_phase2_validator_unit_test_rejection PASSED [ 55%]
+tests/unit/test_phase2_guard.py::test_phase2_validator_ground_truth_leakage_rejection PASSED [ 58%]
+tests/unit/test_phase2_guard.py::test_phase2_validator_missing_raw_evidence_rejection PASSED [ 62%]
+tests/unit/test_research_v2_capabilities.py::test_capability_check_format PASSED [ 65%]
+tests/unit/test_research_v2_models.py::test_command_execution_record_model PASSED [ 68%]
+tests/unit/test_research_v2_models.py::test_telemetry_snapshot_model PASSED [ 72%]
+tests/unit/test_research_v2_models.py::test_fault_definition_model PASSED [ 75%]
+tests/unit/test_research_v2_executor.py::test_unprivileged_command_construction PASSED [ 79%]
+tests/unit/test_research_v2_executor.py::test_privileged_command_construction PASSED [ 82%]
+tests/unit/test_research_v2_executor.py::test_namespace_and_privileged_command_construction PASSED [ 86%]
+tests/unit/test_research_v2_executor.py::test_evidence_record_fields_canonical_schema PASSED [ 89%]
+tests/unit/test_research_v2_executor.py::test_privileged_evidence_record_fields PASSED [ 93%]
+tests/unit/test_research_v2_executor.py::test_no_shell_true_flag PASSED  [ 96%]
+tests/phase1/test_privileged_execution.py::test_sudo_passwordless_netns_lifecycle PASSED [100%]
+
+============================== 29 passed in 1.16s ==============================

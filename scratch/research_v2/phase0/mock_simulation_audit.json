@@ -1,0 +1,76 @@
+{
+  "findings": [
+    {
+      "file": "backend/app/ceso/provider.py",
+      "range": "136-150",
+      "symbol": "SimulatedTelemetryProvider",
+      "classification": "SIMULATION_ONLY",
+      "description": "In-memory synthetic telemetry snapshot generator",
+      "contaminates_research": true,
+      "phase1_action": "Replace with real linux netns telemetry or real dataset replay"
+    },
+    {
+      "file": "backend/app/ceso/provider.py",
+      "range": "210-211",
+      "symbol": "LinuxTestbedTelemetryProvider._collect_real_linux_telemetry",
+      "classification": "HARDCODED_RESEARCH_VALUE",
+      "description": "Assigns interface throughput and utilization based on active_fault string matching rather than reading Linux kernel counters",
+      "contaminates_research": true,
+      "phase1_action": "Read sysfs / ethtool / procfs for real interface metrics"
+    },
+    {
+      "file": "backend/app/ceso/provider.py",
+      "range": "271-315",
+      "symbol": "_collect_mocked_testbed_telemetry",
+      "classification": "MOCK_PROVIDER",
+      "description": "Completely synthetic testbed telemetry fallback when netns namespaces are absent",
+      "contaminates_research": true,
+      "phase1_action": "Enforce strict error handling when netns is absent"
+    },
+    {
+      "file": "backend/app/llm/providers/mock.py",
+      "range": "1-86",
+      "symbol": "MockLLMProvider",
+      "classification": "MOCK_PROVIDER",
+      "description": "Returns hardcoded deterministic diagnostic strings without running LLM inference",
+      "contaminates_research": true,
+      "phase1_action": "Isolate mock provider strictly to unit tests"
+    },
+    {
+      "file": "backend/app/msvs/service.py",
+      "range": "94",
+      "symbol": "MSVSService.execute_action_plan",
+      "classification": "SIMULATION_ONLY",
+      "description": "Executes remediation by calling ceso_service.reset_simulation() instead of executing real network commands",
+      "contaminates_research": true,
+      "phase1_action": "Implement real remediation command execution in netns/routers"
+    },
+    {
+      "file": "backend/app/scenarios/case01_enterprise.py",
+      "range": "1-195",
+      "symbol": "Case 01 Enterprise Generator",
+      "classification": "SIMULATION_ONLY",
+      "description": "Synthetic state generator returning pre-cooked network state dicts based on is_fault boolean",
+      "contaminates_research": true,
+      "phase1_action": "Replace with real physical or netns scenario testbed"
+    },
+    {
+      "file": "backend/app/cadd/engine.py",
+      "range": "204",
+      "symbol": "ExplainableRuleEngine (Case 4)",
+      "classification": "HARDCODED_RESEARCH_VALUE",
+      "description": "Hardcoded confidence_score = 0.47 assigned to Case 4 to artificially force LLM escalation",
+      "contaminates_research": true,
+      "phase1_action": "Implement evidence-weighted dynamic confidence scoring"
+    },
+    {
+      "file": "backend/app/evaluation/metrics.py",
+      "range": "125",
+      "symbol": "EvaluationMetricsEngine (VSR)",
+      "classification": "HARDCODED_RESEARCH_VALUE",
+      "description": "Hardcoded VSR = 66.7% metric value returned for testbed experiments",
+      "contaminates_research": true,
+      "phase1_action": "Calculate VSR dynamically from actual verified interface probe sets"
+    }
+  ]
+}

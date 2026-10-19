@@ -1,0 +1,10 @@
+{
+  "dataset": "AIOps Challenge 2020",
+  "dataset_type": "EXTERNAL_DATASET (Static Traces)",
+  "evaluated_subset": "Network-Relevant Failures (KPI Anomaly / Path Congestion)",
+  "subset_size": 25,
+  "diagnostic_accuracy": 1.0,
+  "remediation_status": "NOT_MEASURED (Static Trace Dataset)",
+  "verification_status": "NOT_MEASURED (Static Trace Dataset)",
+  "audit_note": "AIOps 2020 trace analysis is strictly isolated from primary simulated interactive benchmark scores."
+}

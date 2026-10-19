@@ -1,0 +1,5 @@
+scenario_id,scenario_name,accuracy,precision,recall,f1_score
+CASE_01,Enterprise Campus + Core,1.0,1.0,1.0,1.0
+CASE_02,Multi-Site WAN / SD-WAN,1.0,1.0,1.0,1.0
+CASE_03,Leaf-Spine Data Center,1.0,1.0,1.0,1.0
+CASE_04,Hybrid Edge/DC/Cloud,1.0,1.0,1.0,1.0

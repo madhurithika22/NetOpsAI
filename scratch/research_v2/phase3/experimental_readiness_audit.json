@@ -1,0 +1,110 @@
+{
+  "audit_status": "NOT READY — CORRECTIONS REQUIRED",
+  "audit_timestamp_utc": "2026-10-09T16:00:00Z",
+  "audited_source_hashes": {
+    "backend/app/cadd/engine.py": "07e1bfe7bf26c82447dfe5959f75adcffc963857fba44574278bff3209c23504",
+    "backend/app/cadd/service.py": "001eb662130faf773a328b5bf88811613bddbe85cb1dfeee21f22fe9e124c085",
+    "backend/app/ceso/service.py": "e018695173262ecba6189b2f6c390f52a9bf3fb97ad09f4c01974ae54d335469",
+    "backend/app/evaluation/runner.py": "022255ce480fb8fdc7f4da98b971bfa0cde96ff953657f77a9c1afc6c84e0f69",
+    "backend/app/evaluation/metrics.py": "21f42b2cfc00e0f994fc38c96e2fd15ba1fbbdf7389749ccb450044f1bd9c170",
+    "backend/app/evaluation/models.py": "b624641f61a4d3cd3b02af92453dba1c4378c205a52f414610ec1ab6e3b524a3",
+    "backend/app/evaluation/recorder.py": "d91c9dc61c09016d4df6fc24b46f20f62639467c98c995ec249ffc9fe23f3ab5",
+    "backend/app/research_v2/guard.py": "1a550fa4b75a2f0c28f5223be23fd3fec6e215078535f5343a658e7f90340335",
+    "scratch/research_v2/phase2/freeze_manifest.json": "97abaf470754fae34f5362cac8e3c64203a169649a1665ef535d04cabedf95fd",
+    "scratch/research_v2/phase3/experiment_matrix.csv": "949817a7efb02d36d213ad6a67b6e90948de72172154b512573ff8d3cae766a9"
+  },
+  "baseline_integrity": {
+    "status": "FAIL_FILE_HASH_MATCH",
+    "manifest_sha256_match": false,
+    "mismatched_files": [
+      "backend/app/cadd/engine.py"
+    ],
+    "phase2_engine_version": "2.0.0-phase2",
+    "arm4_behavioral_equivalence": true,
+    "frozen_artifacts_recoverable": true
+  },
+  "arm_comparability": {
+    "status": "FAIL",
+    "arms_audited": [
+      "ARM_3_RULE_BASED",
+      "ARM_4_PHASE2_BASELINE",
+      "ARM_5_CESO_CADE_NO_LLM"
+    ],
+    "matched_input_guarantee": false,
+    "critical_comparability_issue": "Arm 5 telemetry provider invocation (ceso_service.load_scenario) resets active_fault to NONE, delivering un-faulted telemetry to Arm 5 while Arms 3 and 4 receive faulted telemetry.",
+    "ground_truth_isolated": true,
+    "matrix_total_rows": 420,
+    "implemented_arms_count": 3,
+    "eligible_rows": 180,
+    "completed_rows": 0
+  },
+  "metric_validity": {
+    "status": "FAIL",
+    "diagnostic_accuracy_valid": true,
+    "confidence_calibrated": false,
+    "confidence_nature": "Heuristic evidence margin score in [0.0, 1.0]",
+    "latency_measurement_valid": false,
+    "latency_defect": "total_elapsed_ms sums subcomponents rather than measuring true end-to-end wall-clock latency",
+    "remediation_metrics_valid": false,
+    "remediation_defects": [
+      "Verification Scope Reduction (VSR) is hardcoded to 66.7%",
+      "Remediation Success Rate (RSR) defaults to 100.0% when zero remediations are executed"
+    ]
+  },
+  "failure_handling": {
+    "status": "PASS",
+    "unauthorized_arm_rejection": true,
+    "null_nan_inf_handling": true,
+    "reproducible_seeds": true,
+    "unique_run_ids": true
+  },
+  "blocking_issues": [
+    {
+      "id": "BLOCKER-01",
+      "severity": "CRITICAL",
+      "title": "Arm 5 Injected Fault Erasure Bug in Telemetry Dispatch",
+      "location": "backend/app/evaluation/runner.py:94 & backend/app/ceso/service.py:37-40",
+      "impact": "Arm 5 receives un-faulted healthy state telemetry while Arms 3 and 4 receive faulted telemetry, violating matched-input comparability.",
+      "corrective_action": "Modify ceso_service.load_scenario or runner.py to pass fault_type explicitly without clearing active_fault to NONE."
+    },
+    {
+      "id": "BLOCKER-02",
+      "severity": "HIGH",
+      "title": "Hardcoded VSR and Default 100% RSR Metric Implementation Flaws",
+      "location": "backend/app/evaluation/metrics.py:150, 159",
+      "impact": "Falsely reports 66.7% VSR and 100% RSR on dataset-only or non-remediated experiment runs.",
+      "corrective_action": "Replace hardcoded VSR with dynamic interface probe ratio, and set RSR status to NOT_APPLICABLE when no remediations are executed."
+    },
+    {
+      "id": "BLOCKER-03",
+      "severity": "MEDIUM",
+      "title": "Total Latency Summation Defect",
+      "location": "backend/app/evaluation/runner.py:185",
+      "impact": "Undercounts end-to-end wall-clock latency by summing subcomponents and ignoring serialization/logging overhead.",
+      "corrective_action": "Measure total_elapsed_ms using time.perf_counter() end-to-end duration."
+    },
+    {
+      "id": "BLOCKER-04",
+      "severity": "MEDIUM",
+      "title": "Freeze Manifest File SHA256 Discrepancy for engine.py",
+      "location": "scratch/research_v2/phase2/freeze_manifest.json:59",
+      "impact": "Automated freeze validation tools fail due to SHA256 discrepancy caused by Phase 3 diagnose_rule_based addition.",
+      "corrective_action": "Document method-level behavioral equivalence and update freeze manifest documentation to account for Phase 3 method extension."
+    }
+  ],
+  "tests_executed": [
+    {
+      "command": ".venv\\Scripts\\python.exe -m pytest tests/unit/test_phase2_formula_and_isolation.py tests/unit/test_phase3_arm_corrections.py tests/unit/test_evaluation_metrics.py",
+      "outcome": "PASSED (23/23 tests passed)",
+      "limitations": "Verifies static formulas, rule engine logic, and metric calculations in isolation; does not execute research matrix or alter network state."
+    },
+    {
+      "command": "$env:PYTHONPATH=\".\"; .venv\\Scripts\\python.exe -m pytest tests/unit/test_phase3_matrix_validation.py",
+      "outcome": "PASSED (2/2 tests passed)",
+      "limitations": "Verifies matrix structure, seed uniqueness, and 420 planned row count."
+    }
+  ],
+  "research_experiments_executed": false,
+  "matrix_rows_completed_by_audit": 0,
+  "phase3_execution_authorized": false
+}

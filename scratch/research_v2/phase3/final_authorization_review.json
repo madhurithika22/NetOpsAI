@@ -1,0 +1,82 @@
+{
+  "review_timestamp_utc": "2026-10-09T09:28:49.988872+00:00",
+  "final_decision": "AUTHORIZED \u2014 specified arms only",
+  "authorized_arms": [
+    "ARM_3_RULE_BASED",
+    "ARM_4_PHASE2_BASELINE",
+    "ARM_5_CESO_CADE_NO_LLM"
+  ],
+  "blocked_or_unimplemented_arms": [
+    "ARM_1_STATIC_THRESHOLD",
+    "ARM_2_ROLLING_STATISTICAL",
+    "ARM_6_CESO_CADE_OLLAMA_LLM",
+    "ARM_7_CLOSED_LOOP_NETOPS"
+  ],
+  "arm_classifications": {
+    "ARM_1_STATIC_THRESHOLD": {
+      "classification": "NOT_IMPLEMENTED",
+      "justification": "Static single-metric threshold detector baseline code is not written in repository.",
+      "authorized_for_execution": false
+    },
+    "ARM_2_ROLLING_STATISTICAL": {
+      "classification": "NOT_IMPLEMENTED",
+      "justification": "Rolling statistical / z-score detector baseline code is not written in repository.",
+      "authorized_for_execution": false
+    },
+    "ARM_3_RULE_BASED": {
+      "classification": "READY_FOR_AUTHORIZATION",
+      "justification": "Standard boolean rule matching is implemented in backend/app/cadd/engine.py:161-230 and verified by unit tests.",
+      "authorized_for_execution": true
+    },
+    "ARM_4_PHASE2_BASELINE": {
+      "classification": "READY_FOR_AUTHORIZATION",
+      "justification": "Frozen CADE engine (ExplainableRuleEngine v2.0.0-phase2) is implemented in backend/app/cadd/engine.py and verified by unit tests.",
+      "authorized_for_execution": true
+    },
+    "ARM_5_CESO_CADE_NO_LLM": {
+      "classification": "READY_FOR_AUTHORIZATION",
+      "justification": "CESO state extraction (backend/app/ceso/service.py) + CADE continuous candidate scoring without LLM is implemented and verified by unit tests.",
+      "authorized_for_execution": true
+    },
+    "ARM_6_CESO_CADE_OLLAMA_LLM": {
+      "classification": "IMPLEMENTED_BUT_ENVIRONMENT_BLOCKED",
+      "justification": "Ollama service connection refused in Ubuntu WSL environment; llama3.2:3b model unavailable.",
+      "authorized_for_execution": false
+    },
+    "ARM_7_CLOSED_LOOP_NETOPS": {
+      "classification": "IMPLEMENTED_BUT_ENVIRONMENT_BLOCKED",
+      "justification": "Automated closed-loop remediation execution hooks and post-remediation verification loops require Mininet testbed orchestration pending Phase 4.",
+      "authorized_for_execution": false
+    }
+  },
+  "confidence_reconciliation_verification": {
+    "status": "RESOLVED",
+    "stored_record1_confidence": 0.78,
+    "stored_record2_confidence": 0.8,
+    "recomputed_record1_confidence": 0.78,
+    "recomputed_record2_confidence": 0.8,
+    "origin_of_0_5950": "Un-executed theoretical calculation in final_evidence_check.md:95 assuming S(second)=0.3000 (0.7000 * 0.8500 = 0.5950)."
+  },
+  "matrix_verification": {
+    "total_planned_rows": 420,
+    "unique_run_ids": 420,
+    "unique_effective_seeds": 420,
+    "seed_formula": "seed = 42 + 1000*a + 100*s + r",
+    "seed_formula_errors": 0,
+    "dataset_only_remediation_violations": 0,
+    "completed_rows_count": 0
+  },
+  "environment_and_runtime": {
+    "platform": "linux",
+    "python_executable": "/mnt/d/NetOpsAI/.venv-linux/bin/python",
+    "ollama_daemon_online": false,
+    "requirements_txt_present": false
+  },
+  "permitted_scope_and_claims": [
+    "Execution is authorized ONLY for Arms 3, 4, and 5 across the 6 pre-registered scenario definitions.",
+    "Evaluation must be conducted in offline dataset mode or read-only testbed telemetry mode.",
+    "Dataset-only scenarios SCN_004 and SCN_005 must produce offline diagnostic accuracy metrics (M-01 to M-04) only; live remediation metrics remain NOT_MEASURED.",
+    "Confidence scores must be reported as heuristic evidence margin intensity scores in [0, 1], not calibrated Bayesian probabilities.",
+    "Arms 1, 2, 6, and 7 remain strictly unauthorized and blocked from execution."
+  ]
+}

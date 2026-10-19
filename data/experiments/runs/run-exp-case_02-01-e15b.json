@@ -1,0 +1,73 @@
+{
+  "run_id": "run-exp-case_02-01-e15b",
+  "timestamp": "2026-10-08T03:36:06.975099+00:00",
+  "environment": "SIMULATED",
+  "dataset_or_scenario_id": "CASE_02",
+  "ground_truth_fault_label": "WAN_PATH_DEGRADATION_AND_CONGESTION",
+  "predicted_fault_label": "WAN_PATH_DEGRADATION_AND_CONGESTION",
+  "ground_truth_location": "isp-prim-rtr1<->dc-gw01",
+  "predicted_location": "isp-prim-rtr1<->dc-gw01",
+  "start_time": "2026-10-08T03:36:06.975099+00:00",
+  "end_time": "2026-10-08T03:36:06.975099+00:00",
+  "diagnosis_latency_ms": 0.1134001649916172,
+  "evidence_selected": [
+    "SD-WAN Failover & Backup Circuit Queue Saturation Check"
+  ],
+  "evidence_count": 1,
+  "total_raw_evidence_count": 11,
+  "token_count": null,
+  "raw_token_count": null,
+  "llm_invocation_count": 0,
+  "llm_escalated": false,
+  "pre_llm_diagnosis": "WAN_PATH_DEGRADATION_AND_CONGESTION",
+  "post_llm_diagnosis": "WAN_PATH_DEGRADATION_AND_CONGESTION",
+  "verification_scope": "WAN Edge & Secondary Path Congestion",
+  "remediation_decision": "APPROVED",
+  "remediation_status": "SUCCESS",
+  "verification_result": "VERIFIED_HEALTHY",
+  "pre_remediation_rtt_ms": 145.0,
+  "post_remediation_rtt_ms": 18.0,
+  "pre_remediation_loss_pct": 8.5,
+  "post_remediation_loss_pct": 0.0,
+  "seed": 42,
+  "raw_telemetry_count": 11,
+  "ceso_context": {
+    "snapshot_id": "snap-case02",
+    "anomalies_detected": true
+  },
+  "cadd_confidence": 0.94,
+  "escalation_decision": false,
+  "msvs_decision": "APPROVED",
+  "llm_request_payload": null,
+  "llm_response_payload": null,
+  "direct_token_metrics": null,
+  "pipeline_token_metrics": null,
+  "input_token_reduction_pct": null,
+  "total_token_reduction_pct": null,
+  "feedback_package": {
+    "action_id": "act-33d00185",
+    "result": "SUCCESS",
+    "verification_passed": true,
+    "pre_action_metrics": {
+      "rtt_ms": 145.0,
+      "packet_loss_pct": 8.5
+    },
+    "post_action_metrics": {
+      "rtt_ms": 18.0,
+      "packet_loss_pct": 0.0
+    },
+    "metric_deltas": {
+      "rtt_ms_delta": -127.0,
+      "packet_loss_pct_delta": -8.5
+    },
+    "affected_services": [
+      "Enterprise ERP Suite",
+      "Oracle Financial DB"
+    ],
+    "observed_side_effects": []
+  },
+  "post_action_llm_assessment": null,
+  "is_completed": true,
+  "error_message": null,
+  "metrics": {}
+}

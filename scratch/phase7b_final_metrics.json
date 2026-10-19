@@ -1,0 +1,15 @@
+{
+  "primary_benchmark_runs": 40,
+  "overall_accuracy": 1.0,
+  "overall_precision": 1.0,
+  "overall_recall": 1.0,
+  "overall_f1": 1.0,
+  "msvs_approval_rate": 1.0,
+  "remediation_success_rate": 1.0,
+  "verification_success_rate": 1.0,
+  "safety_violation_rate": 0.0,
+  "ness_composite_score": 1.0,
+  "token_reduction_input_pct": 43.86,
+  "token_reduction_total_pct": 36.35,
+  "aiops_subset_accuracy": 1.0
+}

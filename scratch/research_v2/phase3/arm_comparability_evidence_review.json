@@ -1,0 +1,100 @@
+{
+  "review_metadata": {
+    "timestamp": "2026-10-09T15:25:00+05:30",
+    "review_type": "Read-Only Audit Evidence Challenge",
+    "repository_root": "/mnt/d/NetOpsAI",
+    "execution_environment": {
+      "platform": "linux",
+      "interpreter": "/mnt/d/NetOpsAI/.venv-linux/bin/python",
+      "os": "Ubuntu WSL2 on Windows"
+    },
+    "prior_audit_file": "scratch/research_v2/phase3/arm_comparability_audit.json",
+    "prior_audit_sha256": "574348279f3bff082a3c0d92ced80f9450e1a5444e1b148ceeb7a9f25918201f",
+    "prior_decision": "PASS — COMPARABLE FOR SPECIFIED SCOPE",
+    "review_decision": "FAIL — EXPERIMENTS MUST REMAIN BLOCKED"
+  },
+  "audited_source_files": [
+    {
+      "path": "backend/app/evaluation/runner.py",
+      "sha256": "d4ec4e43d370d979a8f51606d0e1958f43e42fa5bd80de22d7f7f2143f992c02"
+    },
+    {
+      "path": "backend/app/cadd/engine.py",
+      "sha256": "ea483491d34cec03aa6a6a7c28e069fb5c1f80341ef742232ba5284837137326"
+    },
+    {
+      "path": "backend/app/ceso/service.py",
+      "sha256": "e018695173262ecba6189b2f6c390f52a9bf3fb97ad09f4c01974ae54d335469"
+    },
+    {
+      "path": "backend/app/evaluation/metrics.py",
+      "sha256": "21f42b2cfc00e0f994fc38c96e2fd15ba1fbbdf7389749ccb450044f1bd9c170"
+    }
+  ],
+  "required_checks": {
+    "1_arm_dispatch": {
+      "status": "FAIL",
+      "source_path": "backend/app/evaluation/runner.py",
+      "lines": "61-255",
+      "observed_behavior": "BenchmarkRunner._run_single_scenario_benchmark() accepts no arm selection parameter and hardcodes a single fixed execution pipeline calling cadd_engine.diagnose_state(telemetry). No arm-dispatch router exists anywhere in backend/app/ or scratch/.",
+      "interpretation": "Experimental Arms 3, 4, and 5 are not actually wired into a runnable dispatch path. Executing the benchmark runner runs identical code regardless of matrix arm designations.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    },
+    "2_algorithmic_distinction": {
+      "status": "FAIL",
+      "source_path": "backend/app/cadd/engine.py",
+      "lines": "96-262",
+      "observed_behavior": "ExplainableRuleEngine.diagnose_state() contains a single unified execution path. Continuous candidate scoring S(c) is computed first (lines 96-139), and evidence chain building (lines 161-262) occurs strictly after top candidate selection. There is no standalone discrete rule engine entry point.",
+      "interpretation": "Arm 3 (Rule-Based) and Arm 4 (Phase 2 Baseline) invoke identical underlying code. The previous audit report cited stale line ranges (claiming L161-230 was a separate rule engine). Arms 3 and 4 are FUNCTIONALLY_IDENTICAL under the current codebase.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    },
+    "3_ground_truth_isolation": {
+      "status": "FAIL",
+      "source_path": "backend/app/evaluation/runner.py",
+      "lines": "90",
+      "observed_behavior": "llm_escalated = cadd_diag.escalation_required or (sc_id == 'CASE_04' and include_llm). The benchmark runner uses a hardcoded scenario-ID check (sc_id == 'CASE_04') to force LLM escalation.",
+      "interpretation": "Ground-truth scenario identification directly influences control flow escalation in the benchmark runner, violating strict scenario-label isolation.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    },
+    "4_input_equivalence": {
+      "status": "FAIL",
+      "source_path": "backend/app/evaluation/runner.py & backend/app/ceso/service.py",
+      "lines": "runner.py: 80; service.py: 45-55",
+      "observed_behavior": "BenchmarkRunner directly invokes scenario_registry.generate_telemetry(sc_id, fault_type), bypassing CESOService. Live collection overhead in Arm 5 is not routed through the evaluation runner.",
+      "interpretation": "Arm 5 does not evaluate live dynamic collection versus static pre-extracted snapshots during benchmark execution because runner.py bypasses CESOService.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    },
+    "5_metrics_instrumentation": {
+      "status": "FAIL",
+      "source_path": "backend/app/evaluation/runner.py",
+      "lines": "70-82",
+      "observed_behavior": "t0 = time.perf_counter(); telemetry = scenario_registry.generate_telemetry(sc_id, fault_type); t1 = time.perf_counter(); diag_lat_ms = (t1 - t0) * 1000.0. Latency is measured strictly around telemetry generation, NOT during cadd_engine.diagnose_state() or LLM escalation.",
+      "interpretation": "Mean Time to Diagnosis (MTTD) instrumentation is defective. It records data generation time instead of diagnostic engine evaluation latency.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    },
+    "6_matrix_integration": {
+      "status": "FAIL",
+      "source_path": "scratch/research_v2/phase3/experiment_matrix.csv",
+      "lines": "1-421",
+      "observed_behavior": "The 420-row matrix lists Arms 3, 4, 5 as PLANNED_READY, but no runner script maps matrix rows to arm-specific execution paths.",
+      "interpretation": "Executing matrix rows currently results in running the default un-dispatched Phase 2 pipeline for all arms, masking missing arm implementations.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    },
+    "7_audit_integrity": {
+      "status": "FAIL",
+      "source_path": "scratch/research_v2/phase3/arm_comparability_audit.md",
+      "lines": "Section 3 & Section 4",
+      "observed_behavior": "The prior audit report claimed PASS based on inaccurate line range citations and assumed Arm 3 and Arm 4 had separate prediction logic. It overlooked the missing arm dispatcher and the latency instrumentation bug.",
+      "interpretation": "The previous audit conclusion PASS — COMPARABLE FOR SPECIFIED SCOPE was invalid due to incomplete source-code verification.",
+      "confidence": "HIGH (100% verified by direct source inspection)"
+    }
+  },
+  "overall_decision": "FAIL — EXPERIMENTS MUST REMAIN BLOCKED",
+  "recommended_corrective_actions": [
+    "Implement an explicit arm dispatcher in backend/app/evaluation/runner.py accepting arm_id parameter.",
+    "Implement a true discrete rule-based diagnosis method in ExplainableRuleEngine for Arm 3.",
+    "Route Arm 5 through CESOService live telemetry collection in runner.py.",
+    "Remove scenario-ID hardcoded branch (sc_id == 'CASE_04') from runner.py escalation logic.",
+    "Fix diagnosis latency timing in runner.py to wrap cadd_engine.diagnose_state() instead of generate_telemetry()."
+  ]
+}

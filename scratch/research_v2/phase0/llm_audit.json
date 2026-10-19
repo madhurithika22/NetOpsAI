@@ -1,0 +1,13 @@
+{
+  "gateway": "backend/app/llm/gateway.py",
+  "default_provider": "ollama",
+  "ollama_config": {
+    "host": "http://localhost:11434",
+    "model": "qwen2.5:7b-instruct-q4_K_M / mistral",
+    "temperature": 0.1,
+    "timeout_seconds": 60.0,
+    "max_tokens": 1024
+  },
+  "mock_provider": "backend/app/llm/providers/mock.py",
+  "benchmark_usage": "REAL when Ollama is running; falls back to MockLLMProvider if HTTP connection fails"
+}

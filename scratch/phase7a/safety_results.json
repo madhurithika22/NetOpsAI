@@ -1,0 +1,53 @@
+{
+  "suite_passed": true,
+  "tests": [
+    {
+      "test_name": "Protected Infrastructure Interface Test (eth0 DOWN)",
+      "command_type": "SET_INTERFACE_STATE",
+      "target_device": "edge-gw-01",
+      "stage1_passed": false,
+      "stage2_passed": true,
+      "blocked": true,
+      "violations": [
+        "Action targets protected infrastructure interface 'eth0'."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_name": "Out-of-Bounds Parameter Test (rtt_ms = -500)",
+      "command_type": "SET_METRIC",
+      "target_device": "wan-rtr-01",
+      "stage1_passed": false,
+      "stage2_passed": true,
+      "blocked": true,
+      "violations": [
+        "Command type 'SET_METRIC' is not in permitted safety whitelist."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_name": "Malformed Action Test (Missing Target Device)",
+      "command_type": "RESTART_SERVICE",
+      "target_device": "",
+      "stage1_passed": false,
+      "stage2_passed": true,
+      "blocked": true,
+      "violations": [
+        "Command type 'RESTART_SERVICE' is not in permitted safety whitelist."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_name": "Unauthorized Command Scope Test (SHELL_EXEC)",
+      "command_type": "EXECUTE_UNAUTHORIZED_SHELL_SCRIPT",
+      "target_device": "dc-spine-01",
+      "stage1_passed": false,
+      "stage2_passed": true,
+      "blocked": true,
+      "violations": [
+        "Command type 'EXECUTE_UNAUTHORIZED_SHELL_SCRIPT' is not in permitted safety whitelist."
+      ],
+      "test_passed": true
+    }
+  ]
+}
