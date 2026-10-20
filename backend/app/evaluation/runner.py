@@ -11,6 +11,7 @@ from app.evaluation.recorder import ExperimentRecorder
 from app.adapters.aiops2020_adapter import AIOps2020Adapter
 from app.scenarios.registry import scenario_registry
 from app.cadd.engine import ExplainableRuleEngine
+from app.cadd.service import build_operational_llm_context, INVALID_DIAGNOSES
 from app.ceso.service import ceso_service
 from app.msvs.policies import SafetyPolicyEngine
 from app.msvs.service import msvs_service
@@ -145,22 +146,11 @@ class BenchmarkRunner:
         if llm_escalated and allow_llm:
             t_llm_start = time.perf_counter()
             # Context package constructed strictly from operational evidence; scenario identifier neutralized
-            ctx_package = LLMContextPackage(
-                incident_id=f"inc-{uuid.uuid4().hex[:8]}",
-                scenario_id="operational-session",
-                timestamp=start_ts,
-                topology_summary={"node_count": len(telemetry.nodes), "link_count": len(telemetry.links)},
-                affected_nodes=cadd_diag.impacted_elements,
-                affected_links=[l.source_node + "<->" + l.target_node for l in telemetry.links if l.status != "HEALTHY"],
-                ceso_findings=[e.observed_value for e in cadd_diag.evidence_chain] or ["Operational state anomaly detected"],
-                relevant_telemetry={"anomalies_detected": telemetry.anomalies_detected},
-                correlated_anomalies=[e.condition_matched for e in cadd_diag.evidence_chain] or ["Metric deviation observed"],
-                cadd_diagnosis=cadd_diag.fault_type,
-                diagnosis_confidence=cadd_diag.confidence_score,
-                candidate_causes=cadd_diag.candidate_causes or ["Operational telemetry degradation"],
-                msvs_safety_constraints=["Do not modify protected interface eth0"],
-                candidate_remediation_actions=[a.model_dump(mode="json") for a in final_action_plan.proposed_actions],
-                verification_requirements={"rtt_max_ms": 50.0, "loss_max_pct": 10.0}
+            ctx_package = build_operational_llm_context(
+                state=telemetry,
+                report=cadd_diag,
+                plan=final_action_plan,
+                incident_id=f"inc-bench-{run_number:03d}"
             )
 
             llm_req_payload = ctx_package.model_dump_json(indent=2)
@@ -187,37 +177,38 @@ class BenchmarkRunner:
             llm_status_recorded = status_enum.value if hasattr(status_enum, "value") else str(status_enum or "UNKNOWN")
 
             if llm_response.llm_status == LLMStatus.LLM_AVAILABLE:
-                # Validate response fields
-                if llm_response.diagnosis and llm_response.diagnosis not in ("LLM_UNAVAILABLE", "LLM_ERROR", "LLM_DISABLED"):
-                    post_llm_diagnosis = llm_response.diagnosis
-                else:
+                # Validate diagnosis response BEFORE processing proposed action
+                diag = getattr(llm_response, "diagnosis", None)
+                if not diag or not str(diag).strip() or str(diag).strip().upper() in INVALID_DIAGNOSES:
                     llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
                     post_llm_diagnosis = cadd_diag.fault_type
-
-                if llm_response.recommended_action and isinstance(llm_response.recommended_action, dict):
-                    rec = llm_response.recommended_action
-                    if "command_type" in rec and "target_device" in rec:
-                        try:
-                            rec_act = ProposedAction(
-                                action_id=rec.get("action_id", f"act-llm-{uuid.uuid4().hex[:6]}"),
-                                command_type=rec["command_type"],
-                                target_device=rec["target_device"],
-                                parameters=rec.get("parameters", {}),
-                                is_destructive=rec.get("is_destructive", True),
-                                reversion_action=rec.get("reversion_action", {})
-                            )
-                            final_action_plan = ActionPlan(
-                                plan_id=f"plan-llm-{uuid.uuid4().hex[:8]}",
-                                diagnosis_id=cadd_diag.diagnosis_id,
-                                proposed_actions=[rec_act],
-                                estimated_risk_level="HIGH",
-                                requires_approval=True
-                            )
-                            llm_action_proposed = True
-                        except Exception:
+                    llm_action_proposed = False
+                else:
+                    post_llm_diagnosis = str(diag).strip()
+                    if llm_response.recommended_action and isinstance(llm_response.recommended_action, dict):
+                        rec = llm_response.recommended_action
+                        if "command_type" in rec and "target_device" in rec:
+                            try:
+                                rec_act = ProposedAction(
+                                    action_id=rec.get("action_id", f"act-llm-{uuid.uuid4().hex[:6]}"),
+                                    command_type=rec["command_type"],
+                                    target_device=rec["target_device"],
+                                    parameters=rec.get("parameters", {}),
+                                    is_destructive=rec.get("is_destructive", True),
+                                    reversion_action=rec.get("reversion_action", {})
+                                )
+                                final_action_plan = ActionPlan(
+                                    plan_id=f"plan-llm-{uuid.uuid4().hex[:8]}",
+                                    diagnosis_id=cadd_diag.diagnosis_id,
+                                    proposed_actions=[rec_act],
+                                    estimated_risk_level="HIGH",
+                                    requires_approval=True
+                                )
+                                llm_action_proposed = True
+                            except Exception:
+                                llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
+                        else:
                             llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
-                    else:
-                        llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
             else:
                 # LLM disabled, unreachable, or error: preserve original CADE diagnosis and block remediation
                 post_llm_diagnosis = cadd_diag.fault_type
@@ -225,7 +216,7 @@ class BenchmarkRunner:
         # 5. MSVS Safety Validation (LLM Output MUST Pass Through MSVS)
         if llm_escalated and llm_status_recorded != LLMStatus.LLM_AVAILABLE.value:
             policy_passed = False
-            remediation_decision = "BLOCKED_LLM_FAILURE"
+            remediation_decision = "BLOCKED_INVALID_DIAGNOSIS" if llm_status_recorded == LLMStatus.INVALID_RESPONSE.value else "BLOCKED_LLM_FAILURE"
             remediation_status = "NOT_EXECUTED"
             verification_result = "NOT_EXECUTED"
         elif llm_escalated and not llm_action_proposed:

@@ -8,10 +8,11 @@ from app.cadd.service import cadd_service, build_operational_llm_context
 from app.scenarios.registry import scenario_registry
 from app.llm.models import LLMStatus, LLMDiagnosisResponse, TokenMetrics
 from app.llm.gateway import llm_gateway
+from app.llm.prompts import build_netops_prompt
 from app.evaluation.runner import BenchmarkRunner
 from app.evaluation.recorder import ExperimentRecorder
 from app.models.cadd_models import ProposedAction, ActionPlan
-from app.models.ceso_models import NetworkState, InterfaceState, LinkLatency
+from app.models.ceso_models import NetworkState, InterfaceState, LinkLatency, RouteEntry, NodeMetrics
 from app.msvs.service import msvs_service
 from app.ceso.service import ceso_service
 
@@ -505,3 +506,355 @@ def test_primary_research_arms_remain_strictly_llm_free(monkeypatch, tmp_path):
     assert run5.llm_invocation_count == 0
     assert run5.llm_status == "LLM_DISABLED_FOR_ARM"
     assert run5.llm_escalated is False
+
+
+def test_operational_context_builder_and_diagnose_isolation(monkeypatch):
+    """
+    Operational-service-level test that captures the exact context passed to the gateway
+    and verifies:
+    - No benchmark ID ('CASE_04') or ground-truth fault label ('NOVEL_COMPOSITE_ANOMALY') is present.
+    - No scenario-specific recovery action or action parameters are exposed.
+    - candidate_remediation_actions is strictly empty [].
+    - The original CADE report and plan remain available for audit.
+    - The LLM context is based on observed operational evidence and generic safety constraints.
+    Tests both build_operational_llm_context() directly and the operational /cadd/diagnose route.
+    """
+    telemetry = scenario_registry.generate_telemetry("CASE_04", "NOVEL_COMPOSITE_ANOMALY")
+    engine = ExplainableRuleEngine()
+    orig_report, orig_plan = engine.diagnose_state(telemetry)
+
+    # 1. Direct unit test of build_operational_llm_context()
+    ctx_pkg = build_operational_llm_context(telemetry, orig_report, orig_plan)
+    pkg_json = ctx_pkg.model_dump_json()
+
+    # Verify no benchmark ID or ground-truth leakage
+    assert "CASE_04" not in pkg_json
+    assert "NOVEL_COMPOSITE_ANOMALY" not in pkg_json
+    assert ctx_pkg.scenario_id == "operational-session"
+
+    # Verify no scenario-conditioned action or action parameters are leaked to LLM
+    assert ctx_pkg.candidate_remediation_actions == []
+    assert "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE" not in pkg_json
+    assert "FLUSH_DNS_CACHE_AND_RESTORE_BGP_LOCAL_PREF" not in pkg_json
+
+    # Verify original CADE report and plan remain available for audit
+    assert orig_report.fault_type == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert len(orig_plan.proposed_actions) > 0
+    assert orig_plan.proposed_actions[0].command_type == "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE"
+
+    # Verify observed operational evidence and generic safety constraints
+    assert ctx_pkg.cadd_diagnosis == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert "interfaces" in ctx_pkg.relevant_telemetry
+    assert "links" in ctx_pkg.relevant_telemetry
+    assert "routes" in ctx_pkg.relevant_telemetry
+    assert "nodes" in ctx_pkg.relevant_telemetry
+    assert any("permitted NetOps safety policy whitelist" in c for c in ctx_pkg.msvs_safety_constraints)
+
+    # 2. Operational /cadd/diagnose path test capturing gateway payload
+    monkeypatch.setattr(ceso_service, "get_latest_state", lambda: telemetry)
+    captured_gateway_pkg = None
+
+    def mock_capture(pkg):
+        nonlocal captured_gateway_pkg
+        captured_gateway_pkg = pkg
+        return LLMDiagnosisResponse(
+            diagnosis="RECOVERED_CROSS_DOMAIN_ANOMALY",
+            reasoning_summary="Operational isolation verified",
+            confidence=0.85,
+            recommended_action={
+                "action_id": "act-llm-isolated",
+                "command_type": "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE",
+                "target_device": "edge-gw-01",
+                "parameters": {}
+            },
+            llm_status=LLMStatus.LLM_AVAILABLE,
+            token_metrics=TokenMetrics(input_tokens=100, output_tokens=50, total_tokens=150)
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_capture)
+
+    res = client.post("/api/v1/cadd/diagnose")
+    assert res.status_code == 200
+    res_data = res.json()
+
+    assert captured_gateway_pkg is not None
+    captured_json = captured_gateway_pkg.model_dump_json()
+
+    # Strict isolation in the operational route payload
+    assert "CASE_04" not in captured_json
+    assert "NOVEL_COMPOSITE_ANOMALY" not in captured_json
+    assert captured_gateway_pkg.candidate_remediation_actions == []
+    assert "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE" not in captured_json
+
+    # Operational route preserves original CADE audit trail
+    assert res_data["diagnostic_report"]["fault_type"] == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert len(res_data["action_plan"]["proposed_actions"]) > 0
+    assert res_data["action_plan"]["proposed_actions"][0]["command_type"] == "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE"
+
+
+def test_sanitized_telemetry_fields_and_prompt_rendering():
+    """
+    Verifies that:
+    - extract_sanitized_telemetry captures observed interfaces, MTU, errors, drops, utilization,
+      links, RTT, loss, routes, destination, gateway, interface, metric, node CPU and RAM.
+    - build_netops_prompt actually renders the selected telemetry and verification requirements.
+    - Excludes ground-truth labels and benchmark identifiers.
+    """
+    state = NetworkState(
+        snapshot_id="snap-sanitized-01",
+        topology_id="topo-bench-internal-id",
+        interfaces={
+            "eth1": InterfaceState(
+                name="eth1",
+                is_up=True,
+                mtu=1500,
+                rx_errors=12,
+                tx_errors=0,
+                rx_drops=5,
+                tx_drops=0,
+                utilization_pct=42.5,
+                throughput_bps=1000000.0
+            )
+        },
+        links=[
+            LinkLatency(source_node="rtr1", target_node="rtr2", rtt_ms=125.4, packet_loss_pct=15.2, status="DEGRADED")
+        ],
+        routes=[
+            RouteEntry(destination="10.10.0.0/16", gateway="192.168.1.1", interface="eth1", metric=150)
+        ],
+        nodes={
+            "rtr1": NodeMetrics(node_id="rtr1", cpu_utilization_pct=88.5, memory_utilization_pct=72.0)
+        },
+        anomalies_detected=True
+    )
+
+    engine = ExplainableRuleEngine()
+    report, plan = engine.diagnose_state(state)
+    ctx_pkg = build_operational_llm_context(state, report, plan, incident_id="inc-sanitize-test")
+
+    # Verify sanitized telemetry contents
+    telemetry = ctx_pkg.relevant_telemetry
+    assert "eth1" in telemetry["interfaces"]
+    assert telemetry["interfaces"]["eth1"]["mtu"] == 1500
+    assert telemetry["interfaces"]["eth1"]["rx_errors"] == 12
+    assert telemetry["interfaces"]["eth1"]["utilization_pct"] == 42.5
+    assert telemetry["links"][0]["rtt_ms"] == 125.4
+    assert telemetry["links"][0]["packet_loss_pct"] == 15.2
+    assert telemetry["routes"][0]["destination"] == "10.10.0.0/16"
+    assert telemetry["nodes"]["rtr1"]["cpu_utilization_pct"] == 88.5
+
+    # Verify prompt rendering
+    prompt = build_netops_prompt(ctx_pkg)
+    assert "[OBSERVED OPERATIONAL TELEMETRY]" in prompt
+    assert "[VERIFICATION REQUIREMENTS]" in prompt
+    assert "125.4" in prompt  # link RTT
+    assert "15.2" in prompt   # packet loss
+    assert "10.10.0.0/16" in prompt  # route destination
+    assert "88.5" in prompt   # CPU utilization
+    assert "1500" in prompt   # MTU
+    assert "rtt_max_ms" in prompt  # verification requirements
+    assert "topo-bench-internal-id" not in prompt  # benchmark topology id excluded
+
+
+def test_invalid_llm_diagnosis_blocks_action_validation_and_approval(monkeypatch):
+    """
+    REGRESSION TEST:
+    Verifies that when the LLM response contains an invalid/placeholder diagnosis
+    (e.g., 'UNKNOWN', 'ERROR', or empty) but includes a syntactically valid,
+    MSVS-whitelisted action:
+    - llm_status is set to INVALID_RESPONSE.
+    - Original CADE diagnosis is preserved.
+    - Remediation status is NOT_EXECUTED and decision is BLOCKED_INVALID_DIAGNOSIS.
+    - The proposed action is NOT validated, registered, queued, or executed.
+    - No approval request is created in MSVS.
+    - msvs_service.execute_action_plan() is never invoked.
+    - CADE's original action is NOT automatically executed as a fallback.
+    """
+    valid_action_payload = {
+        "action_id": "act-valid-whitelist",
+        "command_type": "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE",
+        "target_device": "edge-gw-01",
+        "parameters": {
+            "service": "dns-resolver",
+            "target_gateway": "edge-gw-01",
+            "action": "FLUSH_DNS_CACHE_AND_RESTORE_BGP_LOCAL_PREF",
+            "bgp_neighbor": "cloud-gw-01",
+            "local_pref": 200
+        }
+    }
+
+    # Test with placeholder diagnosis "UNKNOWN"
+    def mock_invalid_diag(ctx_pkg):
+        return LLMDiagnosisResponse(
+            diagnosis="UNKNOWN",  # Placeholder/invalid diagnosis
+            reasoning_summary="Could not determine root cause",
+            confidence=0.10,
+            recommended_action=valid_action_payload,  # Valid whitelisted action attached!
+            llm_status=LLMStatus.LLM_AVAILABLE
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_invalid_diag)
+
+    telemetry = scenario_registry.generate_telemetry("CASE_04", "NOVEL_COMPOSITE_ANOMALY")
+    monkeypatch.setattr(ceso_service, "get_latest_state", lambda: telemetry)
+
+    exec_called = False
+    orig_exec = msvs_service.execute_action_plan
+
+    def tracked_exec(plan_id, operator_id="OPERATOR_ADMIN"):
+        nonlocal exec_called
+        exec_called = True
+        return orig_exec(plan_id, operator_id)
+
+    monkeypatch.setattr(msvs_service, "execute_action_plan", tracked_exec)
+
+    initial_pending_count = len(msvs_service.get_pending_approvals())
+
+    res = client.post("/api/v1/cadd/diagnose")
+    assert res.status_code == 200
+    data = res.json()
+
+    esc = data["llm_escalation"]
+    assert esc is not None
+    assert esc["llm_status"] == "INVALID_RESPONSE"
+    assert esc["post_llm_diagnosis"] == "UNKNOWN_COMPOSITE_ANOMALY"  # Preserved original CADE diagnosis
+    assert esc["remediation_decision"] == "BLOCKED_INVALID_DIAGNOSIS"
+    assert esc["remediation_status"] == "NOT_EXECUTED"
+    assert esc["suggested_action"] is None
+    assert esc["proposed_plan"] is None
+    assert esc["approval_id"] is None
+    assert esc["approval_status"] is None
+
+    # Crucial assertion: no new approval request created in MSVS queue!
+    final_pending_count = len(msvs_service.get_pending_approvals())
+    assert final_pending_count == initial_pending_count
+
+    # Crucial assertion: execution never invoked!
+    assert exec_called is False
+
+
+def test_get_cadd_latest_is_read_only_and_does_not_mutate_state(monkeypatch):
+    """
+    Verifies that GET /cadd/latest is strictly read-only:
+    - When no prior diagnosis has been recorded, returns 404 Not Found.
+    - Does NOT call the LLM gateway.
+    - Does NOT mutate the pending-approval queue.
+    - After an explicit POST /cadd/diagnose, returns the recorded diagnosis.
+    """
+    cadd_service.clear_latest()
+
+    llm_called = False
+
+    def mock_fail_if_called(ctx_pkg):
+        nonlocal llm_called
+        llm_called = True
+        return LLMDiagnosisResponse(
+            diagnosis="SHOULD_NOT_BE_CALLED",
+            reasoning_summary="",
+            confidence=0.0,
+            llm_status=LLMStatus.LLM_AVAILABLE
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_fail_if_called)
+
+    initial_pending_count = len(msvs_service.get_pending_approvals())
+
+    # 1. GET with no prior diagnosis -> MUST return 404 Not Found
+    res_get_empty = client.get("/api/v1/cadd/latest")
+    assert res_get_empty.status_code == 404
+    assert "No prior diagnosis recorded" in res_get_empty.json()["detail"]
+
+    # Proves read-only guarantee:
+    assert llm_called is False
+    assert len(msvs_service.get_pending_approvals()) == initial_pending_count
+
+    # 2. Trigger explicit POST /cadd/diagnose to record state
+    telemetry = scenario_registry.generate_telemetry("CASE_04", "NOVEL_COMPOSITE_ANOMALY")
+    monkeypatch.setattr(ceso_service, "get_latest_state", lambda: telemetry)
+
+    def mock_available(ctx_pkg):
+        return LLMDiagnosisResponse(
+            diagnosis="CONFIRMED_ANOMALY",
+            reasoning_summary="Recorded diagnosis",
+            confidence=0.90,
+            llm_status=LLMStatus.LLM_AVAILABLE
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_available)
+
+    res_post = client.post("/api/v1/cadd/diagnose")
+    assert res_post.status_code == 200
+
+    # 3. GET /cadd/latest now returns 200 with the recorded diagnosis
+    res_get_recorded = client.get("/api/v1/cadd/latest")
+    assert res_get_recorded.status_code == 200
+    data = res_get_recorded.json()
+    assert data["diagnostic_report"]["fault_type"] == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert data["llm_escalation"]["post_llm_diagnosis"] == "CONFIRMED_ANOMALY"
+
+
+def test_preservation_of_both_action_plans(monkeypatch):
+    """
+    Verifies that both original CADE action plan and LLM proposal are preserved unambiguously:
+    - Original CADE diagnosis and CADE action plan are in diagnostic_report and action_plan.
+    - Secondary LLM diagnosis and proposed plan are in llm_escalation.
+    - MSVS validation result, pending approval ID, and pending status are present.
+    - Remediation state remains PENDING and is never marked successful without explicit human approval.
+    """
+    telemetry = scenario_registry.generate_telemetry("CASE_04", "NOVEL_COMPOSITE_ANOMALY")
+    monkeypatch.setattr(ceso_service, "get_latest_state", lambda: telemetry)
+
+    valid_action_payload = {
+        "action_id": "act-llm-dual-plan",
+        "command_type": "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE",
+        "target_device": "edge-gw-01",
+        "parameters": {
+            "service": "dns-resolver",
+            "target_gateway": "edge-gw-01",
+            "action": "FLUSH_DNS_CACHE_AND_RESTORE_BGP_LOCAL_PREF",
+            "bgp_neighbor": "cloud-gw-01",
+            "local_pref": 200
+        }
+    }
+
+    def mock_llm(ctx_pkg):
+        return LLMDiagnosisResponse(
+            diagnosis="RECOVERED_CROSS_DOMAIN_ANOMALY",
+            reasoning_summary="Dual plan preservation test",
+            confidence=0.88,
+            recommended_action=valid_action_payload,
+            llm_status=LLMStatus.LLM_AVAILABLE
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_llm)
+
+    res = client.post("/api/v1/cadd/diagnose")
+    assert res.status_code == 200
+    data = res.json()
+
+    # 1. Original CADE diagnosis and plan
+    assert data["diagnostic_report"]["fault_type"] == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert data["action_plan"]["diagnosis_id"] == data["diagnostic_report"]["diagnosis_id"]
+    assert len(data["action_plan"]["proposed_actions"]) > 0
+
+    # 2. Secondary LLM diagnosis and proposed plan
+    esc = data["llm_escalation"]
+    assert esc is not None
+    assert esc["post_llm_diagnosis"] == "RECOVERED_CROSS_DOMAIN_ANOMALY"
+    assert esc["proposed_plan"] is not None
+    assert esc["proposed_plan"]["proposed_actions"][0]["action_id"] == "act-llm-dual-plan"
+
+    # 3. MSVS validation and pending approval
+    assert esc["validation_passed"] is True
+    assert esc["approval_id"] is not None
+    assert esc["approval_status"] == "PENDING"
+    assert esc["remediation_decision"] == "PENDING_APPROVAL"
+    assert esc["remediation_status"] == "PENDING"
+
+    # 4. Verified cached state via GET /cadd/latest
+    res_latest = client.get("/api/v1/cadd/latest")
+    assert res_latest.status_code == 200
+    latest_data = res_latest.json()
+    assert latest_data["action_plan"]["plan_id"] == data["action_plan"]["plan_id"]
+    assert latest_data["llm_escalation"]["proposed_plan"]["plan_id"] == esc["proposed_plan"]["plan_id"]
+

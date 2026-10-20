@@ -47,6 +47,9 @@ Links Count: {topology_links_count}
 Affected Nodes: {affected_nodes}
 Affected Links: {affected_links}
 
+[OBSERVED OPERATIONAL TELEMETRY]
+{relevant_telemetry}
+
 [DISTILLED CESO FINDINGS]
 {ceso_findings}
 
@@ -58,11 +61,14 @@ Preliminary Diagnosis: {cadd_diagnosis}
 Confidence: {diagnosis_confidence}
 Candidate Causes: {candidate_causes}
 
-[MSVS SAFETY CONSTRAINTS]
+[MSVS SAFETY CONSTRAINTS & PERMITTED ACTIONS]
 {msvs_safety_constraints}
 
 [CANDIDATE REMEDIATION ACTIONS]
 {candidate_remediation_actions}
+
+[VERIFICATION REQUIREMENTS]
+{verification_requirements}
 
 Provide your refined diagnosis, reasoning, and safest recommended action in structured JSON."""
 
@@ -97,7 +103,62 @@ def build_direct_prompt(raw_telemetry: Dict[str, Any], raw_logs: list, topology_
         topology_events="\n".join(topology_events) if topology_events else "No topology state change events."
     )
 
+def format_telemetry_summary(telemetry: Dict[str, Any]) -> str:
+    """
+    Formats the sanitized telemetry dictionary into a clean, concise representation
+    suitable for LLM reasoning while preserving token efficiency.
+    """
+    if not telemetry:
+        return "No additional telemetry recorded."
+
+    lines = []
+    if "interfaces" in telemetry and telemetry["interfaces"]:
+        lines.append("Interfaces:")
+        for name, if_data in telemetry["interfaces"].items():
+            lines.append(
+                f"  - {name}: up={if_data.get('is_up')}, mtu={if_data.get('mtu')}, "
+                f"util={if_data.get('utilization_pct')}%, rx_err={if_data.get('rx_errors')}, "
+                f"tx_err={if_data.get('tx_errors')}, rx_drop={if_data.get('rx_drops')}, "
+                f"tx_drop={if_data.get('tx_drops')}"
+            )
+    if "links" in telemetry and telemetry["links"]:
+        lines.append("Links:")
+        for l in telemetry["links"]:
+            lines.append(
+                f"  - {l.get('source')} <-> {l.get('target')}: status={l.get('status')}, "
+                f"rtt={l.get('rtt_ms')}ms, loss={l.get('packet_loss_pct')}%"
+            )
+    if "routes" in telemetry and telemetry["routes"]:
+        lines.append("Routes:")
+        for r in telemetry["routes"]:
+            lines.append(
+                f"  - dst={r.get('destination')}, gw={r.get('gateway')}, "
+                f"iface={r.get('interface')}, metric={r.get('metric')}"
+            )
+    if "nodes" in telemetry and telemetry["nodes"]:
+        lines.append("Nodes:")
+        for n_id, n_data in telemetry["nodes"].items():
+            lines.append(
+                f"  - {n_id}: cpu={n_data.get('cpu_utilization_pct')}%, "
+                f"mem={n_data.get('memory_utilization_pct')}%"
+            )
+    if "anomalies_detected" in telemetry:
+        lines.append(f"Anomalies Detected: {telemetry['anomalies_detected']}")
+
+    return "\n".join(lines) if lines else json.dumps(telemetry)
+
+
+def format_verification_summary(verif: Dict[str, Any]) -> str:
+    if not verif:
+        return "Standard verification criteria apply."
+    return ", ".join(f"{k}: {v}" for k, v in verif.items())
+
+
 def build_netops_prompt(ctx: LLMContextPackage) -> str:
+    telemetry_str = format_telemetry_summary(ctx.relevant_telemetry)
+    verification_str = format_verification_summary(ctx.verification_requirements)
+    remediation_str = json.dumps(ctx.candidate_remediation_actions, indent=2) if ctx.candidate_remediation_actions else "None (Escalation requires independent safe action recommendation from permitted command types)"
+
     return NETOPS_CONTEXT_PACKAGE_PROMPT_TEMPLATE.format(
         incident_id=ctx.incident_id,
         scenario_id=ctx.scenario_id,
@@ -106,13 +167,15 @@ def build_netops_prompt(ctx: LLMContextPackage) -> str:
         topology_links_count=ctx.topology_summary.get("link_count", 0),
         affected_nodes=", ".join(ctx.affected_nodes) if ctx.affected_nodes else "None",
         affected_links=", ".join(ctx.affected_links) if ctx.affected_links else "None",
-        ceso_findings="\n".join(f"- {f}" for f in ctx.ceso_findings),
-        correlated_anomalies="\n".join(f"- {a}" for a in ctx.correlated_anomalies),
+        relevant_telemetry=telemetry_str,
+        ceso_findings="\n".join(f"- {f}" for f in ctx.ceso_findings) if ctx.ceso_findings else "None",
+        correlated_anomalies="\n".join(f"- {a}" for a in ctx.correlated_anomalies) if ctx.correlated_anomalies else "None",
         cadd_diagnosis=ctx.cadd_diagnosis,
         diagnosis_confidence=ctx.diagnosis_confidence,
-        candidate_causes=", ".join(ctx.candidate_causes),
-        msvs_safety_constraints="\n".join(f"- {c}" for c in ctx.msvs_safety_constraints),
-        candidate_remediation_actions=json.dumps(ctx.candidate_remediation_actions, indent=2)
+        candidate_causes=", ".join(ctx.candidate_causes) if ctx.candidate_causes else "None",
+        msvs_safety_constraints="\n".join(f"- {c}" for c in ctx.msvs_safety_constraints) if ctx.msvs_safety_constraints else "None",
+        candidate_remediation_actions=remediation_str,
+        verification_requirements=verification_str
     )
 
 def build_feedback_prompt(action_id: str, result: str, verification_passed: bool, pre_metrics: dict, post_metrics: dict, deltas: dict, services: list, side_effects: list) -> str:
