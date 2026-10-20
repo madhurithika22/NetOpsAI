@@ -1,3 +1,4 @@
+import re
 import pytest
 from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
@@ -857,4 +858,190 @@ def test_preservation_of_both_action_plans(monkeypatch):
     latest_data = res_latest.json()
     assert latest_data["action_plan"]["plan_id"] == data["action_plan"]["plan_id"]
     assert latest_data["llm_escalation"]["proposed_plan"]["plan_id"] == esc["proposed_plan"]["plan_id"]
+
+
+def test_benchmark_runner_incident_id_and_context_isolation(monkeypatch, tmp_path):
+    """
+    REGRESSION TEST:
+    Verifies that through the BenchmarkRunner path:
+    - build_operational_llm_context() generates a neutral incident identifier (inc-<hex>).
+    - No 'inc-bench', scenario ID ('CASE_04'), ground-truth label ('CLOUD_ROUTING_ASYMMETRY...'),
+      or recovery-action hint is passed to the LLM gateway.
+    - Candidate remediation actions remain strictly empty so no recovery answer leaks.
+    """
+    captured_context = None
+
+    def mock_analyze(ctx_pkg):
+        nonlocal captured_context
+        captured_context = ctx_pkg
+        return LLMDiagnosisResponse(
+            diagnosis="INVESTIGATED_ANOMALY",
+            reasoning_summary="Mocked operational reasoning",
+            confidence=0.85,
+            recommended_action=None,
+            llm_status=LLMStatus.LLM_AVAILABLE,
+            token_metrics=TokenMetrics(input_tokens=100, output_tokens=50, total_tokens=150)
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_analyze)
+    monkeypatch.setattr(llm_gateway, "run_controlled_token_experiment", MagicMock())
+
+    runner = BenchmarkRunner(recorder=ExperimentRecorder(base_dir=str(tmp_path)))
+    runner._run_single_scenario_benchmark(
+        sc_id="CASE_04",
+        run_number=7,
+        seed=4241,
+        include_llm=True,
+        run_direct_llm_comparison=False,
+        arm_id="ARM_4_PHASE2_BASELINE"
+    )
+
+    assert captured_context is not None
+
+    # 1. Neutral incident ID verification
+    assert "inc-bench" not in captured_context.incident_id
+    assert "bench" not in captured_context.incident_id.lower()
+    assert re.match(r"^inc-[0-9a-f]{8}$", captured_context.incident_id) is not None
+
+    # 2. Neutral scenario identifier
+    assert captured_context.scenario_id == "operational-session"
+    assert "CASE_04" not in captured_context.scenario_id
+
+    # 3. Ground truth label isolation
+    gt_label = "CLOUD_ROUTING_ASYMMETRY_WITH_LATENCY_SPIKE"
+    assert captured_context.cadd_diagnosis != gt_label
+    assert gt_label not in captured_context.candidate_causes
+    assert gt_label not in captured_context.correlated_anomalies
+
+    # 4. Recovery action hint isolation
+    assert captured_context.candidate_remediation_actions == []
+    prompt = build_netops_prompt(captured_context)
+    assert "inc-bench" not in prompt
+    assert "CASE_04" not in prompt
+    assert gt_label not in prompt
+    assert "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE" not in prompt
+
+
+def test_benchmark_runner_invalid_diagnosis_preserves_not_executed(monkeypatch, tmp_path):
+    """
+    REGRESSION TEST:
+    Verifies that when the LLM returns an invalid diagnosis via the BenchmarkRunner path:
+    - The original pre-LLM diagnosis label is retained in both predicted_fault_label and post_llm_diagnosis.
+    - Remediation decision is BLOCKED_INVALID_DIAGNOSIS and remediation status is NOT_EXECUTED.
+    - Verification result remains NOT_EXECUTED and is NOT overwritten to SAFETY_POLICY_ENFORCED.
+    - No action execution occurs (msvs_service.execute_action_plan is never called).
+    - No approval request is created in MSVS.
+    - No recovery is claimed (post-action metrics equal pre-action metrics).
+    """
+    valid_action_payload = {
+        "action_id": "act-valid-test",
+        "command_type": "RESTART_EDGE_RESOLVER_AND_RESET_BGP_PREFERENCE",
+        "target_device": "edge-gw-01",
+        "parameters": {
+            "service": "dns-resolver",
+            "target_gateway": "edge-gw-01",
+            "action": "FLUSH_DNS_CACHE_AND_RESTORE_BGP_LOCAL_PREF",
+            "bgp_neighbor": "cloud-gw-01",
+            "local_pref": 200
+        }
+    }
+
+    def mock_invalid_diag(ctx_pkg):
+        return LLMDiagnosisResponse(
+            diagnosis="UNKNOWN",  # Invalid / placeholder diagnosis in INVALID_DIAGNOSES
+            reasoning_summary="Could not determine root cause",
+            confidence=0.10,
+            recommended_action=valid_action_payload,  # Action attached but diagnosis is invalid!
+            llm_status=LLMStatus.LLM_AVAILABLE,
+            token_metrics=TokenMetrics(input_tokens=100, output_tokens=50, total_tokens=150)
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_invalid_diag)
+    monkeypatch.setattr(llm_gateway, "run_controlled_token_experiment", MagicMock())
+
+    exec_called = False
+    orig_exec = msvs_service.execute_action_plan
+
+    def tracked_exec(plan_id, operator_id="OPERATOR_ADMIN"):
+        nonlocal exec_called
+        exec_called = True
+        return orig_exec(plan_id, operator_id)
+
+    monkeypatch.setattr(msvs_service, "execute_action_plan", tracked_exec)
+
+    initial_pending_count = len(msvs_service.get_pending_approvals())
+
+    runner = BenchmarkRunner(recorder=ExperimentRecorder(base_dir=str(tmp_path)))
+    run = runner._run_single_scenario_benchmark(
+        sc_id="CASE_04",
+        run_number=1,
+        seed=4241,
+        include_llm=True,
+        run_direct_llm_comparison=False,
+        arm_id="ARM_4_PHASE2_BASELINE"
+    )
+
+    # Original pre-LLM diagnosis retained
+    assert run.pre_llm_diagnosis == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert run.post_llm_diagnosis == "UNKNOWN_COMPOSITE_ANOMALY"
+    assert run.predicted_fault_label == "UNKNOWN_COMPOSITE_ANOMALY"
+
+    # Evaluation statuses: blocked and NOT_EXECUTED (must NOT be SAFETY_POLICY_ENFORCED)
+    assert run.remediation_decision == "BLOCKED_INVALID_DIAGNOSIS"
+    assert run.remediation_status == "NOT_EXECUTED"
+    assert run.verification_result == "NOT_EXECUTED"
+
+    # Zero execution and zero recovery claimed
+    assert exec_called is False
+    assert run.post_remediation_rtt_ms == run.pre_remediation_rtt_ms
+    assert run.post_remediation_loss_pct == run.pre_remediation_loss_pct
+
+    # No approval request created in MSVS queue
+    assert len(msvs_service.get_pending_approvals()) == initial_pending_count
+
+
+def test_benchmark_runner_invalid_action_schema_distinguished_from_invalid_diagnosis(monkeypatch, tmp_path):
+    """
+    REGRESSION TEST:
+    Verifies that through the BenchmarkRunner path:
+    - An invalid action schema (malformed dictionary missing required fields) is distinguished
+      from an invalid diagnosis.
+    - Remediation decision is INVALID_ACTION_PROPOSAL (not BLOCKED_INVALID_DIAGNOSIS or REJECTED_UNSAFE).
+    - Valid post-LLM diagnosis is preserved.
+    - Remediation status and verification result remain NOT_EXECUTED.
+    - No execution or approval request occurs.
+    """
+    def mock_invalid_schema(ctx_pkg):
+        return LLMDiagnosisResponse(
+            diagnosis="CLOUD_ROUTING_ASYMMETRY",  # Valid secondary diagnosis
+            reasoning_summary="Valid root cause but malformed action schema",
+            confidence=0.88,
+            recommended_action={
+                "malformed_field": "missing_command_type_and_target_device"
+            },
+            llm_status=LLMStatus.LLM_AVAILABLE,
+            token_metrics=TokenMetrics(input_tokens=100, output_tokens=50, total_tokens=150)
+        )
+
+    monkeypatch.setattr(llm_gateway, "analyze_netops_context", mock_invalid_schema)
+    monkeypatch.setattr(llm_gateway, "run_controlled_token_experiment", MagicMock())
+
+    runner = BenchmarkRunner(recorder=ExperimentRecorder(base_dir=str(tmp_path)))
+    run = runner._run_single_scenario_benchmark(
+        sc_id="CASE_04",
+        run_number=1,
+        seed=4241,
+        include_llm=True,
+        run_direct_llm_comparison=False,
+        arm_id="ARM_4_PHASE2_BASELINE"
+    )
+
+    # Valid post-LLM diagnosis is retained
+    assert run.post_llm_diagnosis == "CLOUD_ROUTING_ASYMMETRY"
+    assert run.pre_llm_diagnosis == "UNKNOWN_COMPOSITE_ANOMALY"
+
+    # Distinguish invalid action schema from invalid diagnosis
+    assert run.remediation_decision == "INVALID_ACTION_PROPOSAL"
+    assert run.remediation_status == "NOT_EXECUTED"
+    assert run.verification_result == "NOT_EXECUTED"
 

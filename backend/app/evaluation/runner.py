@@ -143,14 +143,16 @@ class BenchmarkRunner:
         llm_latency_ms = 0.0
 
         llm_action_proposed = False
+        diagnosis_invalid = False
+        action_schema_invalid = False
+
         if llm_escalated and allow_llm:
             t_llm_start = time.perf_counter()
             # Context package constructed strictly from operational evidence; scenario identifier neutralized
             ctx_package = build_operational_llm_context(
                 state=telemetry,
                 report=cadd_diag,
-                plan=final_action_plan,
-                incident_id=f"inc-bench-{run_number:03d}"
+                plan=final_action_plan
             )
 
             llm_req_payload = ctx_package.model_dump_json(indent=2)
@@ -180,62 +182,110 @@ class BenchmarkRunner:
                 # Validate diagnosis response BEFORE processing proposed action
                 diag = getattr(llm_response, "diagnosis", None)
                 if not diag or not str(diag).strip() or str(diag).strip().upper() in INVALID_DIAGNOSES:
+                    diagnosis_invalid = True
                     llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
                     post_llm_diagnosis = cadd_diag.fault_type
                     llm_action_proposed = False
                 else:
                     post_llm_diagnosis = str(diag).strip()
-                    if llm_response.recommended_action and isinstance(llm_response.recommended_action, dict):
-                        rec = llm_response.recommended_action
-                        if "command_type" in rec and "target_device" in rec:
-                            try:
-                                rec_act = ProposedAction(
-                                    action_id=rec.get("action_id", f"act-llm-{uuid.uuid4().hex[:6]}"),
-                                    command_type=rec["command_type"],
-                                    target_device=rec["target_device"],
-                                    parameters=rec.get("parameters", {}),
-                                    is_destructive=rec.get("is_destructive", True),
-                                    reversion_action=rec.get("reversion_action", {})
-                                )
-                                final_action_plan = ActionPlan(
-                                    plan_id=f"plan-llm-{uuid.uuid4().hex[:8]}",
-                                    diagnosis_id=cadd_diag.diagnosis_id,
-                                    proposed_actions=[rec_act],
-                                    estimated_risk_level="HIGH",
-                                    requires_approval=True
-                                )
-                                llm_action_proposed = True
-                            except Exception:
-                                llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
-                        else:
+                    rec = getattr(llm_response, "recommended_action", None)
+                    if not rec or not isinstance(rec, dict):
+                        # Valid diagnosis, but no action proposed
+                        llm_action_proposed = False
+                    elif "command_type" in rec and "target_device" in rec:
+                        try:
+                            rec_act = ProposedAction(
+                                action_id=rec.get("action_id", f"act-llm-{uuid.uuid4().hex[:6]}"),
+                                command_type=rec["command_type"],
+                                target_device=rec["target_device"],
+                                parameters=rec.get("parameters", {}),
+                                is_destructive=rec.get("is_destructive", True),
+                                reversion_action=rec.get("reversion_action", {})
+                            )
+                            final_action_plan = ActionPlan(
+                                plan_id=f"plan-llm-{uuid.uuid4().hex[:8]}",
+                                diagnosis_id=cadd_diag.diagnosis_id,
+                                proposed_actions=[rec_act],
+                                estimated_risk_level="HIGH",
+                                requires_approval=True
+                            )
+                            llm_action_proposed = True
+                        except Exception:
+                            action_schema_invalid = True
                             llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
+                            llm_action_proposed = False
+                    else:
+                        action_schema_invalid = True
+                        llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
+                        llm_action_proposed = False
             else:
                 # LLM disabled, unreachable, or error: preserve original CADE diagnosis and block remediation
                 post_llm_diagnosis = cadd_diag.fault_type
 
         # 5. MSVS Safety Validation (LLM Output MUST Pass Through MSVS)
-        if llm_escalated and llm_status_recorded != LLMStatus.LLM_AVAILABLE.value:
-            policy_passed = False
-            remediation_decision = "BLOCKED_INVALID_DIAGNOSIS" if llm_status_recorded == LLMStatus.INVALID_RESPONSE.value else "BLOCKED_LLM_FAILURE"
-            remediation_status = "NOT_EXECUTED"
-            verification_result = "NOT_EXECUTED"
-        elif llm_escalated and not llm_action_proposed:
-            # LLM escalated, but returned no valid action proposal.
-            # Do NOT fall back to executing the original CADE plan.
-            policy_passed = False
-            remediation_decision = "NO_ACTION_PROPOSED"
-            remediation_status = "NOT_EXECUTED"
-            verification_result = "NOT_EXECUTED"
+        if llm_escalated:
+            if diagnosis_invalid:
+                policy_passed = False
+                remediation_decision = "BLOCKED_INVALID_DIAGNOSIS"
+                remediation_status = "NOT_EXECUTED"
+                verification_result = "NOT_EXECUTED"
+                final_action_plan = ActionPlan(
+                    plan_id=f"plan-blocked-{uuid.uuid4().hex[:8]}",
+                    diagnosis_id=cadd_diag.diagnosis_id,
+                    proposed_actions=[],
+                    estimated_risk_level="LOW",
+                    requires_approval=False
+                )
+            elif llm_status_recorded != LLMStatus.LLM_AVAILABLE.value and not action_schema_invalid:
+                policy_passed = False
+                remediation_decision = "BLOCKED_LLM_FAILURE"
+                remediation_status = "NOT_EXECUTED"
+                verification_result = "NOT_EXECUTED"
+                final_action_plan = ActionPlan(
+                    plan_id=f"plan-blocked-{uuid.uuid4().hex[:8]}",
+                    diagnosis_id=cadd_diag.diagnosis_id,
+                    proposed_actions=[],
+                    estimated_risk_level="LOW",
+                    requires_approval=False
+                )
+            elif action_schema_invalid:
+                policy_passed = False
+                remediation_decision = "INVALID_ACTION_PROPOSAL"
+                remediation_status = "NOT_EXECUTED"
+                verification_result = "NOT_EXECUTED"
+                final_action_plan = ActionPlan(
+                    plan_id=f"plan-blocked-{uuid.uuid4().hex[:8]}",
+                    diagnosis_id=cadd_diag.diagnosis_id,
+                    proposed_actions=[],
+                    estimated_risk_level="LOW",
+                    requires_approval=False
+                )
+            elif not llm_action_proposed:
+                # LLM escalated, but returned no valid action proposal.
+                # Do NOT fall back to executing the original CADE plan or create approval request.
+                policy_passed = False
+                remediation_decision = "NO_ACTION_PROPOSED"
+                remediation_status = "NOT_EXECUTED"
+                verification_result = "NOT_EXECUTED"
+                final_action_plan = ActionPlan(
+                    plan_id=f"plan-blocked-{uuid.uuid4().hex[:8]}",
+                    diagnosis_id=cadd_diag.diagnosis_id,
+                    proposed_actions=[],
+                    estimated_risk_level="LOW",
+                    requires_approval=False
+                )
+            else:
+                validation_res = self.msvs_policy_engine.validate_plan(final_action_plan)
+                policy_passed = validation_res[0] and validation_res[1]
+                remediation_decision = "PENDING_APPROVAL" if policy_passed else "REJECTED_UNSAFE"
+                remediation_status = "PENDING" if policy_passed else "NOT_EXECUTED"
+                verification_result = "NOT_EXECUTED" if policy_passed else "SAFETY_POLICY_ENFORCED"
         else:
             validation_res = self.msvs_policy_engine.validate_plan(final_action_plan)
             policy_passed = validation_res[0] and validation_res[1]
-            if llm_escalated:
-                remediation_decision = "PENDING_APPROVAL" if policy_passed else "REJECTED_UNSAFE"
-                remediation_status = "PENDING" if policy_passed else "NOT_EXECUTED"
-            else:
-                remediation_decision = "APPROVED" if policy_passed else "REJECTED_UNSAFE"
-                remediation_status = "PENDING"
-            verification_result = "NOT_EXECUTED"
+            remediation_decision = "APPROVED" if policy_passed else "REJECTED_UNSAFE"
+            remediation_status = "PENDING" if policy_passed else "NOT_EXECUTED"
+            verification_result = "NOT_EXECUTED" if policy_passed else "SAFETY_POLICY_ENFORCED"
 
         pre_rtt = telemetry.links[1].rtt_ms if len(telemetry.links) > 1 else (telemetry.links[0].rtt_ms if telemetry.links else 0.0)
         pre_loss = telemetry.links[1].packet_loss_pct if len(telemetry.links) > 1 else (telemetry.links[0].packet_loss_pct if telemetry.links else 0.0)
@@ -285,8 +335,10 @@ class BenchmarkRunner:
                 remediation_status = "PENDING"
                 verification_result = "NOT_EXECUTED"
         elif not policy_passed:
-            if remediation_decision not in ("BLOCKED_LLM_FAILURE", "NO_ACTION_PROPOSED"):
+            if remediation_decision == "REJECTED_UNSAFE":
                 verification_result = "SAFETY_POLICY_ENFORCED"
+            else:
+                verification_result = "NOT_EXECUTED"
 
         overall_wall_end = time.perf_counter()
         total_elapsed_ms = (overall_wall_end - overall_wall_start) * 1000.0
