@@ -37,19 +37,24 @@ class MSVSService:
 
         # If valid and requires human approval, queue it
         if is_valid and plan.requires_approval:
-            approval_id = f"appr-{uuid.uuid4().hex[:8]}"
-            actions_summary = "; ".join(
-                [f"{a.command_type} on {a.target_device} ({a.parameters})" for a in plan.proposed_actions]
+            existing_req = next(
+                (req for req in self.pending_approvals.values() if req.plan_id == plan.plan_id and req.status == "PENDING"),
+                None
             )
-            req = ApprovalRequest(
-                approval_id=approval_id,
-                plan_id=plan.plan_id,
-                diagnosis_summary=diagnosis_summary or "Network degradation requiring remediation",
-                proposed_actions_summary=actions_summary,
-                status="PENDING",
-                requested_at=datetime.now(timezone.utc)
-            )
-            self.pending_approvals[approval_id] = req
+            if not existing_req:
+                approval_id = f"appr-{uuid.uuid4().hex[:8]}"
+                actions_summary = "; ".join(
+                    [f"{a.command_type} on {a.target_device} ({a.parameters})" for a in plan.proposed_actions]
+                )
+                req = ApprovalRequest(
+                    approval_id=approval_id,
+                    plan_id=plan.plan_id,
+                    diagnosis_summary=diagnosis_summary or "Network degradation requiring remediation",
+                    proposed_actions_summary=actions_summary,
+                    status="PENDING",
+                    requested_at=datetime.now(timezone.utc)
+                )
+                self.pending_approvals[approval_id] = req
 
         return result
 

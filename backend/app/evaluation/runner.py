@@ -141,7 +141,7 @@ class BenchmarkRunner:
         post_action_llm_assessment = None
         llm_latency_ms = 0.0
 
-        # 4. LLM Escalation & Token Experiment (Operational Handoff)
+        llm_action_proposed = False
         if llm_escalated and allow_llm:
             t_llm_start = time.perf_counter()
             # Context package constructed strictly from operational evidence; scenario identifier neutralized
@@ -213,6 +213,7 @@ class BenchmarkRunner:
                                 estimated_risk_level="HIGH",
                                 requires_approval=True
                             )
+                            llm_action_proposed = True
                         except Exception:
                             llm_status_recorded = LLMStatus.INVALID_RESPONSE.value
                     else:
@@ -227,11 +228,22 @@ class BenchmarkRunner:
             remediation_decision = "BLOCKED_LLM_FAILURE"
             remediation_status = "NOT_EXECUTED"
             verification_result = "NOT_EXECUTED"
+        elif llm_escalated and not llm_action_proposed:
+            # LLM escalated, but returned no valid action proposal.
+            # Do NOT fall back to executing the original CADE plan.
+            policy_passed = False
+            remediation_decision = "NO_ACTION_PROPOSED"
+            remediation_status = "NOT_EXECUTED"
+            verification_result = "NOT_EXECUTED"
         else:
             validation_res = self.msvs_policy_engine.validate_plan(final_action_plan)
             policy_passed = validation_res[0] and validation_res[1]
-            remediation_decision = "APPROVED" if policy_passed else "REJECTED_UNSAFE"
-            remediation_status = "PENDING"
+            if llm_escalated:
+                remediation_decision = "PENDING_APPROVAL" if policy_passed else "REJECTED_UNSAFE"
+                remediation_status = "PENDING" if policy_passed else "NOT_EXECUTED"
+            else:
+                remediation_decision = "APPROVED" if policy_passed else "REJECTED_UNSAFE"
+                remediation_status = "PENDING"
             verification_result = "NOT_EXECUTED"
 
         pre_rtt = telemetry.links[1].rtt_ms if len(telemetry.links) > 1 else (telemetry.links[0].rtt_ms if telemetry.links else 0.0)
@@ -242,39 +254,47 @@ class BenchmarkRunner:
 
         # 6. Action Execution & Post-Action Telemetry Verification
         if policy_passed and final_action_plan.proposed_actions:
-            # Register plan with MSVS service and simulate approval
+            # Register plan with MSVS service
             msvs_res = msvs_service.validate_action_plan(final_action_plan, cadd_diag.explanation_summary)
-            if msvs_res.requires_human_approval:
-                appr_req = next((r for r in msvs_service.get_pending_approvals() if r.plan_id == final_action_plan.plan_id), None)
-                if appr_req:
-                    msvs_service.approve_request(appr_req.approval_id)
+            if not llm_escalated:
+                # Non-escalated benchmark execution path: simulated automatic approval and execution
+                if msvs_res.requires_human_approval:
+                    appr_req = next((r for r in msvs_service.get_pending_approvals() if r.plan_id == final_action_plan.plan_id), None)
+                    if appr_req:
+                        msvs_service.approve_request(appr_req.approval_id)
 
-            exec_log = msvs_service.execute_action_plan(final_action_plan.plan_id)
-            remediation_status = exec_log.status
+                exec_log = msvs_service.execute_action_plan(final_action_plan.plan_id)
+                remediation_status = exec_log.status
 
-            # Post-action telemetry verification
-            post_telemetry = scenario_registry.generate_telemetry(sc_id, "NONE")
-            post_rtt = post_telemetry.links[1].rtt_ms if len(post_telemetry.links) > 1 else (post_telemetry.links[0].rtt_ms if post_telemetry.links else 0.0)
-            post_loss = post_telemetry.links[1].packet_loss_pct if len(post_telemetry.links) > 1 else (post_telemetry.links[0].packet_loss_pct if post_telemetry.links else 0.0)
-            
-            verification_result = "VERIFIED_HEALTHY" if not post_telemetry.anomalies_detected else "VERIFICATION_FAILED"
+                # Post-action telemetry verification
+                post_telemetry = scenario_registry.generate_telemetry(sc_id, "NONE")
+                post_rtt = post_telemetry.links[1].rtt_ms if len(post_telemetry.links) > 1 else (post_telemetry.links[0].rtt_ms if post_telemetry.links else 0.0)
+                post_loss = post_telemetry.links[1].packet_loss_pct if len(post_telemetry.links) > 1 else (post_telemetry.links[0].packet_loss_pct if post_telemetry.links else 0.0)
+                
+                verification_result = "VERIFIED_HEALTHY" if not post_telemetry.anomalies_detected else "VERIFICATION_FAILED"
 
-            # 7. Feedback Package & LLM Post-Action Assessment
-            fb_pkg = create_feedback_package(
-                action_id=final_action_plan.proposed_actions[0].action_id if final_action_plan.proposed_actions else "act-0",
-                result=exec_log.status,
-                verification_passed=(verification_result == "VERIFIED_HEALTHY"),
-                pre_metrics={"rtt_ms": pre_rtt, "packet_loss_pct": pre_loss},
-                post_metrics={"rtt_ms": post_rtt, "packet_loss_pct": post_loss},
-                affected_services=[s.name for s in sc_def.services]
-            )
-            feedback_pkg_dict = fb_pkg.model_dump(mode="json")
-
-            if allow_llm and llm_escalated:
-                post_assess = llm_gateway.assess_post_remediation(fb_pkg)
-                post_action_llm_assessment = post_assess.model_dump(mode="json")
+                # 7. Feedback Package & LLM Post-Action Assessment
+                fb_pkg = create_feedback_package(
+                    action_id=final_action_plan.proposed_actions[0].action_id if final_action_plan.proposed_actions else "act-0",
+                    result=exec_log.status,
+                    verification_passed=(verification_result == "VERIFIED_HEALTHY"),
+                    pre_metrics={"rtt_ms": pre_rtt, "packet_loss_pct": pre_loss},
+                    post_metrics={"rtt_ms": post_rtt, "packet_loss_pct": post_loss},
+                    affected_services=[s.name for s in sc_def.services]
+                )
+                feedback_pkg_dict = fb_pkg.model_dump(mode="json")
+            else:
+                # LLM Escalation Path: STRICT HUMAN APPROVAL GATE
+                # A valid proposal is MSVS-validated and queued for human approval.
+                # Its remediation state remains PENDING.
+                # No approve_request() call is made.
+                # No execute_action_plan() call is made.
+                # No ceso_service.reset_simulation() is triggered.
+                # No recovery success or verified-health status is reported.
+                remediation_status = "PENDING"
+                verification_result = "NOT_EXECUTED"
         elif not policy_passed:
-            if remediation_decision != "BLOCKED_LLM_FAILURE":
+            if remediation_decision not in ("BLOCKED_LLM_FAILURE", "NO_ACTION_PROPOSED"):
                 verification_result = "SAFETY_POLICY_ENFORCED"
 
         overall_wall_end = time.perf_counter()

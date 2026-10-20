@@ -39,3 +39,20 @@ class ActionPlan(BaseModel):
     proposed_actions: List[ProposedAction] = Field(default_factory=list, description="Ordered list of proposed remediation steps")
     estimated_risk_level: str = Field("MEDIUM", description="Risk assessment: LOW, MEDIUM, HIGH")
     requires_approval: bool = Field(True, description="Human-in-the-loop approval requirement flag")
+
+class LLMEscalationResult(BaseModel):
+    escalated: bool = Field(True, description="Flag indicating if LLM escalation was triggered")
+    llm_status: str = Field(..., description="LLM provider status: LLM_AVAILABLE, LLM_UNAVAILABLE, LLM_DISABLED, LLM_ERROR, INVALID_RESPONSE")
+    post_llm_diagnosis: Optional[str] = Field(None, description="Secondary root cause diagnosis suggested by LLM")
+    reasoning_summary: Optional[str] = Field(None, description="Detailed operational reasoning provided by LLM")
+    confidence: Optional[float] = Field(None, description="Diagnostic confidence score from LLM")
+    suggested_action: Optional[ProposedAction] = Field(None, description="Parsed corrective action proposed by LLM")
+    proposed_plan: Optional[ActionPlan] = Field(None, description="Action plan containing LLM proposal for MSVS validation")
+    validation_passed: Optional[bool] = Field(None, description="Whether the proposal passed MSVS Stage 1/2 safety validation")
+    policy_violations: List[str] = Field(default_factory=list, description="List of policy violations if MSVS rejected the proposal")
+    approval_id: Optional[str] = Field(None, description="MSVS approval request ID in pending approvals queue")
+    approval_status: Optional[str] = Field(None, description="Status of approval request (e.g. PENDING)")
+    remediation_decision: Optional[str] = Field(None, description="Remediation safety decision: PENDING_APPROVAL, REJECTED_UNSAFE, NO_ACTION_PROPOSED, BLOCKED_LLM_FAILURE")
+    remediation_status: str = Field("NOT_EXECUTED", description="Execution status: always PENDING or NOT_EXECUTED in escalation path")
+    raw_response: Optional[str] = Field(None, description="Raw provider response payload")
+
